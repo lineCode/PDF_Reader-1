@@ -20,12 +20,14 @@ UPDF_ReaderBPLibrary::UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectIniti
 bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling)
 {	
 	FPDF_InitLibrary();
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, "PDF library initialized.");
 
 	FPDF_DOCUMENT Document = NULL;
 	
 	if (InBytes.Num() > 0)
 	{
 		Document = FPDF_LoadMemDocument(InBytes.GetData(), InBytes.Num(), TCHAR_TO_UTF8(*InPDF_Pass));
+		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, "Document loaded from memory.");
 	}
 
 	else
@@ -53,6 +55,7 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FStr
 		}
 		
 		Document = FPDF_LoadDocument(TCHAR_TO_UTF8(*Path), TCHAR_TO_UTF8(*InPDF_Pass));
+		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, "Document loaded from path.");
 	}
 
 	if (!Document)
@@ -61,6 +64,7 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FStr
 	}
 	
 	int32 PDF_Page_Count = FPDF_GetPageCount(Document);
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, "Function got PDF page count.");
 
 	for (int32 PageIndex = 0; PageIndex < PDF_Page_Count; PageIndex++)
 	{
@@ -71,6 +75,7 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FStr
 		FVector2D EachResolution = FVector2D(PDF_Page_Width, PDF_Page_Height);
 		
 		UTexture2D* PDF_Texture = UTexture2D::CreateTransient((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), PF_B8G8R8A8);
+		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, ("Texture created " + FString::FromInt(PageIndex)));
 
 #if WITH_EDITORONLY_DATA
 		PDF_Texture->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
@@ -81,6 +86,8 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FStr
 		void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
 		FPDF_BITMAP PDF_Bitmap = FPDFBitmap_Create((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), 0);
+		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, ("Bitmap created " + FString::FromInt(PageIndex)));
+
 		if (PDF_Bitmap != NULL)
 		{
 			void* buf = FPDFBitmap_GetBuffer(PDF_Bitmap);
@@ -92,15 +99,22 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FStr
 			FPDF_ClosePage(PDF_Page);
 
 			FMemory::Memcpy(Data, buf, stride * Height);
+			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, ("Bitmap has been copied to texture " + FString::FromInt(PageIndex)));
 
 			FPDFBitmap_Destroy(PDF_Bitmap);
 		}
 
 		Mip.BulkData.Unlock();
 
+#ifdef _WIN64
 #define UpdateResource UpdateResource
 		PDF_Texture->UpdateResource();
 #undef UpdateResource	// specific case for #include "fpdfview.h"
+#endif
+
+#ifdef __ANDROID__
+		PDF_Texture->UpdateResource();
+#endif
 
 		OutPages.Add(PDF_Texture, EachResolution);
 	}

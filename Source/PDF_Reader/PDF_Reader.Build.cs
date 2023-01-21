@@ -21,18 +21,11 @@ public class PDF_Reader : ModuleRules
 
         if (UnrealTargetPlatform.Android == Target.Platform)
         {
-            AdditionalPropertiesForReceipt.Add("AndroidPlugin", Path.Combine(ModuleDirectory, "PDF_Reader_UPL_Android.xml"));
-
             string Location_PDFium = "../Source/PDF_Reader/ThirdParty/pdfium/Android/include";
             PrivateIncludePaths.Add(Location_PDFium);
             PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Android", "lib", "libpdfium.so"));
-        }
 
-        if (UnrealTargetPlatform.IOS == Target.Platform)
-        {
-            string Location_PDFium = "../Source/PDF_Reader/ThirdParty/pdfium/Android/include";
-            PrivateIncludePaths.Add(Location_PDFium);
-            PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "iOS", "lib", "libpdfium.dylib"));
+            AdditionalPropertiesForReceipt.Add("AndroidPlugin", Path.Combine(ModuleDirectory, "PDF_Reader_UPL_Android.xml"));
         }
 
         PublicDependencyModuleNames.AddRange(
