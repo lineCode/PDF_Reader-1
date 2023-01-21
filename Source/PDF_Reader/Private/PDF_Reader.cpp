@@ -8,30 +8,33 @@
 void FPDF_ReaderModule::StartupModule()
 {
 #ifdef _WIN64
-	const FString BasePluginDir = IPluginManager::Get().FindPlugin("PDF_READER")->GetBaseDir();
-	const FString DLL_Path = FPaths::Combine(*BasePluginDir, TEXT("Source/PDF_Reader/ThirdParty/pdfium/Windows/lib/pdfium.dll"));
-	PDFium_Handle = FPlatformProcess::GetDllHandle(*DLL_Path);
-
-	if (PDFium_Handle != nullptr)
+	if (UGameplayStatics::GetPlatformName() == "Windows")
 	{
-		UE_LOG(LogTemp, Log, TEXT("pdfium.dll loaded successfully!"));
-	}
+		const FString BasePluginDir = IPluginManager::Get().FindPlugin("PDF_READER")->GetBaseDir();
+		const FString DLL_Path = FPaths::Combine(*BasePluginDir, TEXT("Source/PDF_Reader/ThirdParty/pdfium/Windows/lib/pdfium.dll"));
+		PDFium_Handle = FPlatformProcess::GetDllHandle(*DLL_Path);
 
-	else
-	{
-		UE_LOG(LogTemp, Fatal, TEXT("pdfium.dll failed to load!"));
+		if (PDFium_Handle != nullptr)
+		{
+			UE_LOG(LogTemp, Log, TEXT("pdfium.dll loaded successfully!"));
+		}
+
+		else
+		{
+			UE_LOG(LogTemp, Fatal, TEXT("pdfium.dll failed to load!"));
+		}
 	}
 #endif
 }
 
 void FPDF_ReaderModule::ShutdownModule()
 {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
-
 #ifdef _WIN64
-	FPlatformProcess::FreeDllHandle(PDFium_Handle);
-	PDFium_Handle = nullptr;
+	if (UGameplayStatics::GetPlatformName() == "Windows")
+	{
+		FPlatformProcess::FreeDllHandle(PDFium_Handle);
+		PDFium_Handle = nullptr;
+	}
 #endif
 }
 

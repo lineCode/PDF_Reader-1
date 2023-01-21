@@ -18,30 +18,40 @@ UPDF_ReaderBPLibrary::UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectIniti
 }
 
 bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling)
-{
-	FString Path = InPath;
-	
-	if (UGameplayStatics::GetPlatformName() == "Windows")
-	{
-		FPaths::MakePlatformFilename(Path);
-	}
-
-	if (UGameplayStatics::GetPlatformName() == "Android" || UGameplayStatics::GetPlatformName() == "iOS")
-	{
-		Path = FPlatformFileManager::Get().GetPlatformFile().ConvertToAbsolutePathForExternalAppForRead(*InPath);
-	}
-	
+{	
 	FPDF_InitLibrary();
 
 	FPDF_DOCUMENT Document = NULL;
+	
 	if (InBytes.Num() > 0)
 	{
 		Document = FPDF_LoadMemDocument(InBytes.GetData(), InBytes.Num(), TCHAR_TO_UTF8(*InPDF_Pass));
-		
 	}
 
 	else
 	{
+		if (InPath.IsEmpty() == true)
+		{
+			return false;
+		}
+		
+		FString Path = InPath;
+
+		if (UGameplayStatics::GetPlatformName() == "Windows")
+		{
+			FPaths::MakePlatformFilename(Path);
+		}
+
+		if (UGameplayStatics::GetPlatformName() == "Android" || UGameplayStatics::GetPlatformName() == "iOS")
+		{
+			Path = FPlatformFileManager::Get().GetPlatformFile().ConvertToAbsolutePathForExternalAppForRead(*InPath);
+		}
+
+		if (FPaths::FileExists(Path) == false)
+		{
+			return false;
+		}
+		
 		Document = FPDF_LoadDocument(TCHAR_TO_UTF8(*Path), TCHAR_TO_UTF8(*InPDF_Pass));
 	}
 
@@ -61,9 +71,11 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FStr
 		FVector2D EachResolution = FVector2D(PDF_Page_Width, PDF_Page_Height);
 		
 		UTexture2D* PDF_Texture = UTexture2D::CreateTransient((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), PF_B8G8R8A8);
+
 #if WITH_EDITORONLY_DATA
 		PDF_Texture->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
 #endif
+
 		PDF_Texture->SRGB = 0;;
 		FTexture2DMipMap& Mip = PDF_Texture->GetPlatformData()->Mips[0];
 		void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
@@ -96,4 +108,3 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FStr
 	FPDF_CloseDocument(Document);
 	return true;
 }
-
