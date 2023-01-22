@@ -23,7 +23,7 @@ public class PDF_Reader : ModuleRules
         {
             string Location_PDFium = "../Source/PDF_Reader/ThirdParty/pdfium/Android/include";
             PrivateIncludePaths.Add(Location_PDFium);
-            PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Android", "lib", "libpdfium.so"));
+            PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Android", "lib", "arm64-v8a", "libpdfium.so"));
 
             AdditionalPropertiesForReceipt.Add("AndroidPlugin", Path.Combine(ModuleDirectory, "PDF_Reader_UPL_Android.xml"));
         }

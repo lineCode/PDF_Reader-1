@@ -36,6 +36,6 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	* @param InPath Use platform file name in here.
 	* @param Sampling Default value is "1". It generates textures as its default resolution. But "2" gives better result
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Read PDF", Description = "", Keywords = "read, pdf"), Category = "PDF_Reader|Read")
-	static bool Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling = 1.0);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Read PDF for Windows", Keywords = "read, pdf"), Category = "PDF_Reader|Read")
+	static bool Read_PDF_Windows(TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling = 1.0);
 };

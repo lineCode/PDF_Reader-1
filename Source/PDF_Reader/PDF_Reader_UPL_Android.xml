@@ -13,7 +13,7 @@
 		<if condition="bCpuArchSupported">
 			<true>
 				<log text="Copying libpdfium.so"/>
-				<copyFile src="$S(PluginDir)/ThirdParty/pdfium/Android/lib/libpdfium.so"
+				<copyFile src="$S(PluginDir)/ThirdParty/pdfium/Android/lib/arm64-v8a/libpdfium.so"
 							dst="$S(BuildDir)/libs/$S(Architecture)/libpdfium.so" />
 			</true>
 		</if>
@@ -24,7 +24,7 @@
 	<soLoadLibrary>
 		<if condition="bCpuArchSupported">
 			<true>
-				<loadLibrary name="pdfium" failmsg="pdfium library not loaded and may be required for PDF_Reader." />
+				<loadLibrary name="libpdfium" failmsg="pdfium library not loaded and may be required for PDF_Reader." />
 			</true>
 		</if>
 	</soLoadLibrary>
