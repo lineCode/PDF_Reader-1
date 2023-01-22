@@ -37,7 +37,13 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, bool
 
 	if (InBytes.Num() > 0)
 	{
+#ifdef _WIN64
 		Document = FPDF_LoadMemDocument64(InBytes.GetData(), InBytes.Num(), TCHAR_TO_UTF8(*InPDF_Pass));
+#endif
+
+#ifdef __ANDROID__
+		Document = FPDF_LoadMemDocument(InBytes.GetData(), InBytes.Num(), TCHAR_TO_UTF8(*InPDF_Pass));
+#endif
 
 		if (bUseDebug)
 		{
