@@ -1,11 +1,11 @@
-#USED LIBRARIES
+# USED LIBRARIES
 Android Binary
 https://github.com/barteksc/PdfiumAndroid
 
 Windows Binary
 https://github.com/bblanchon/pdfium-binaries
 
-#DEPENDENCIES
+# DEPENDENCIES
 Low Entry HTTP Request
 https://www.unrealengine.com/marketplace/en-US/product/low-entry-http-request
 
@@ -14,12 +14,12 @@ If you need to view online pdf files, you need to use an HTML plugin with ByteAr
 
 Even if you don't want to view online PDF files, you need to attach an empty array to ByteArray pin of Read PDF function. You can use "Make Array" node.
 
-#RELEASE
+# RELEASE
 Relaese has an APK for ASTC arm64-v8 to test it.
 
-#FEATURES
+# FEATURES
 Plugin is for Unreal Engine 5.1 and up.
 Windows and Android platforms supported. This is runtime plugin. It don't work in editor. 
 
-#USAGE
+# USAGE
 You need to use it in a C++ project. After first compile, you can copy it to a blueprint only project.
