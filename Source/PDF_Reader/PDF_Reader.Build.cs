@@ -10,22 +10,26 @@ public class PDF_Reader : ModuleRules
 	{
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicIncludePaths.Add(Path.Combine(EngineDirectory, "Source", "Runtime", "Core", "Public", "Android"));
-
         if (UnrealTargetPlatform.Win64 == Target.Platform)
         {
             string Location_PDFium = "../Source/PDF_Reader/ThirdParty/pdfium/Windows/include";
             PrivateIncludePaths.Add(Location_PDFium);
-            PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Windows", "lib", "pdfium.dll.lib"));
+            
+			PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Windows", "lib", "pdfium.dll.lib"));
             RuntimeDependencies.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Windows", "lib", "pdfium.dll"));
             PublicDelayLoadDLLs.Add("pdfium.dll");
         }
 
         if (UnrealTargetPlatform.Android == Target.Platform)
         {
+            // We need it for #include "AndroidPlatform.h" in fpdview.h. Because default #define DLLEXPORT makes clash with Unreal's defination. We comment it out and include AndroidPlatform.h
+            PublicIncludePaths.Add(Path.Combine(EngineDirectory, "Source", "Runtime", "Core", "Public", "Android"));
+
             string Location_PDFium = "../Source/PDF_Reader/ThirdParty/pdfium/Android/include";
             PrivateIncludePaths.Add(Location_PDFium);
-            PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Android", "lib", "arm64-v8a", "libmodft2.so"));
+            
+			
+			PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Android", "lib", "arm64-v8a", "libmodft2.so"));
             PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Android", "lib", "arm64-v8a", "libmodpdfium.so"));
             PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty", "pdfium", "Android", "lib", "arm64-v8a", "libmodpng.so"));
 
