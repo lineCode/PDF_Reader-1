@@ -38,4 +38,8 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Read PDF", Keywords = "read, pdf"), Category = "PDF_Reader|Read")
 	static bool Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling = 1.0);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Close PDF Library", Keywords = "read, pdf"), Category = "PDF_Reader|System")
+	static void ClosePdfLib();
+
 };

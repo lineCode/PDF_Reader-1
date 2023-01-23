@@ -1,0 +1,11 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.PDF_Reader.cpp.obj": [
+			"PDF_Reader.init.gen.cpp.obj",
+			"PDF_ReaderBPLibrary.gen.cpp.obj",
+			"PDF_Reader.cpp.obj",
+			"PDF_ReaderBPLibrary.cpp.obj"
+		]
+	}
+}

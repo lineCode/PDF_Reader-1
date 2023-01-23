@@ -132,7 +132,30 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, bool
 			size_t Count = static_cast<size_t>(Stride) * Height;
 
 			FPDFBitmap_FillRect(PDF_Bitmap, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0xffffffff);
-			FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0, 0);
+			FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0, FPDF_ANNOT);
+			
+			/*
+			FS_RECTF rc;
+			FMemory::Memset(&rc, 0, sizeof(rc));
+			rc.left = 0;
+			rc.right = (PDF_Page_Width * Sampling) - 1;
+
+			rc.top = 0;
+			rc.bottom = (PDF_Page_Height * Sampling) - 1;
+
+			FS_MATRIX transform;
+			FMemory::Memset(&transform, 0, sizeof(transform));
+
+			transform.a = 1 * Sampling;
+			transform.b = 0;
+			transform.c = 0;
+			transform.d = 1 * Sampling;
+			transform.e = 0;
+			transform.f = 0;
+
+			FPDF_RenderPageBitmapWithMatrix(PDF_Bitmap, PDF_Page, &transform, &rc, FPDF_ANNOT);
+			*/
+
 			FPDF_FFLDraw(Form_Handle, PDF_Bitmap, PDF_Page, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0, 0);
 
 			FPDF_ClosePage(PDF_Page);
@@ -148,7 +171,7 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, bool
 		}
 
 		Mip.BulkData.Unlock();
-
+		
 #ifdef _WIN64
 #define UpdateResource UpdateResource
 		PDF_Texture->UpdateResource();
@@ -156,13 +179,18 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, bool
 #endif
 
 #ifdef __ANDROID__
-		PDF_Texture->UpdateResource();
+		PDF_Texture->UpdateResource(); 
 #endif
 
 		OutPages.Add(PDF_Texture, EachResolution);
 	}
 
 	FPDF_CloseDocument(Document);
-
+	
 	return true;
+}
+
+void UPDF_ReaderBPLibrary::ClosePdfLib()
+{
+	FPDF_DestroyLibrary();
 }
