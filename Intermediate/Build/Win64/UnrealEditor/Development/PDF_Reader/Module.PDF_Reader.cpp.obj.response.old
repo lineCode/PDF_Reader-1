@@ -273,6 +273,7 @@ D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\B
 /I Developer\AnimationDataController\Public
 /I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Inc\PDF_Reader\UHT
 /I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source
+/I Runtime\Core\Public\Android
 /I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\Public
 /external:W0
 /external:I ThirdParty\mimalloc\include

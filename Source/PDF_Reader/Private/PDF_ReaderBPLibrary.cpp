@@ -10,6 +10,9 @@ THIRD_PARTY_INCLUDES_START
 // PDFium Includes.
 #include "fpdf_formfill.h"
 #include "fpdfview.h"
+#include "fpdf_text.h"
+
+#include <string>
 THIRD_PARTY_INCLUDES_END
 
 UPDF_ReaderBPLibrary::UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectInitializer)
@@ -18,8 +21,10 @@ UPDF_ReaderBPLibrary::UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectIniti
 
 }
 
-bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling)
-{	
+static bool Global_bIsLibInitialized = false;
+
+void UPDF_ReaderBPLibrary::PDF_LibInit()
+{
 	FPDF_LIBRARY_CONFIG config;
 	FMemory::Memset(&config, 0, sizeof(config));
 	config.version = 2;
@@ -27,6 +32,22 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, bool
 	config.m_pIsolate = NULL;
 	config.m_v8EmbedderSlot = 0;
 	FPDF_InitLibraryWithConfig(&config);
+
+	Global_bIsLibInitialized = true;
+}
+
+void UPDF_ReaderBPLibrary::PDF_LibClose()
+{
+	Global_bIsLibInitialized = false;
+	FPDF_DestroyLibrary();
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Read(TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling)
+{	
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
 
 	if (bUseDebug)
 	{
@@ -188,9 +209,4 @@ bool UPDF_ReaderBPLibrary::Read_PDF(TMap<UTexture2D*, FVector2D>& OutPages, bool
 	FPDF_CloseDocument(Document);
 	
 	return true;
-}
-
-void UPDF_ReaderBPLibrary::ClosePdfLib()
-{
-	FPDF_DestroyLibrary();
 }

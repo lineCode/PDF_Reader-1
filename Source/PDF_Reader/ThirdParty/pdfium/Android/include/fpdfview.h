@@ -13,7 +13,10 @@
 #if defined(_WIN32) && !defined(__WINDOWS__)
 #include <windows.h>
 #endif
+
+#ifdef __ANDROID__
 #include "AndroidPlatform.h"
+#endif
 
 #ifdef PDF_ENABLE_XFA
 //  TODO: remove the #define when XFA is officially in pdfium
