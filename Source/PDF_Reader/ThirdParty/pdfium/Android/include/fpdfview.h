@@ -10,7 +10,7 @@
 #ifndef PUBLIC_FPDFVIEW_H_
 #define PUBLIC_FPDFVIEW_H_
 
-#if defined(_WIN32) && !defined(__WINDOWS__)
+#if defined(_WIN64) && !defined(__WINDOWS__)
 #include <windows.h>
 #endif
 
@@ -130,12 +130,17 @@ typedef struct _FS_RECTF_ {
 // Const Pointer to FS_RECTF structure.
 typedef const FS_RECTF* FS_LPCRECTF;
 
-#if defined(_WIN32) && defined(FPDFSDK_EXPORTS)
+#if defined(_WIN64) && defined(FPDFSDK_EXPORTS)
 // On Windows system, functions are exported in a DLL
 #define DLLEXPORT __declspec(dllexport)
 #define STDCALL __stdcall
 #else
-//#define DLLEXPORT
+
+// UE5 AndroidPlatform.h has this defination. So, package operation creates clash. We put defination to #ifdef _WIN64 for preventing VS compile errors.
+#ifdef _WIN64
+#define DLLEXPORT
+#endif // _WIN64
+
 #define STDCALL
 #endif
 
@@ -517,7 +522,7 @@ DLLEXPORT int STDCALL FPDF_GetPageSizeByIndex(FPDF_DOCUMENT document,
 // rendering to a bitmap.
 #define FPDF_REVERSE_BYTE_ORDER 0x10
 
-#ifdef _WIN32
+#ifdef _WIN64
 // Function: FPDF_RenderPage
 //          Render contents of a page to a device (screen, bitmap, or printer).
 //          This function is only supported on Windows.

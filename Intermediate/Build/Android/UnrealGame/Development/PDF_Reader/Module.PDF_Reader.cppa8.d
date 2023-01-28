@@ -1802,4 +1802,5 @@ D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Intermediate/B
   D:/Epic/Engines/UE_5.1/Engine/Source/Runtime/Projects/Public/VerseScope.h \
   D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/Private/PDF_ReaderBPLibrary.cpp \
   D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_formfill.h \
-  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdfview.h
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdfview.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_text.h
