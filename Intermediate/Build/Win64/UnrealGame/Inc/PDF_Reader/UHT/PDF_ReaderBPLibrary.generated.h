@@ -18,12 +18,16 @@ class UTexture2D;
 #define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_31_SPARSE_DATA
 #define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_31_RPC_WRAPPERS \
  \
-	DECLARE_FUNCTION(execRead_PDF);
+	DECLARE_FUNCTION(execPDF_Read); \
+	DECLARE_FUNCTION(execPDF_LibClose); \
+	DECLARE_FUNCTION(execPDF_LibInit);
 
 
 #define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_31_RPC_WRAPPERS_NO_PURE_DECLS \
  \
-	DECLARE_FUNCTION(execRead_PDF);
+	DECLARE_FUNCTION(execPDF_Read); \
+	DECLARE_FUNCTION(execPDF_LibClose); \
+	DECLARE_FUNCTION(execPDF_LibInit);
 
 
 #define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_31_ACCESSORS

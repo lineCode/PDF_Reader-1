@@ -21,10 +21,10 @@ UPDF_ReaderBPLibrary::UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectIniti
 
 }
 
-static bool Global_bIsLibInitialized = false;
-
-void UPDF_ReaderBPLibrary::PDF_LibInit()
+void UPDF_ReaderBPLibrary::PDF_LibInit(UPDFiumLib*& OutPDFium)
 {
+	UPDFiumLib* PDFiumLib = NewObject<UPDFiumLib>();
+	
 	FPDF_LIBRARY_CONFIG config;
 	FMemory::Memset(&config, 0, sizeof(config));
 	config.version = 2;
@@ -33,18 +33,20 @@ void UPDF_ReaderBPLibrary::PDF_LibInit()
 	config.m_v8EmbedderSlot = 0;
 	FPDF_InitLibraryWithConfig(&config);
 
-	Global_bIsLibInitialized = true;
+	PDFiumLib->bIsLibraryInitialized = true;
+	
+	OutPDFium = PDFiumLib;
 }
 
-void UPDF_ReaderBPLibrary::PDF_LibClose()
+void UPDF_ReaderBPLibrary::PDF_LibClose(UPARAM(ref)UPDFiumLib*& InPDFium)
 {
-	Global_bIsLibInitialized = false;
+	InPDFium->bIsLibraryInitialized = false;
 	FPDF_DestroyLibrary();
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Read(TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling)
+bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling)
 {	
-	if (Global_bIsLibInitialized == false)
+	if (InPDFium->bIsLibraryInitialized == false)
 	{
 		return false;
 	}

@@ -27,7 +27,6 @@
 		</if>
 	</resourceCopies>
 
-
 	<!-- optional libraries to load in GameActivity.java before libUnreal.so -->
 	<soLoadLibrary>
 		<if condition="bCpuArchSupported">

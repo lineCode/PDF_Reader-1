@@ -16,7 +16,7 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 	PDF_READER_API UClass* Z_Construct_UClass_UPDF_ReaderBPLibrary_NoRegister();
 	UPackage* Z_Construct_UPackage__Script_PDF_Reader();
 // End Cross Module References
-	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execRead_PDF)
+	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_Read)
 	{
 		P_GET_TMAP_REF(UTexture2D*,FVector2D,Z_Param_Out_OutPages);
 		P_GET_UBOOL(Z_Param_bUseDebug);
@@ -26,20 +26,86 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 		P_GET_PROPERTY(FDoubleProperty,Z_Param_Sampling);
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		*(bool*)Z_Param__Result=UPDF_ReaderBPLibrary::Read_PDF(Z_Param_Out_OutPages,Z_Param_bUseDebug,Z_Param_InPath,Z_Param_InBytes,Z_Param_InPDF_Pass,Z_Param_Sampling);
+		*(bool*)Z_Param__Result=UPDF_ReaderBPLibrary::PDF_Read(Z_Param_Out_OutPages,Z_Param_bUseDebug,Z_Param_InPath,Z_Param_InBytes,Z_Param_InPDF_Pass,Z_Param_Sampling);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_LibClose)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		UPDF_ReaderBPLibrary::PDF_LibClose();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_LibInit)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		UPDF_ReaderBPLibrary::PDF_LibInit();
 		P_NATIVE_END;
 	}
 	void UPDF_ReaderBPLibrary::StaticRegisterNativesUPDF_ReaderBPLibrary()
 	{
 		UClass* Class = UPDF_ReaderBPLibrary::StaticClass();
 		static const FNameNativePtrPair Funcs[] = {
-			{ "Read_PDF", &UPDF_ReaderBPLibrary::execRead_PDF },
+			{ "PDF_LibClose", &UPDF_ReaderBPLibrary::execPDF_LibClose },
+			{ "PDF_LibInit", &UPDF_ReaderBPLibrary::execPDF_LibInit },
+			{ "PDF_Read", &UPDF_ReaderBPLibrary::execPDF_Read },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 	}
-	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics
+	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics
 	{
-		struct PDF_ReaderBPLibrary_eventRead_PDF_Parms
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::Function_MetaDataParams[] = {
+		{ "Category", "PDF_Reader|System" },
+		{ "DisplayName", "Close PDF Library" },
+		{ "Keywords", "pdf, pdfium, library, lib, close" },
+		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_LibClose", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::Function_MetaDataParams[] = {
+		{ "Category", "PDF_Reader|System" },
+		{ "DisplayName", "Open PDF Library" },
+		{ "Keywords", "pdf, pdfium, library, lib, open" },
+		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_LibInit", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics
+	{
+		struct PDF_ReaderBPLibrary_eventPDF_Read_Parms
 		{
 			TMap<UTexture2D*,FVector2D> OutPages;
 			bool bUseDebug;
@@ -67,54 +133,54 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 #endif
 		static const UECodeGen_Private::FFunctionParams FuncParams;
 	};
-	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_OutPages_ValueProp = { "OutPages", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, 1, Z_Construct_UScriptStruct_FVector2D, METADATA_PARAMS(nullptr, 0) };
-	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_OutPages_Key_KeyProp = { "OutPages_Key", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, 0, Z_Construct_UClass_UTexture2D_NoRegister, METADATA_PARAMS(nullptr, 0) };
-	const UECodeGen_Private::FMapPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_OutPages = { "OutPages", nullptr, (EPropertyFlags)0x0010000000000180, UECodeGen_Private::EPropertyGenFlags::Map, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventRead_PDF_Parms, OutPages), EMapPropertyFlags::None, METADATA_PARAMS(nullptr, 0) };
-	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_bUseDebug_SetBit(void* Obj)
+	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages_ValueProp = { "OutPages", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, 1, Z_Construct_UScriptStruct_FVector2D, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages_Key_KeyProp = { "OutPages_Key", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, 0, Z_Construct_UClass_UTexture2D_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FMapPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages = { "OutPages", nullptr, (EPropertyFlags)0x0010000000000180, UECodeGen_Private::EPropertyGenFlags::Map, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Read_Parms, OutPages), EMapPropertyFlags::None, METADATA_PARAMS(nullptr, 0) };
+	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_bUseDebug_SetBit(void* Obj)
 	{
-		((PDF_ReaderBPLibrary_eventRead_PDF_Parms*)Obj)->bUseDebug = 1;
+		((PDF_ReaderBPLibrary_eventPDF_Read_Parms*)Obj)->bUseDebug = 1;
 	}
-	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_bUseDebug = { "bUseDebug", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventRead_PDF_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_bUseDebug_SetBit, METADATA_PARAMS(nullptr, 0) };
-	const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_InPath = { "InPath", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventRead_PDF_Parms, InPath), METADATA_PARAMS(nullptr, 0) };
-	const UECodeGen_Private::FBytePropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_InBytes_Inner = { "InBytes", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, 0, nullptr, METADATA_PARAMS(nullptr, 0) };
-	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_InBytes = { "InBytes", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventRead_PDF_Parms, InBytes), EArrayPropertyFlags::None, METADATA_PARAMS(nullptr, 0) };
-	const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_InPDF_Pass = { "InPDF_Pass", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventRead_PDF_Parms, InPDF_Pass), METADATA_PARAMS(nullptr, 0) };
-	const UECodeGen_Private::FDoublePropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_Sampling = { "Sampling", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Double, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventRead_PDF_Parms, Sampling), METADATA_PARAMS(nullptr, 0) };
-	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_ReturnValue_SetBit(void* Obj)
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_bUseDebug = { "bUseDebug", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventPDF_Read_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_bUseDebug_SetBit, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InPath = { "InPath", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Read_Parms, InPath), METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FBytePropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InBytes_Inner = { "InBytes", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, 0, nullptr, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InBytes = { "InBytes", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Read_Parms, InBytes), EArrayPropertyFlags::None, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InPDF_Pass = { "InPDF_Pass", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Read_Parms, InPDF_Pass), METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FDoublePropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_Sampling = { "Sampling", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Double, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Read_Parms, Sampling), METADATA_PARAMS(nullptr, 0) };
+	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_ReturnValue_SetBit(void* Obj)
 	{
-		((PDF_ReaderBPLibrary_eventRead_PDF_Parms*)Obj)->ReturnValue = 1;
+		((PDF_ReaderBPLibrary_eventPDF_Read_Parms*)Obj)->ReturnValue = 1;
 	}
-	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventRead_PDF_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
-	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::PropPointers[] = {
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_OutPages_ValueProp,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_OutPages_Key_KeyProp,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_OutPages,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_bUseDebug,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_InPath,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_InBytes_Inner,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_InBytes,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_InPDF_Pass,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_Sampling,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::NewProp_ReturnValue,
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventPDF_Read_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::PropPointers[] = {
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages_ValueProp,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages_Key_KeyProp,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_bUseDebug,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InPath,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InBytes_Inner,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InBytes,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InPDF_Pass,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_Sampling,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_ReturnValue,
 	};
 #if WITH_METADATA
-	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::Function_MetaDataParams[] = {
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::Function_MetaDataParams[] = {
 		{ "Category", "PDF_Reader|Read" },
 		{ "Comment", "/**\n\x09* If you want to view a PDF file from online, you need to convert it to byte array (Low Entry HTTP plugin can do that) and attach it to respective input.\n\x09* If you want to view local PDF file, use \"Platform File Name\" instead normalized file name as standart for Unreal Engine. Also you need to attach an \"empty array\" to InBytes.\n\x09* @param InPath Use platform file name in here.\n\x09* @param Sampling Default value is \"1\". It generates textures as its default resolution. But \"2\" gives better result\n\x09*/" },
 		{ "CPP_Default_Sampling", "1.000000" },
-		{ "DisplayName", "Read PDF" },
-		{ "Keywords", "read, pdf" },
+		{ "DisplayName", "Get PDF as Texture" },
+		{ "Keywords", "pdf, pdfium, read, texture, image" },
 		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
 		{ "ToolTip", "If you want to view a PDF file from online, you need to convert it to byte array (Low Entry HTTP plugin can do that) and attach it to respective input.\nIf you want to view local PDF file, use \"Platform File Name\" instead normalized file name as standart for Unreal Engine. Also you need to attach an \"empty array\" to InBytes.\n@param InPath Use platform file name in here.\n@param Sampling Default value is \"1\". It generates textures as its default resolution. But \"2\" gives better result" },
 	};
 #endif
-	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "Read_PDF", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::PDF_ReaderBPLibrary_eventRead_PDF_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF()
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_Read", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::PDF_ReaderBPLibrary_eventPDF_Read_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF_Statics::FuncParams);
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -138,7 +204,9 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_PDF_Reader,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UPDF_ReaderBPLibrary_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_Read_PDF, "Read_PDF" }, // 2222071162
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose, "PDF_LibClose" }, // 1502096549
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit, "PDF_LibInit" }, // 2829430607
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read, "PDF_Read" }, // 3090181561
 	};
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UPDF_ReaderBPLibrary_Statics::Class_MetaDataParams[] = {
@@ -185,9 +253,9 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 		static const FClassRegisterCompiledInInfo ClassInfo[];
 	};
 	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo[] = {
-		{ Z_Construct_UClass_UPDF_ReaderBPLibrary, UPDF_ReaderBPLibrary::StaticClass, TEXT("UPDF_ReaderBPLibrary"), &Z_Registration_Info_UClass_UPDF_ReaderBPLibrary, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDF_ReaderBPLibrary), 1043992371U) },
+		{ Z_Construct_UClass_UPDF_ReaderBPLibrary, UPDF_ReaderBPLibrary::StaticClass, TEXT("UPDF_ReaderBPLibrary"), &Z_Registration_Info_UClass_UPDF_ReaderBPLibrary, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDF_ReaderBPLibrary), 2179980955U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_4090925984(TEXT("/Script/PDF_Reader"),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_4117484066(TEXT("/Script/PDF_Reader"),
 		Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo),
 		nullptr, 0,
 		nullptr, 0);

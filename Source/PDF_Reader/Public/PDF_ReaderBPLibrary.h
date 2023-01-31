@@ -25,16 +25,28 @@
 *	PDFium Binaries
 *	https://github.com/bblanchon/pdfium-binaries/releases
 */
+
+UCLASS(BlueprintType)
+class PDF_READER_API UPDFiumLib : public UObject
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsLibraryInitialized = false;
+};
+
 UCLASS()
 class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 		
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Open PDF Library", Keywords = "pdf, pdfium, library, lib, open"), Category = "PDF_Reader|System")
-	static void PDF_LibInit();
+	static void PDF_LibInit(UPDFiumLib*& OutPDFium);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Close PDF Library", Keywords = "pdf, pdfium, library, lib, close"), Category = "PDF_Reader|System")
-	static void PDF_LibClose();
+	static void PDF_LibClose(UPARAM(ref)UPDFiumLib*& InPDFium);
 		
 	/**
 	* If you want to view a PDF file from online, you need to convert it to byte array (Low Entry HTTP plugin can do that) and attach it to respective input.
@@ -43,6 +55,6 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	* @param Sampling Default value is "1". It generates textures as its default resolution. But "2" gives better result
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get PDF as Texture", Keywords = "pdf, pdfium, read, texture, image"), Category = "PDF_Reader|Read")
-	static bool PDF_Read(TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling = 1.0);
+	static bool PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling = 1.0);
 	
 };
