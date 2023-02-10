@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-PDF_Reader.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Intermediate\Build\Win64\FF_Plugins_MobileEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Module.PDF_Reader.cpp.obj"
+"D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Default.rc2.res"
+/OUT:"D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\UnrealEditor-PDF_Reader.lib"
