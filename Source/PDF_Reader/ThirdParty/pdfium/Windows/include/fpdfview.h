@@ -14,7 +14,7 @@
 
 #include <stddef.h>
 
-#if defined(_WIN64) && !defined(__WINDOWS__)
+#if defined(_WIN32) && !defined(__WINDOWS__)
 #include <windows.h>
 #endif
 
@@ -191,7 +191,7 @@ typedef int FPDF_ANNOT_APPEARANCEMODE;
 // Dictionary value types.
 typedef int FPDF_OBJECT_TYPE;
 
-#if defined(_WIN64)
+#if defined(WIN32)
 #if defined(FPDF_IMPLEMENTATION)
 #define FPDF_EXPORT __declspec(dllexport)
 #else
@@ -203,9 +203,9 @@ typedef int FPDF_OBJECT_TYPE;
 #else
 #define FPDF_EXPORT
 #endif  // defined(FPDF_IMPLEMENTATION)
-#endif  // defined(_WIN64)
+#endif  // defined(WIN32)
 
-#if defined(_WIN64) && defined(FPDFSDK_EXPORTS)
+#if defined(WIN32) && defined(FPDFSDK_EXPORTS)
 #define FPDF_CALLCONV __stdcall
 #else
 #define FPDF_CALLCONV
@@ -316,7 +316,7 @@ FPDF_EXPORT void FPDF_CALLCONV FPDF_DestroyLibrary();
 FPDF_EXPORT void FPDF_CALLCONV FPDF_SetSandBoxPolicy(FPDF_DWORD policy,
                                                      FPDF_BOOL enable);
 
-#if defined(_WIN64)
+#if defined(_WIN32)
 // Experimental API.
 // Function: FPDF_SetPrintMode
 //          Set printing mode when printing on Windows.
@@ -343,7 +343,7 @@ FPDF_EXPORT void FPDF_CALLCONV FPDF_SetSandBoxPolicy(FPDF_DWORD policy,
 // Return value:
 //          True if successful, false if unsuccessful (typically invalid input).
 FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_SetPrintMode(int mode);
-#endif  // defined(_WIN64)
+#endif  // defined(_WIN32)
 
 // Function: FPDF_LoadDocument
 //          Open and load a PDF document.
@@ -812,7 +812,7 @@ typedef struct FPDF_COLORSCHEME_ {
   FPDF_DWORD text_stroke_color;
 } FPDF_COLORSCHEME;
 
-#ifdef _WIN64
+#ifdef _WIN32
 // Function: FPDF_RenderPage
 //          Render contents of a page to a device (screen, bitmap, or printer).
 //          This function is only supported on Windows.

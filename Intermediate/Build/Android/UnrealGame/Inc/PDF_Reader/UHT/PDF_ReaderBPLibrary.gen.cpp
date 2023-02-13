@@ -9,15 +9,101 @@
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 // Cross Module References
+	COREUOBJECT_API UClass* Z_Construct_UClass_UObject();
 	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector2D();
 	ENGINE_API UClass* Z_Construct_UClass_UBlueprintFunctionLibrary();
 	ENGINE_API UClass* Z_Construct_UClass_UTexture2D_NoRegister();
 	PDF_READER_API UClass* Z_Construct_UClass_UPDF_ReaderBPLibrary();
 	PDF_READER_API UClass* Z_Construct_UClass_UPDF_ReaderBPLibrary_NoRegister();
+	PDF_READER_API UClass* Z_Construct_UClass_UPDFiumLib();
+	PDF_READER_API UClass* Z_Construct_UClass_UPDFiumLib_NoRegister();
 	UPackage* Z_Construct_UPackage__Script_PDF_Reader();
 // End Cross Module References
+	void UPDFiumLib::StaticRegisterNativesUPDFiumLib()
+	{
+	}
+	IMPLEMENT_CLASS_NO_AUTO_REGISTRATION(UPDFiumLib);
+	UClass* Z_Construct_UClass_UPDFiumLib_NoRegister()
+	{
+		return UPDFiumLib::StaticClass();
+	}
+	struct Z_Construct_UClass_UPDFiumLib_Statics
+	{
+		static UObject* (*const DependentSingletons[])();
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
+#endif
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_bIsLibraryInitialized_MetaData[];
+#endif
+		static void NewProp_bIsLibraryInitialized_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_bIsLibraryInitialized;
+		static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
+		static const UECodeGen_Private::FClassParams ClassParams;
+	};
+	UObject* (*const Z_Construct_UClass_UPDFiumLib_Statics::DependentSingletons[])() = {
+		(UObject* (*)())Z_Construct_UClass_UObject,
+		(UObject* (*)())Z_Construct_UPackage__Script_PDF_Reader,
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UPDFiumLib_Statics::Class_MetaDataParams[] = {
+		{ "BlueprintType", "true" },
+		{ "Comment", "/* \n*\x09""Function library class.\n*\x09""Each function in it is expected to be static and represents blueprint node that can be called in any blueprint.\n*\n*\x09When declaring function you can define metadata for the node. Key function specifiers will be BlueprintPure and BlueprintCallable.\n*\x09""BlueprintPure - means the function does not affect the owning object in any way and thus creates a node without Exec pins.\n*\x09""BlueprintCallable - makes a function which can be executed in Blueprints - Thus it has Exec pins.\n*\x09""DisplayName - full name of the node, shown when you mouse over the node and in the blueprint drop down menu.\n*\x09\x09\x09\x09Its lets you name the node using characters not allowed in C++ function names.\n*\x09""CompactNodeTitle - the word(s) that appear on the node.\n*\x09Keywords -\x09the list of keywords that helps you to find node when you search for it using Blueprint drop-down menu. \n*\x09\x09\x09\x09Good example is \"Print String\" node which you can find also by using keyword \"log\".\n*\x09""Category -\x09the category your node will be under in the Blueprint drop-down menu.\n*\n*\x09""For more info on custom blueprint nodes visit documentation:\n*\x09https://wiki.unrealengine.com/Custom_Blueprint_Node_Creation\n* \n*\x09PDFium Binaries\n*\x09https://github.com/bblanchon/pdfium-binaries/releases\n*/" },
+		{ "IncludePath", "PDF_ReaderBPLibrary.h" },
+		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
+		{ "ToolTip", "*      Function library class.\n*      Each function in it is expected to be static and represents blueprint node that can be called in any blueprint.\n*\n*      When declaring function you can define metadata for the node. Key function specifiers will be BlueprintPure and BlueprintCallable.\n*      BlueprintPure - means the function does not affect the owning object in any way and thus creates a node without Exec pins.\n*      BlueprintCallable - makes a function which can be executed in Blueprints - Thus it has Exec pins.\n*      DisplayName - full name of the node, shown when you mouse over the node and in the blueprint drop down menu.\n*                              Its lets you name the node using characters not allowed in C++ function names.\n*      CompactNodeTitle - the word(s) that appear on the node.\n*      Keywords -      the list of keywords that helps you to find node when you search for it using Blueprint drop-down menu.\n*                              Good example is \"Print String\" node which you can find also by using keyword \"log\".\n*      Category -      the category your node will be under in the Blueprint drop-down menu.\n*\n*      For more info on custom blueprint nodes visit documentation:\n*      https://wiki.unrealengine.com/Custom_Blueprint_Node_Creation\n*\n*      PDFium Binaries\n*      https://github.com/bblanchon/pdfium-binaries/releases" },
+	};
+#endif
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UPDFiumLib_Statics::NewProp_bIsLibraryInitialized_MetaData[] = {
+		{ "Category", "PDFiumLib" },
+		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
+	};
+#endif
+	void Z_Construct_UClass_UPDFiumLib_Statics::NewProp_bIsLibraryInitialized_SetBit(void* Obj)
+	{
+		((UPDFiumLib*)Obj)->bIsLibraryInitialized = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UPDFiumLib_Statics::NewProp_bIsLibraryInitialized = { "bIsLibraryInitialized", nullptr, (EPropertyFlags)0x0010000000000014, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(UPDFiumLib), &Z_Construct_UClass_UPDFiumLib_Statics::NewProp_bIsLibraryInitialized_SetBit, METADATA_PARAMS(Z_Construct_UClass_UPDFiumLib_Statics::NewProp_bIsLibraryInitialized_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UPDFiumLib_Statics::NewProp_bIsLibraryInitialized_MetaData)) };
+	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UPDFiumLib_Statics::PropPointers[] = {
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UPDFiumLib_Statics::NewProp_bIsLibraryInitialized,
+	};
+	const FCppClassTypeInfoStatic Z_Construct_UClass_UPDFiumLib_Statics::StaticCppClassTypeInfo = {
+		TCppClassTypeTraits<UPDFiumLib>::IsAbstract,
+	};
+	const UECodeGen_Private::FClassParams Z_Construct_UClass_UPDFiumLib_Statics::ClassParams = {
+		&UPDFiumLib::StaticClass,
+		nullptr,
+		&StaticCppClassTypeInfo,
+		DependentSingletons,
+		nullptr,
+		Z_Construct_UClass_UPDFiumLib_Statics::PropPointers,
+		nullptr,
+		UE_ARRAY_COUNT(DependentSingletons),
+		0,
+		UE_ARRAY_COUNT(Z_Construct_UClass_UPDFiumLib_Statics::PropPointers),
+		0,
+		0x001000A0u,
+		METADATA_PARAMS(Z_Construct_UClass_UPDFiumLib_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_UPDFiumLib_Statics::Class_MetaDataParams))
+	};
+	UClass* Z_Construct_UClass_UPDFiumLib()
+	{
+		if (!Z_Registration_Info_UClass_UPDFiumLib.OuterSingleton)
+		{
+			UECodeGen_Private::ConstructUClass(Z_Registration_Info_UClass_UPDFiumLib.OuterSingleton, Z_Construct_UClass_UPDFiumLib_Statics::ClassParams);
+		}
+		return Z_Registration_Info_UClass_UPDFiumLib.OuterSingleton;
+	}
+	template<> PDF_READER_API UClass* StaticClass<UPDFiumLib>()
+	{
+		return UPDFiumLib::StaticClass();
+	}
+	DEFINE_VTABLE_PTR_HELPER_CTOR(UPDFiumLib);
+	UPDFiumLib::~UPDFiumLib() {}
 	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_Read)
 	{
+		P_GET_OBJECT_REF(UPDFiumLib,Z_Param_Out_InPDFium);
 		P_GET_TMAP_REF(UTexture2D*,FVector2D,Z_Param_Out_OutPages);
 		P_GET_UBOOL(Z_Param_bUseDebug);
 		P_GET_PROPERTY(FStrProperty,Z_Param_InPath);
@@ -26,21 +112,23 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 		P_GET_PROPERTY(FDoubleProperty,Z_Param_Sampling);
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		*(bool*)Z_Param__Result=UPDF_ReaderBPLibrary::PDF_Read(Z_Param_Out_OutPages,Z_Param_bUseDebug,Z_Param_InPath,Z_Param_InBytes,Z_Param_InPDF_Pass,Z_Param_Sampling);
+		*(bool*)Z_Param__Result=UPDF_ReaderBPLibrary::PDF_Read(Z_Param_Out_InPDFium,Z_Param_Out_OutPages,Z_Param_bUseDebug,Z_Param_InPath,Z_Param_InBytes,Z_Param_InPDF_Pass,Z_Param_Sampling);
 		P_NATIVE_END;
 	}
 	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_LibClose)
 	{
+		P_GET_OBJECT_REF(UPDFiumLib,Z_Param_Out_InPDFium);
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		UPDF_ReaderBPLibrary::PDF_LibClose();
+		UPDF_ReaderBPLibrary::PDF_LibClose(Z_Param_Out_InPDFium);
 		P_NATIVE_END;
 	}
 	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_LibInit)
 	{
+		P_GET_OBJECT_REF(UPDFiumLib,Z_Param_Out_OutPDFium);
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		UPDF_ReaderBPLibrary::PDF_LibInit();
+		UPDF_ReaderBPLibrary::PDF_LibInit(Z_Param_Out_OutPDFium);
 		P_NATIVE_END;
 	}
 	void UPDF_ReaderBPLibrary::StaticRegisterNativesUPDF_ReaderBPLibrary()
@@ -55,10 +143,20 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 	}
 	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics
 	{
+		struct PDF_ReaderBPLibrary_eventPDF_LibClose_Parms
+		{
+			UPDFiumLib* InPDFium;
+		};
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_InPDFium;
+		static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
 #endif
 		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::NewProp_InPDFium = { "InPDFium", nullptr, (EPropertyFlags)0x0010000008000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_LibClose_Parms, InPDFium), Z_Construct_UClass_UPDFiumLib_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::PropPointers[] = {
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::NewProp_InPDFium,
 	};
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::Function_MetaDataParams[] = {
@@ -68,7 +166,7 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
 	};
 #endif
-	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_LibClose", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::Function_MetaDataParams)) };
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_LibClose", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::PDF_ReaderBPLibrary_eventPDF_LibClose_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -80,10 +178,20 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 	}
 	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics
 	{
+		struct PDF_ReaderBPLibrary_eventPDF_LibInit_Parms
+		{
+			UPDFiumLib* OutPDFium;
+		};
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_OutPDFium;
+		static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
 #endif
 		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::NewProp_OutPDFium = { "OutPDFium", nullptr, (EPropertyFlags)0x0010000000000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_LibInit_Parms, OutPDFium), Z_Construct_UClass_UPDFiumLib_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::PropPointers[] = {
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::NewProp_OutPDFium,
 	};
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::Function_MetaDataParams[] = {
@@ -93,7 +201,7 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
 	};
 #endif
-	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_LibInit", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::Function_MetaDataParams)) };
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_LibInit", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::PDF_ReaderBPLibrary_eventPDF_LibInit_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -107,6 +215,7 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 	{
 		struct PDF_ReaderBPLibrary_eventPDF_Read_Parms
 		{
+			UPDFiumLib* InPDFium;
 			TMap<UTexture2D*,FVector2D> OutPages;
 			bool bUseDebug;
 			FString InPath;
@@ -115,6 +224,7 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 			double Sampling;
 			bool ReturnValue;
 		};
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_InPDFium;
 		static const UECodeGen_Private::FStructPropertyParams NewProp_OutPages_ValueProp;
 		static const UECodeGen_Private::FObjectPropertyParams NewProp_OutPages_Key_KeyProp;
 		static const UECodeGen_Private::FMapPropertyParams NewProp_OutPages;
@@ -133,6 +243,7 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 #endif
 		static const UECodeGen_Private::FFunctionParams FuncParams;
 	};
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InPDFium = { "InPDFium", nullptr, (EPropertyFlags)0x0010000008000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Read_Parms, InPDFium), Z_Construct_UClass_UPDFiumLib_NoRegister, METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages_ValueProp = { "OutPages", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, 1, Z_Construct_UScriptStruct_FVector2D, METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages_Key_KeyProp = { "OutPages_Key", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, 0, Z_Construct_UClass_UTexture2D_NoRegister, METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FMapPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages = { "OutPages", nullptr, (EPropertyFlags)0x0010000000000180, UECodeGen_Private::EPropertyGenFlags::Map, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Read_Parms, OutPages), EMapPropertyFlags::None, METADATA_PARAMS(nullptr, 0) };
@@ -152,6 +263,7 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 	}
 	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventPDF_Read_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::PropPointers[] = {
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_InPDFium,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages_ValueProp,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages_Key_KeyProp,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Statics::NewProp_OutPages,
@@ -204,16 +316,14 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_PDF_Reader,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UPDF_ReaderBPLibrary_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose, "PDF_LibClose" }, // 1502096549
-		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit, "PDF_LibInit" }, // 2829430607
-		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read, "PDF_Read" }, // 3090181561
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose, "PDF_LibClose" }, // 3478292979
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit, "PDF_LibInit" }, // 555610884
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read, "PDF_Read" }, // 2082149286
 	};
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UPDF_ReaderBPLibrary_Statics::Class_MetaDataParams[] = {
-		{ "Comment", "/* \n*\x09""Function library class.\n*\x09""Each function in it is expected to be static and represents blueprint node that can be called in any blueprint.\n*\n*\x09When declaring function you can define metadata for the node. Key function specifiers will be BlueprintPure and BlueprintCallable.\n*\x09""BlueprintPure - means the function does not affect the owning object in any way and thus creates a node without Exec pins.\n*\x09""BlueprintCallable - makes a function which can be executed in Blueprints - Thus it has Exec pins.\n*\x09""DisplayName - full name of the node, shown when you mouse over the node and in the blueprint drop down menu.\n*\x09\x09\x09\x09Its lets you name the node using characters not allowed in C++ function names.\n*\x09""CompactNodeTitle - the word(s) that appear on the node.\n*\x09Keywords -\x09the list of keywords that helps you to find node when you search for it using Blueprint drop-down menu. \n*\x09\x09\x09\x09Good example is \"Print String\" node which you can find also by using keyword \"log\".\n*\x09""Category -\x09the category your node will be under in the Blueprint drop-down menu.\n*\n*\x09""For more info on custom blueprint nodes visit documentation:\n*\x09https://wiki.unrealengine.com/Custom_Blueprint_Node_Creation\n* \n*\x09PDFium Binaries\n*\x09https://github.com/bblanchon/pdfium-binaries/releases\n*/" },
 		{ "IncludePath", "PDF_ReaderBPLibrary.h" },
 		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
-		{ "ToolTip", "*      Function library class.\n*      Each function in it is expected to be static and represents blueprint node that can be called in any blueprint.\n*\n*      When declaring function you can define metadata for the node. Key function specifiers will be BlueprintPure and BlueprintCallable.\n*      BlueprintPure - means the function does not affect the owning object in any way and thus creates a node without Exec pins.\n*      BlueprintCallable - makes a function which can be executed in Blueprints - Thus it has Exec pins.\n*      DisplayName - full name of the node, shown when you mouse over the node and in the blueprint drop down menu.\n*                              Its lets you name the node using characters not allowed in C++ function names.\n*      CompactNodeTitle - the word(s) that appear on the node.\n*      Keywords -      the list of keywords that helps you to find node when you search for it using Blueprint drop-down menu.\n*                              Good example is \"Print String\" node which you can find also by using keyword \"log\".\n*      Category -      the category your node will be under in the Blueprint drop-down menu.\n*\n*      For more info on custom blueprint nodes visit documentation:\n*      https://wiki.unrealengine.com/Custom_Blueprint_Node_Creation\n*\n*      PDFium Binaries\n*      https://github.com/bblanchon/pdfium-binaries/releases" },
 	};
 #endif
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UPDF_ReaderBPLibrary_Statics::StaticCppClassTypeInfo = {
@@ -253,9 +363,10 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 		static const FClassRegisterCompiledInInfo ClassInfo[];
 	};
 	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo[] = {
-		{ Z_Construct_UClass_UPDF_ReaderBPLibrary, UPDF_ReaderBPLibrary::StaticClass, TEXT("UPDF_ReaderBPLibrary"), &Z_Registration_Info_UClass_UPDF_ReaderBPLibrary, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDF_ReaderBPLibrary), 2179980955U) },
+		{ Z_Construct_UClass_UPDFiumLib, UPDFiumLib::StaticClass, TEXT("UPDFiumLib"), &Z_Registration_Info_UClass_UPDFiumLib, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDFiumLib), 2093429572U) },
+		{ Z_Construct_UClass_UPDF_ReaderBPLibrary, UPDF_ReaderBPLibrary::StaticClass, TEXT("UPDF_ReaderBPLibrary"), &Z_Registration_Info_UClass_UPDF_ReaderBPLibrary, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDF_ReaderBPLibrary), 2961499881U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_4117484066(TEXT("/Script/PDF_Reader"),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_481264807(TEXT("/Script/PDF_Reader"),
 		Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo),
 		nullptr, 0,
 		nullptr, 0);

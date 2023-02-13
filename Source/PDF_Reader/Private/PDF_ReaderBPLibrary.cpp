@@ -114,6 +114,8 @@ bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UText
 		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, ("Function got PDF page count = " + FString::FromInt(PDF_Page_Count)));
 	}
 
+	TMap<UTexture2D*, FVector2D> Pages;
+
 	for (int32 PageIndex = 0; PageIndex < PDF_Page_Count; PageIndex++)
 	{
 		FPDF_PAGE PDF_Page = FPDF_LoadPage(Document, PageIndex);
@@ -133,7 +135,7 @@ bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UText
 		PDF_Texture->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
 #endif
 
-		PDF_Texture->SRGB = 0;;
+		PDF_Texture->SRGB = 0;
 		FTexture2DMipMap& Mip = PDF_Texture->GetPlatformData()->Mips[0];
 		void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
@@ -205,8 +207,10 @@ bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UText
 		PDF_Texture->UpdateResource(); 
 #endif
 
-		OutPages.Add(PDF_Texture, EachResolution);
+		Pages.Add(PDF_Texture, EachResolution);
 	}
+
+	OutPages = Pages;
 
 	FPDF_CloseDocument(Document);
 	

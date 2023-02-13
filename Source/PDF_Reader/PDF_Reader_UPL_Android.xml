@@ -12,6 +12,7 @@
 	<resourceCopies>
 		<if condition="bCpuArchSupported">
 			<true>
+				
 				<log text="Copying libmodft2.so"/>
 				<copyFile src="$S(PluginDir)/ThirdParty/pdfium/Android/lib/arm64-v8a/libmodft2.so"
 							dst="$S(BuildDir)/libs/$S(Architecture)/libmodft2.so" />
@@ -23,6 +24,7 @@
 				<log text="Copying libmodpng.so"/>
 				<copyFile src="$S(PluginDir)/ThirdParty/pdfium/Android/lib/arm64-v8a/libmodpng.so"
 							dst="$S(BuildDir)/libs/$S(Architecture)/libmodpng.so" />
+				
 			</true>
 		</if>
 	</resourceCopies>
@@ -31,9 +33,11 @@
 	<soLoadLibrary>
 		<if condition="bCpuArchSupported">
 			<true>
-				<loadLibrary name="libmodft2" failmsg="pdfium library not loaded and may be required for PDF_Reader." />
-				<loadLibrary name="libmodpdfium" failmsg="pdfium library not loaded and may be required for PDF_Reader." />
-				<loadLibrary name="libmodpng" failmsg="pdfium library not loaded and may be required for PDF_Reader." />
+				
+				<loadLibrary name="libmodft2" failmsg="libmodft2 library not loaded and may be required for PDF_Reader." />
+				<loadLibrary name="libmodpdfium" failmsg="libmodpdfium library not loaded and may be required for PDF_Reader." />
+				<loadLibrary name="libmodpng" failmsg="libmodpng library not loaded and may be required for PDF_Reader." />
+				
 			</true>
 		</if>
 	</soLoadLibrary>
