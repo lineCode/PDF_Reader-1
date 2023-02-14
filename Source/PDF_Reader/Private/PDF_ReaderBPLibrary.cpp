@@ -18,7 +18,34 @@ THIRD_PARTY_INCLUDES_END
 UPDF_ReaderBPLibrary::UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
+	if (HasAnyFlags(RF_ClassDefaultObject) == false)
+	{
+		AddToRoot();
+	}
+}
 
+FString UPDF_ReaderBPLibrary::AndroidFolderHelper(FString InFileName)
+{
+	if (UGameplayStatics::GetPlatformName() == "Android")
+	{
+		if (InFileName.IsEmpty() == true)
+		{
+			return "";
+		}
+
+		FString Path_Referance = FPlatformFileManager::Get().GetPlatformFile().ConvertToAbsolutePathForExternalAppForRead(*(FPaths::ProjectSavedDir()));
+
+		TArray<FString> Path_Sections;
+		Path_Referance.ParseIntoArray(Path_Sections, TEXT("/"), true);
+		FString Path_Absolute = "/" + Path_Sections[0] + "/" + Path_Sections[1] + "/" + Path_Sections[2] + "/" + InFileName;
+
+		return Path_Absolute;
+	}
+
+	else
+	{
+		return "";
+	}
 }
 
 void UPDF_ReaderBPLibrary::PDF_LibInit(UPDFiumLib*& OutPDFium)
@@ -44,16 +71,11 @@ void UPDF_ReaderBPLibrary::PDF_LibClose(UPARAM(ref)UPDFiumLib*& InPDFium)
 	FPDF_DestroyLibrary();
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling)
+bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UTexture2D*, FVector2D>& OutPages, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling)
 {	
 	if (InPDFium->bIsLibraryInitialized == false)
 	{
 		return false;
-	}
-
-	if (bUseDebug)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, "PDF library initialized.");
 	}
 
 	FPDF_DOCUMENT Document = NULL;
@@ -67,11 +89,6 @@ bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UText
 #ifdef __ANDROID__
 		Document = FPDF_LoadMemDocument(InBytes.GetData(), InBytes.Num(), TCHAR_TO_UTF8(*InPDF_Pass));
 #endif
-
-		if (bUseDebug)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, "Document loaded from memory.");
-		}
 	}
 
 	else
@@ -109,11 +126,6 @@ bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UText
 
 	int32 PDF_Page_Count = FPDF_GetPageCount(Document);
 
-	if (bUseDebug)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, ("Function got PDF page count = " + FString::FromInt(PDF_Page_Count)));
-	}
-
 	TMap<UTexture2D*, FVector2D> Pages;
 
 	for (int32 PageIndex = 0; PageIndex < PDF_Page_Count; PageIndex++)
@@ -126,11 +138,6 @@ bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UText
 
 		UTexture2D* PDF_Texture = UTexture2D::CreateTransient((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), PF_B8G8R8A8);
 
-		if (bUseDebug)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, ("Texture created " + FString::FromInt(PageIndex)));
-		}
-
 #if WITH_EDITORONLY_DATA
 		PDF_Texture->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
 #endif
@@ -140,11 +147,6 @@ bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UText
 		void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
 		FPDF_BITMAP PDF_Bitmap = FPDFBitmap_CreateEx((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), FPDFBitmap_BGRA, NULL, 0);
-
-		if (bUseDebug)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, ("Bitmap created " + FString::FromInt(PageIndex)));
-		}
 
 		if (PDF_Bitmap != NULL)
 		{
@@ -158,39 +160,10 @@ bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UText
 
 			FPDFBitmap_FillRect(PDF_Bitmap, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0xffffffff);
 			FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0, FPDF_ANNOT);
-			
-			/*
-			FS_RECTF rc;
-			FMemory::Memset(&rc, 0, sizeof(rc));
-			rc.left = 0;
-			rc.right = (PDF_Page_Width * Sampling) - 1;
-
-			rc.top = 0;
-			rc.bottom = (PDF_Page_Height * Sampling) - 1;
-
-			FS_MATRIX transform;
-			FMemory::Memset(&transform, 0, sizeof(transform));
-
-			transform.a = 1 * Sampling;
-			transform.b = 0;
-			transform.c = 0;
-			transform.d = 1 * Sampling;
-			transform.e = 0;
-			transform.f = 0;
-
-			FPDF_RenderPageBitmapWithMatrix(PDF_Bitmap, PDF_Page, &transform, &rc, FPDF_ANNOT);
-			*/
-
 			FPDF_FFLDraw(Form_Handle, PDF_Bitmap, PDF_Page, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0, 0);
-
 			FPDF_ClosePage(PDF_Page);
 
 			FMemory::Memcpy(Data, Buffer, Count);
-			
-			if (bUseDebug)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, ("Bitmap has been copied to texture " + FString::FromInt(PageIndex)));
-			}
 
 			FPDFBitmap_Destroy(PDF_Bitmap);
 		}

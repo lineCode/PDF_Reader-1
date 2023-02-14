@@ -32,7 +32,7 @@ class PDF_READER_API UPDFiumLib : public UObject
 	GENERATED_BODY()
 
 public:
-
+	
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsLibraryInitialized = false;
 };
@@ -42,12 +42,15 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 		
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Android Folder Helper", ToolTip = "This node automatically gives Internal Storage absolute path. So, you just need to define sub-folder and pdf file. Example: Download/sample.pdf", Keywords = "pdf, pdfium, android, folder, helper"), Category = "PDF_Reader|System")
+	static FString AndroidFolderHelper(FString InFileName);
+
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Open PDF Library", Keywords = "pdf, pdfium, library, lib, open"), Category = "PDF_Reader|System")
 	static void PDF_LibInit(UPDFiumLib*& OutPDFium);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Close PDF Library", Keywords = "pdf, pdfium, library, lib, close"), Category = "PDF_Reader|System")
 	static void PDF_LibClose(UPARAM(ref)UPDFiumLib*& InPDFium);
-		
+	
 	/**
 	* If you want to view a PDF file from online, you need to convert it to byte array (Low Entry HTTP plugin can do that) and attach it to respective input.
 	* If you want to view local PDF file, use "Platform File Name" instead normalized file name as standart for Unreal Engine. Also you need to attach an "empty array" to InBytes.
@@ -55,6 +58,6 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	* @param Sampling Default value is "1". It generates textures as its default resolution. But "2" gives better result
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get PDF as Texture", Keywords = "pdf, pdfium, read, texture, image"), Category = "PDF_Reader|Read")
-	static bool PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UTexture2D*, FVector2D>& OutPages, bool bUseDebug, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling = 1.0);
+	static bool PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UTexture2D*, FVector2D>& OutPages, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling = 1.0);
 	
 };

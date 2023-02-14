@@ -98,14 +98,16 @@ template<> PDF_READER_API UClass* StaticClass<class UPDFiumLib>();
  \
 	DECLARE_FUNCTION(execPDF_Read); \
 	DECLARE_FUNCTION(execPDF_LibClose); \
-	DECLARE_FUNCTION(execPDF_LibInit);
+	DECLARE_FUNCTION(execPDF_LibInit); \
+	DECLARE_FUNCTION(execAndroidFolderHelper);
 
 
 #define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_43_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execPDF_Read); \
 	DECLARE_FUNCTION(execPDF_LibClose); \
-	DECLARE_FUNCTION(execPDF_LibInit);
+	DECLARE_FUNCTION(execPDF_LibInit); \
+	DECLARE_FUNCTION(execAndroidFolderHelper);
 
 
 #define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_43_ACCESSORS
