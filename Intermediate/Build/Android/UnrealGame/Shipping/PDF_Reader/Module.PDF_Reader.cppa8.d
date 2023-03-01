@@ -1579,6 +1579,7 @@ D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Intermediate/B
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/sys/cdefs.h \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/android/versioning.h \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/android/api-level.h \
+  C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/bits/get_device_api_level_inlines.h \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/android/ndk-version.h \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/cstddef \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/version \
@@ -1698,6 +1699,7 @@ D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Intermediate/B
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/bits/sysconf.h \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/bits/fortify/unistd.h \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/android/legacy_unistd_inlines.h \
+  C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/bits/swab.h \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/atomic \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/__threading_support \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/chrono \
@@ -1788,6 +1790,21 @@ D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Intermediate/B
   D:/Epic/Engines/UE_5.1/Engine/Source/Runtime/Projects/Public/PluginReferenceDescriptor.h \
   D:/Epic/Engines/UE_5.1/Engine/Source/Runtime/Projects/Public/VerseScope.h \
   D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/Private/PDF_ReaderBPLibrary.cpp \
+  D:/Epic/Engines/UE_5.1/Engine/Source/Runtime/Online/HTTP/Public/Interfaces/IHttpRequest.h \
+  D:/Epic/Engines/UE_5.1/Engine/Source/Runtime/Online/HTTP/Public/Interfaces/IHttpBase.h \
+  D:/Epic/Engines/UE_5.1/Engine/Source/Runtime/Online/HTTP/Public/Interfaces/IHttpResponse.h \
+  D:/Epic/Engines/UE_5.1/Engine/Source/Runtime/Online/HTTP/Public/HttpModule.h \
   D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_formfill.h \
   D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdfview.h \
-  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_text.h
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_text.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/fpdf_scopers.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/fpdf_deleters.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/../fpdf_annot.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/../fpdf_dataavail.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/../fpdf_edit.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/../fpdf_formfill.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/../fpdf_javascript.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/../fpdf_structtree.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/../fpdf_text.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/../fpdf_transformpage.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/cpp/../fpdfview.h

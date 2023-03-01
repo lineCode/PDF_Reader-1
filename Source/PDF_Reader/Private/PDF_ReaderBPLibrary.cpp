@@ -4,16 +4,21 @@
 #include "PDF_Reader.h"
 
 // UE Includes.
+#include "Misc/FileHelper.h"
 #include "Kismet/GameplayStatics.h"
 
 THIRD_PARTY_INCLUDES_START
+// C++ Includes.
+#include <string>
+#include <fstream>
+
 // PDFium Includes.
 #include "fpdf_formfill.h"
-#include "fpdfview.h"
 #include "fpdf_text.h"
-
-#include <string>
 THIRD_PARTY_INCLUDES_END
+
+static inline bool Global_bIsLibInitialized = false;
+static inline TSet<FPDF_DOCUMENT> Global_Docs_Pool;
 
 UPDF_ReaderBPLibrary::UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
@@ -24,9 +29,9 @@ UPDF_ReaderBPLibrary::UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectIniti
 	}
 }
 
-FString UPDF_ReaderBPLibrary::AndroidFolderHelper(FString InFileName)
+FString UPDF_ReaderBPLibrary::PDF_Android_Path_Helper(FString InFileName)
 {
-	if (UGameplayStatics::GetPlatformName() == "Android")
+	if (UGameplayStatics::GetPlatformName() == "Android" || UGameplayStatics::GetPlatformName() == "IOS")
 	{
 		if (InFileName.IsEmpty() == true)
 		{
@@ -48,10 +53,8 @@ FString UPDF_ReaderBPLibrary::AndroidFolderHelper(FString InFileName)
 	}
 }
 
-void UPDF_ReaderBPLibrary::PDF_LibInit(UPDFiumLib*& OutPDFium)
+void UPDF_ReaderBPLibrary::PDF_LibInit()
 {
-	UPDFiumLib* PDFiumLib = NewObject<UPDFiumLib>();
-	
 	FPDF_LIBRARY_CONFIG config;
 	FMemory::Memset(&config, 0, sizeof(config));
 	config.version = 2;
@@ -60,132 +63,300 @@ void UPDF_ReaderBPLibrary::PDF_LibInit(UPDFiumLib*& OutPDFium)
 	config.m_v8EmbedderSlot = 0;
 	FPDF_InitLibraryWithConfig(&config);
 
-	PDFiumLib->bIsLibraryInitialized = true;
-	
-	OutPDFium = PDFiumLib;
+	Global_bIsLibInitialized = true;
 }
 
-void UPDF_ReaderBPLibrary::PDF_LibClose(UPARAM(ref)UPDFiumLib*& InPDFium)
+void UPDF_ReaderBPLibrary::PDF_LibClose()
 {
-	InPDFium->bIsLibraryInitialized = false;
+	TArray<FPDF_DOCUMENT> Array_Docs = Global_Docs_Pool.Array();
+	
+	for (int32 Index_Docs = 0; Index_Docs < Array_Docs.Num(); Index_Docs++)
+	{
+		if (Array_Docs[Index_Docs])
+		{
+			FPDF_CloseDocument(Array_Docs[Index_Docs]);
+		}
+	}
+	
+	Array_Docs.Empty();
+	Global_Docs_Pool.Empty();
+
+	Global_bIsLibInitialized = false;
 	FPDF_DestroyLibrary();
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UTexture2D*, FVector2D>& OutPages, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling)
-{	
-	if (InPDFium->bIsLibraryInitialized == false)
+bool UPDF_ReaderBPLibrary::PDF_LibState()
+{
+	return Global_bIsLibInitialized;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Read_Path(UArrayObject*& Out_Byte_Object, FString In_Path)
+{
+	if (Global_bIsLibInitialized == false)
 	{
 		return false;
 	}
 
-	FPDF_DOCUMENT Document = NULL;
-
-	if (InBytes.Num() > 0)
+	if (In_Path.IsEmpty() == true)
 	{
-#ifdef _WIN64
-		Document = FPDF_LoadMemDocument64(InBytes.GetData(), InBytes.Num(), TCHAR_TO_UTF8(*InPDF_Pass));
-#endif
+		return false;
+	}
 
-#ifdef __ANDROID__
-		Document = FPDF_LoadMemDocument(InBytes.GetData(), InBytes.Num(), TCHAR_TO_UTF8(*InPDF_Pass));
-#endif
+	FString Path = In_Path;
+
+	if (UGameplayStatics::GetPlatformName() == "Windows")
+	{
+		FPaths::MakePlatformFilename(Path);
+	}
+
+	if (FPaths::FileExists(Path) == false)
+	{
+		return false;
+	}
+
+	TArray64<uint8> ByteArray;
+	FFileHelper::LoadFileToArray(ByteArray, *In_Path);
+
+	UArrayObject* ByteObject = NewObject<UArrayObject>();
+	ByteObject->Array_Bytes_64 = ByteArray;
+	
+	return true;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Read_HTTP(UArrayObject*& Out_Byte_Object, TArray<uint8> In_Bytes)
+{
+	if (In_Bytes.Num() == 0)
+	{
+		return false;
+	}
+
+	UArrayObject* Byte_Object = NewObject<UArrayObject>();
+	Byte_Object->Array_Bytes_32 = In_Bytes;
+
+	Out_Byte_Object = Byte_Object;
+
+	return true;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Read_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArrayObject*& In_Byte_Object, FString In_PDF_Password)
+{
+	if (IsValid(In_Byte_Object) == false)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 30, FColor::Red, "Byte object is not valid.");
+		return false;
+	}
+
+	if (In_Byte_Object->Array_Bytes_32.Num() == 0 && In_Byte_Object->Array_Bytes_64.Num() == 0)
+	{
+		return false;
+	}
+
+	void* PDF_Data;
+	size_t PDF_Data_Size;
+
+	if (In_Byte_Object->Array_Bytes_64.Num() > 0)
+	{
+		PDF_Data = In_Byte_Object->Array_Bytes_64.GetData();
+		PDF_Data_Size = In_Byte_Object->Array_Bytes_64.Num();
 	}
 
 	else
 	{
-		if (InPath.IsEmpty() == true)
-		{
-			return false;
-		}
-
-		FString Path = InPath;
-
-		if (UGameplayStatics::GetPlatformName() == "Windows")
-		{
-			FPaths::MakePlatformFilename(Path);
-		}
-
-		if (UGameplayStatics::GetPlatformName() == "Android" || UGameplayStatics::GetPlatformName() == "iOS")
-		{
-			Path = FPlatformFileManager::Get().GetPlatformFile().ConvertToAbsolutePathForExternalAppForRead(*InPath);
-		}
-
-		if (FPaths::FileExists(Path) == false)
-		{
-			return false;
-		}
-
-		Document = FPDF_LoadDocument(TCHAR_TO_UTF8(*Path), TCHAR_TO_UTF8(*InPDF_Pass));
-		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Green, "Document loaded from path.");
+		PDF_Data = In_Byte_Object->Array_Bytes_32.GetData();
+		PDF_Data_Size = In_Byte_Object->Array_Bytes_32.Num();
 	}
 
-	if (!Document)
+	UPDFiumDoc* PDF_Object = NewObject<UPDFiumDoc>();
+
+#ifdef _WIN64
+	PDF_Object->Document = FPDF_LoadMemDocument64(PDF_Data, PDF_Data_Size, TCHAR_TO_UTF8(*In_PDF_Password));
+#endif // _WIN64
+
+#ifdef __ANDROID__
+	PDF_Object->Document = FPDF_LoadMemDocument(PDF_Data, PDF_Data_Size, TCHAR_TO_UTF8(*In_PDF_Password));
+#endif // __ANDROID__
+
+	if (!PDF_Object->Document)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 30, FColor::Red, "Unable to load PDF file.");
+		return false;
+	}
+
+	Global_Docs_Pool.Add(PDF_Object->Document);
+	
+	Out_PDF = PDF_Object;
+
+	return true;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Read_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF)
+{
+	if (Global_bIsLibInitialized == false)
 	{
 		return false;
 	}
 
-	int32 PDF_Page_Count = FPDF_GetPageCount(Document);
+	if (IsValid(In_PDF) == false)
+	{
+		return false;
+	}
+
+	if (!In_PDF->Document)
+	{
+		return false;
+	}
+
+	Global_Docs_Pool.Remove(In_PDF->Document);
+	FPDF_CloseDocument(In_PDF->Document);
+	In_PDF = nullptr;
+	
+	return true;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out_Pages, UPARAM(ref)UPDFiumDoc*& In_PDF, double Sampling, bool bUseMatrix)
+{	
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
+
+	if (IsValid(In_PDF) == false)
+	{
+		return false;
+	}
+
+	if (!In_PDF->Document)
+	{
+		return false;
+	}
 
 	TMap<UTexture2D*, FVector2D> Pages;
-
-	for (int32 PageIndex = 0; PageIndex < PDF_Page_Count; PageIndex++)
-	{
-		FPDF_PAGE PDF_Page = FPDF_LoadPage(Document, PageIndex);
-
+	for (int32 PageIndex = 0; PageIndex < FPDF_GetPageCount(In_PDF->Document); PageIndex++)
+	{		
+		FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
 		double PDF_Page_Width = FPDF_GetPageWidth(PDF_Page);
 		double PDF_Page_Height = FPDF_GetPageHeight(PDF_Page);
 		FVector2D EachResolution = FVector2D(PDF_Page_Width, PDF_Page_Height);
-
-		UTexture2D* PDF_Texture = UTexture2D::CreateTransient((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), PF_B8G8R8A8);
-
-#if WITH_EDITORONLY_DATA
-		PDF_Texture->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
-#endif
-
-		PDF_Texture->SRGB = 0;
-		FTexture2DMipMap& Mip = PDF_Texture->GetPlatformData()->Mips[0];
-		void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
-
+		
 		FPDF_BITMAP PDF_Bitmap = FPDFBitmap_CreateEx((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), FPDFBitmap_BGRA, NULL, 0);
-
-		if (PDF_Bitmap != NULL)
-		{
-			FPDF_FORMHANDLE Form_Handle;
-			FMemory::Memset(&Form_Handle, 0, sizeof(Form_Handle));
-
-			void* Buffer = FPDFBitmap_GetBuffer(PDF_Bitmap);
-			int32 Stride = FPDFBitmap_GetStride(PDF_Bitmap);
-			int32 Height = FPDFBitmap_GetHeight(PDF_Bitmap);
-			size_t Count = static_cast<size_t>(Stride) * Height;
-
-			FPDFBitmap_FillRect(PDF_Bitmap, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0xffffffff);
-			FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0, FPDF_ANNOT);
-			FPDF_FFLDraw(Form_Handle, PDF_Bitmap, PDF_Page, 0, 0, (PDF_Page_Width * Sampling) - 1, (PDF_Page_Height * Sampling) - 1, 0, 0);
-			FPDF_ClosePage(PDF_Page);
-
-			FMemory::Memcpy(Data, Buffer, Count);
-
-			FPDFBitmap_Destroy(PDF_Bitmap);
-		}
-
-		Mip.BulkData.Unlock();
+		FPDFBitmap_FillRect(PDF_Bitmap, 0, 0, (PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), 0xffffffff);
+		
+		FPDF_FORMHANDLE Form_Handle;
+		FMemory::Memset(&Form_Handle, 0, sizeof(Form_Handle));
+		FPDF_FFLDraw(Form_Handle, PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, 0);
 		
 #ifdef _WIN64
-#define UpdateResource UpdateResource
+		if (bUseMatrix == true)
+		{
+			FS_RECTF rc;
+			FMemory::Memset(&rc, 0, sizeof(rc));
+			rc.left = 0;
+			rc.right = (PDF_Page_Width * Sampling) - 1;
+
+			rc.top = 0;
+			rc.bottom = (PDF_Page_Height * Sampling) - 1;
+			
+			FS_MATRIX transform;
+			FMemory::Memset(&transform, 0, sizeof(transform));
+
+			transform.a = 1 * Sampling;
+			transform.b = 0;
+			transform.c = 0;
+			transform.d = 1 * Sampling;
+			transform.e = 0;
+			transform.f = 0;
+
+			FPDF_RenderPageBitmapWithMatrix(PDF_Bitmap, PDF_Page, &transform, &rc, FPDF_ANNOT);
+		}
+
+		else
+		{
+			FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, FPDF_ANNOT);
+		}
+#else
+		FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, FPDF_ANNOT);
+#endif
+
+		UTexture2D* PDF_Texture = UTexture2D::CreateTransient((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), PF_B8G8R8A8);
+		PDF_Texture->SRGB = 0;
+		FTexture2DMipMap& PDF_Texture_Mip = PDF_Texture->GetPlatformData()->Mips[0];
+		void* PDF_Texture_Data = PDF_Texture_Mip.BulkData.Lock(LOCK_READ_WRITE);
+
+		FMemory::Memcpy(PDF_Texture_Data, FPDFBitmap_GetBuffer(PDF_Bitmap), (static_cast<SIZE_T>(FPDFBitmap_GetStride(PDF_Bitmap)) * PDF_Page_Height));
+		PDF_Texture_Mip.BulkData.Unlock();
 		PDF_Texture->UpdateResource();
-#undef UpdateResource	// specific case for #include "fpdfview.h"
-#endif
-
-#ifdef __ANDROID__
-		PDF_Texture->UpdateResource(); 
-#endif
-
+		
 		Pages.Add(PDF_Texture, EachResolution);
+
+		FPDFBitmap_Destroy(PDF_Bitmap);
+		FPDF_ClosePage(PDF_Page);
 	}
 
-	OutPages = Pages;
+	Out_Pages = Pages;
 
-	FPDF_CloseDocument(Document);
-	
+	return true;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Generate_Texts(TArray<FString>& Out_Texts, UPARAM(ref)UPDFiumDoc*& In_PDF)
+{
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
+
+	if (IsValid(In_PDF) == false)
+	{
+		return false;
+	}
+
+	if (!In_PDF->Document)
+	{
+		return false;
+	}
+
+	for (int32 PageIndex = 0; PageIndex < FPDF_GetPageCount(In_PDF->Document); PageIndex++)
+	{
+		FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
+		double Width = FPDF_GetPageWidth(PDF_Page);
+		double Height = FPDF_GetPageHeight(PDF_Page);
+
+		FPDF_TEXTPAGE PDF_TextPage = FPDFText_LoadPage(PDF_Page);
+		FPDF_ClosePage(PDF_Page);
+
+		FString PageText;
+		int CharCount = FPDFText_CountChars(PDF_TextPage);
+		for (int32 CharIndex = 0; CharIndex < CharCount; CharIndex++)
+		{
+			unsigned short* CharBuffer = (unsigned short*)malloc(0x2000 * sizeof(unsigned short));
+			FPDFText_GetText(PDF_TextPage, CharIndex, CharCount, CharBuffer);
+			PageText = PageText + (char*)CharBuffer;
+		}
+		
+		Out_Texts.Add(PageText);
+		FPDFText_ClosePage(PDF_TextPage);
+	}
+
+	return true;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Get_Pages_Count(int32& PagesCount, UPARAM(ref)UPDFiumDoc*& In_PDF)
+{
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
+
+	if (IsValid(In_PDF) == false)
+	{
+		return false;
+	}
+
+	if (!In_PDF->Document)
+	{
+		return false;
+	}
+
+	PagesCount = FPDF_GetPageCount(In_PDF->Document);
+
 	return true;
 }

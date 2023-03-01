@@ -3,61 +3,109 @@
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
+
+THIRD_PARTY_INCLUDES_START
+#ifdef _WIN64
+#include <Windows/AllowWindowsPlatformTypes.h>
+#include "fpdfview.h"
+#include <Windows/HideWindowsPlatformTypes.h>
+#endif
+
+#ifdef __ANDROID__
+#include "fpdfview.h"
+#endif
+THIRD_PARTY_INCLUDES_END
+
 #include "PDF_ReaderBPLibrary.generated.h"
 
 /* 
-*	Function library class.
-*	Each function in it is expected to be static and represents blueprint node that can be called in any blueprint.
-*
-*	When declaring function you can define metadata for the node. Key function specifiers will be BlueprintPure and BlueprintCallable.
-*	BlueprintPure - means the function does not affect the owning object in any way and thus creates a node without Exec pins.
-*	BlueprintCallable - makes a function which can be executed in Blueprints - Thus it has Exec pins.
-*	DisplayName - full name of the node, shown when you mouse over the node and in the blueprint drop down menu.
-*				Its lets you name the node using characters not allowed in C++ function names.
-*	CompactNodeTitle - the word(s) that appear on the node.
-*	Keywords -	the list of keywords that helps you to find node when you search for it using Blueprint drop-down menu. 
-*				Good example is "Print String" node which you can find also by using keyword "log".
-*	Category -	the category your node will be under in the Blueprint drop-down menu.
-*
-*	For more info on custom blueprint nodes visit documentation:
-*	https://wiki.unrealengine.com/Custom_Blueprint_Node_Creation
-* 
 *	PDFium Binaries
 *	https://github.com/bblanchon/pdfium-binaries/releases
+*	https://github.com/barteksc/PdfiumAndroid
 */
 
+USTRUCT(BlueprintType)
+struct FCharStruct
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(BlueprintReadOnly)
+	FString EachChar;
+
+	UPROPERTY(BlueprintReadOnly)
+	FLinearColor CharColor;
+
+	UPROPERTY(BlueprintReadOnly)
+	FVector2D CharPosition;
+
+	UPROPERTY(BlueprintReadOnly)
+	double CharSize;
+
+};
+
 UCLASS(BlueprintType)
-class PDF_READER_API UPDFiumLib : public UObject
+class PDF_READER_API UArrayObject : public UObject
+{
+	GENERATED_BODY()
+
+public:
+
+	TArray64<uint8> Array_Bytes_64;
+	TArray<uint8> Array_Bytes_32;
+};
+
+UCLASS(BlueprintType)
+class PDF_READER_API UPDFiumDoc : public UObject
 {
 	GENERATED_BODY()
 
 public:
 	
-	UPROPERTY(BlueprintReadOnly)
-	bool bIsLibraryInitialized = false;
+	FPDF_DOCUMENT Document;
 };
 
 UCLASS()
 class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
-		
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "Android Folder Helper", ToolTip = "This node automatically gives Internal Storage absolute path. So, you just need to define sub-folder and pdf file. Example: Download/sample.pdf", Keywords = "pdf, pdfium, android, folder, helper"), Category = "PDF_Reader|System")
-	static FString AndroidFolderHelper(FString InFileName);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Open PDF Library", Keywords = "pdf, pdfium, library, lib, open"), Category = "PDF_Reader|System")
-	static void PDF_LibInit(UPDFiumLib*& OutPDFium);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Library Init", Keywords = "pdf, pdfium, library, lib, open"), Category = "PDF_Reader|System")
+	static void PDF_LibInit();
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Close PDF Library", Keywords = "pdf, pdfium, library, lib, close"), Category = "PDF_Reader|System")
-	static void PDF_LibClose(UPARAM(ref)UPDFiumLib*& InPDFium);
-	
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Library Close", Keywords = "pdf, pdfium, library, lib, close"), Category = "PDF_Reader|System")
+	static void PDF_LibClose();
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "PDF Reader - Library State", ToolTip = "", Keywords = "pdf, pdfium, library, state, get, is, initialized"), Category = "PDF_Reader|System")
+	static bool PDF_LibState();
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "PDF Reader - Mobile Path Helper", ToolTip = "This node automatically gives Internal Storage absolute path. So, you just need to define sub-folder and pdf file. Example: Download/sample.pdf", Keywords = "pdf, pdfium, android, ios, mobile, folder, file, path, helper"), Category = "PDF_Reader|Read|Helpers")
+	static FString PDF_Android_Path_Helper(FString InFileName);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Read from Path", ToolTip = "You need to use absolute platform path. You can use \"PDF Reader - Mobile Path Helper\" to generate it for mobile.", Keywords = "pdf, pdfium, read, load, path"), Category = "PDF_Reader|Read")
+	static bool PDF_Read_Path(UArrayObject*& Out_Byte_Object, FString In_Path);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Read from HTTP", ToolTip = "", Keywords = "pdf, pdfium, read, load, path"), Category = "PDF_Reader|Read")
+	static bool PDF_Read_HTTP(UArrayObject*& Out_Byte_Object, TArray<uint8> In_Bytes);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Open File", ToolTip = "", Keywords = "pdf, pdfium, read, open"), Category = "PDF_Reader|Read")
+	static bool PDF_Read_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArrayObject*& In_Byte_Object, FString In_PDF_Password);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Close File", ToolTip = "", Keywords = "pdf, pdfium, read, close"), Category = "PDF_Reader|Read")
+	static bool PDF_Read_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF);
+
 	/**
-	* If you want to view a PDF file from online, you need to convert it to byte array (Low Entry HTTP plugin can do that) and attach it to respective input.
-	* If you want to view local PDF file, use "Platform File Name" instead normalized file name as standart for Unreal Engine. Also you need to attach an "empty array" to InBytes.
-	* @param InPath Use platform file name in here.
-	* @param Sampling Default value is "1". It generates textures as its default resolution. But "2" gives better result
+	* @param Sampling Default value is "1". It generates textures as its default resolution. But "2" gives better result.
+	* @param bUseMatrix Results will same but it uses different function.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get PDF as Texture", Keywords = "pdf, pdfium, read, texture, image"), Category = "PDF_Reader|Read")
-	static bool PDF_Read(UPARAM(ref)UPDFiumLib*& InPDFium, TMap<UTexture2D*, FVector2D>& OutPages, FString InPath, TArray<uint8> InBytes, FString InPDF_Pass, double Sampling = 1.0);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Generate Texture2D", Keywords = "pdf, pdfium, read, generate, texture, image"), Category = "PDF_Reader|Read")
+	static bool PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out_Pages, UPARAM(ref)UPDFiumDoc*& In_PDF, double Sampling = 1.0, bool bUseMatrix = false);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Generate Texts", Keywords = "pdf, pdfium, read, generate, text, string"), Category = "PDF_Reader|Read")
+	static bool PDF_Generate_Texts(TArray<FString>& Out_Texts, UPARAM(ref)UPDFiumDoc*& In_PDF);
 	
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Pages Count", ToolTip = "", Keywords = "pdf, pdfium, get, page, pages, count"), Category = "PDF_Reader|Read")
+	static bool PDF_Get_Pages_Count(int32& PagesCount, UPARAM(ref)UPDFiumDoc*& In_PDF);
+
 };

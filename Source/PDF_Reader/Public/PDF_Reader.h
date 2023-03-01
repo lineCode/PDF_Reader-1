@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Modules/ModuleManager.h"
-#include "Kismet/GameplayStatics.h"
 
 class FPDF_ReaderModule : public IModuleInterface
 {

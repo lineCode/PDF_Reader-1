@@ -8,21 +8,18 @@
 void FPDF_ReaderModule::StartupModule()
 {
 #ifdef _WIN64
-	if (UGameplayStatics::GetPlatformName() == "Windows")
+	const FString BasePluginDir = IPluginManager::Get().FindPlugin("PDF_READER")->GetBaseDir();
+	const FString DLL_Path = FPaths::Combine(*BasePluginDir, TEXT("Source/PDF_Reader/ThirdParty/pdfium/Windows/lib/pdfium.dll"));
+	PDFium_Handle = FPlatformProcess::GetDllHandle(*DLL_Path);
+
+	if (PDFium_Handle != nullptr)
 	{
-		const FString BasePluginDir = IPluginManager::Get().FindPlugin("PDF_READER")->GetBaseDir();
-		const FString DLL_Path = FPaths::Combine(*BasePluginDir, TEXT("Source/PDF_Reader/ThirdParty/pdfium/Windows/lib/pdfium.dll"));
-		PDFium_Handle = FPlatformProcess::GetDllHandle(*DLL_Path);
+		UE_LOG(LogTemp, Log, TEXT("pdfium.dll loaded successfully!"));
+	}
 
-		if (PDFium_Handle != nullptr)
-		{
-			UE_LOG(LogTemp, Log, TEXT("pdfium.dll loaded successfully!"));
-		}
-
-		else
-		{
-			UE_LOG(LogTemp, Fatal, TEXT("pdfium.dll failed to load!"));
-		}
+	else
+	{
+		UE_LOG(LogTemp, Fatal, TEXT("pdfium.dll failed to load!"));
 	}
 #endif
 }
@@ -30,11 +27,8 @@ void FPDF_ReaderModule::StartupModule()
 void FPDF_ReaderModule::ShutdownModule()
 {
 #ifdef _WIN64
-	if (UGameplayStatics::GetPlatformName() == "Windows")
-	{
-		FPlatformProcess::FreeDllHandle(PDFium_Handle);
-		PDFium_Handle = nullptr;
-	}
+	FPlatformProcess::FreeDllHandle(PDFium_Handle);
+	PDFium_Handle = nullptr;
 #endif
 }
 
