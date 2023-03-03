@@ -65,8 +65,8 @@
 #define UE_IS_ENGINE_MODULE 0
 #define UE_DISABLE_INLINE_GEN_CPP 0
 #define UE_ENABLE_INCLUDE_ORDER_DEPRECATED_IN_5_1 0
-#define UE_PROJECT_NAME FF_Plugins_Mobile
-#define UE_TARGET_NAME FF_Plugins_MobileEditor
+#define UE_PROJECT_NAME FF_Plugins
+#define UE_TARGET_NAME FF_PluginsEditor
 #define UE_MODULE_NAME "PDF_Reader"
 #define UE_PLUGIN_NAME "PDF_Reader"
 #define IMPLEMENT_ENCRYPTION_KEY_REGISTRATION() 
