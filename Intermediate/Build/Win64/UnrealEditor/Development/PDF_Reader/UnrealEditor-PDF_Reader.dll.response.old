@@ -44,6 +44,8 @@
 "..\Intermediate\Build\Win64\UnrealEditor\Development\SlateCore\UnrealEditor-SlateCore.lib"
 "..\Intermediate\Build\Win64\UnrealEditor\Development\Projects\UnrealEditor-Projects.lib"
 "..\Intermediate\Build\Win64\UnrealEditor\Development\HTTP\UnrealEditor-HTTP.lib"
+"..\Intermediate\Build\Win64\UnrealEditor\Development\RHI\UnrealEditor-RHI.lib"
+"..\Intermediate\Build\Win64\UnrealEditor\Development\RenderCore\UnrealEditor-RenderCore.lib"
 "..\Intermediate\Build\Win64\UnrealEditor\Development\Core\UnrealEditor-Core.lib"
 "delayimp.lib"
 "wininet.lib"

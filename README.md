@@ -6,44 +6,27 @@ Windows Binary
 https://github.com/bblanchon/pdfium-binaries
 
 # DEPENDENCIES
-Low Entry HTTP Request
+* In order to view online PDF files, you have to use a HTTP Client plugin.
+1- If you don't need HTTPS you can use ours.
+https://github.com/FF-Projects-UE/HTTP_Client
+
+2- If you need HTTPS, write your own client plugin or get from Github/Unreal Marketplace.
+My personaly choice is Low Entry HTTP Request
 https://www.unrealengine.com/marketplace/en-US/product/low-entry-http-request
-
-There is a template widget in plugin's content folder but it uses HTTP GET Request nodes from Low Entry.
-If you need to view online pdf files, you need to use an HTTP plugin with ByteArray support. If you have another one or you want to use only local PDFs, just delete that nodes.
-
-Even if you don't want to view online PDF files, you need to attach an empty array to ByteArray pin of Read PDF function. You can use "Make Array" node.
-
-# RELEASE
-Relaese has an APK for ASTC arm64-v8 to test it.
 
 # FEATURES
 * Plugin is for Unreal Engine 5.1 and up.
 * Windows and Android platforms supported. This is runtime plugin. It don't work in editor. 
 * There is a helper node to give android absolute path.
+* Generate Texts: It will get all texts of all pages.
+* Generate Text At Area: You can think this as a text selection. It will get texts in a rectangle area. You have to define that rectangle's size according with PDF's size and location. Don't use your cursor location directly. (Cursor location minus PDF location at screen will give result.)
+* Generate Links: It will give all "weblinks" in specified page. It won't give internal bridges. It will give weblinks. This is limitation of PDFium.
+* Get Pages Count: You know what it does.
+* PDF Read File Close: It will close opened document.
+* PDF_LibInit / PDF_LibClose / PDF_LibState: It will initialize, close and give state of PDFium library.
 
 # USAGE
-You need to use it in a C++ project. After first compile, you can copy it to a blueprint only project.
-
-## SAMPLE RENDER CODE
-```
-FS_RECTF rc;
-FMemory::Memset(&rc, 0, sizeof(rc));
-rc.left = 0;
-rc.right = (PDF_Page_Width * Sampling) - 1;
-
-rc.top = 0;
-rc.bottom = (PDF_Page_Height * Sampling) - 1;
-
-FS_MATRIX transform;
-FMemory::Memset(&transform, 0, sizeof(transform));
-
-transform.a = 1 * Sampling;
-transform.b = 0;
-transform.c = 0;
-transform.d = 1 * Sampling;
-transform.e = 0;
-transform.f = 0;
-
-FPDF_RenderPageBitmapWithMatrix(PDF_Bitmap, PDF_Page, &transform, &rc, FPDF_ANNOT);
-````
+* You need to use it in a C++ project. After first compile, you can copy it to a blueprint only project.
+* Do NOT close PDF document unless you absolutely sure that you won't use it anymore.
+* When you close your game or finish your job with that document, close that PDF document.
+* When you close your game, you have to close library as well.
