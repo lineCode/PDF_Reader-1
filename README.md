@@ -6,7 +6,7 @@ Windows Binary
 https://github.com/bblanchon/pdfium-binaries
 
 # DEPENDENCIES
-* In order to view online PDF files, you have to use a HTTP Client plugin.
+* In order to view online PDF files, you have to use a HTTP Client plugin.<br />
 1- If you don't need HTTPS you can use ours.
 https://github.com/FF-Projects-UE/HTTP_Client
 
