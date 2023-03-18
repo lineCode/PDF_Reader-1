@@ -6,6 +6,8 @@
 // UE Includes.
 #include "Misc/FileHelper.h"
 #include "Kismet/GameplayStatics.h"
+#include "RHICommandList.h"					
+#include "RenderingThread.h"				
 
 THIRD_PARTY_INCLUDES_START
 // C++ Includes.
@@ -15,6 +17,7 @@ THIRD_PARTY_INCLUDES_START
 // PDFium Includes.
 #include "fpdf_formfill.h"
 #include "fpdf_text.h"
+#include "fpdf_edit.h"
 THIRD_PARTY_INCLUDES_END
 
 static inline bool Global_bIsLibInitialized = false;
@@ -170,11 +173,9 @@ bool UPDF_ReaderBPLibrary::PDF_Read_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)U
 
 #ifdef _WIN64
 	PDF_Object->Document = FPDF_LoadMemDocument64(PDF_Data, PDF_Data_Size, TCHAR_TO_UTF8(*In_PDF_Password));
-#endif // _WIN64
-
-#ifdef __ANDROID__
+#else
 	PDF_Object->Document = FPDF_LoadMemDocument(PDF_Data, PDF_Data_Size, TCHAR_TO_UTF8(*In_PDF_Password));
-#endif // __ANDROID__
+#endif
 
 	if (!PDF_Object->Document)
 	{
@@ -244,7 +245,7 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out
 		FPDF_FORMHANDLE Form_Handle;
 		FMemory::Memset(&Form_Handle, 0, sizeof(Form_Handle));
 		FPDF_FFLDraw(Form_Handle, PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, 0);
-		
+	
 #ifdef _WIN64
 		if (bUseMatrix == true)
 		{
@@ -266,15 +267,33 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out
 			transform.e = 0;
 			transform.f = 0;
 
-			FPDF_RenderPageBitmapWithMatrix(PDF_Bitmap, PDF_Page, &transform, &rc, FPDF_ANNOT);
+			ENQUEUE_RENDER_COMMAND(UpdateTextureRegionsData)([&PDF_Bitmap, PDF_Page, &transform, &rc](FRHICommandListImmediate& CommandList)
+				{
+					FPDF_RenderPageBitmapWithMatrix(PDF_Bitmap, PDF_Page, &transform, &rc, FPDF_ANNOT);
+				}
+			);
+
+			FlushRenderingCommands();
 		}
 
 		else
 		{
-			FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, FPDF_ANNOT);
+			ENQUEUE_RENDER_COMMAND(UpdateTextureRegionsData)([&PDF_Bitmap, PDF_Page, PDF_Page_Width, PDF_Page_Height, Sampling](FRHICommandListImmediate& CommandList)
+				{
+					FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, FPDF_ANNOT);
+				}
+			);
+
+			FlushRenderingCommands();
 		}
 #else
-		FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, FPDF_ANNOT);
+		ENQUEUE_RENDER_COMMAND(UpdateTextureRegionsData)([&PDF_Bitmap, PDF_Page, PDF_Page_Width, PDF_Page_Height, Sampling](FRHICommandListImmediate& CommandList)
+			{
+				FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, FPDF_ANNOT);
+			}
+		);
+
+		FlushRenderingCommands();
 #endif
 
 		UTexture2D* PDF_Texture = UTexture2D::CreateTransient((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), PF_B8G8R8A8);
@@ -287,7 +306,7 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out
 		PDF_Texture->UpdateResource();
 		
 		Pages.Add(PDF_Texture, EachResolution);
-
+		
 		FPDFBitmap_Destroy(PDF_Bitmap);
 		FPDF_ClosePage(PDF_Page);
 	}
@@ -314,12 +333,10 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Texts(TArray<FString>& Out_Texts, UPARAM
 		return false;
 	}
 
+	unsigned short* CharBuffer = (unsigned short*)malloc(0x2000 * sizeof(unsigned short));
 	for (int32 PageIndex = 0; PageIndex < FPDF_GetPageCount(In_PDF->Document); PageIndex++)
 	{
 		FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
-		double Width = FPDF_GetPageWidth(PDF_Page);
-		double Height = FPDF_GetPageHeight(PDF_Page);
-
 		FPDF_TEXTPAGE PDF_TextPage = FPDFText_LoadPage(PDF_Page);
 		FPDF_ClosePage(PDF_Page);
 
@@ -327,7 +344,6 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Texts(TArray<FString>& Out_Texts, UPARAM
 		int CharCount = FPDFText_CountChars(PDF_TextPage);
 		for (int32 CharIndex = 0; CharIndex < CharCount; CharIndex++)
 		{
-			unsigned short* CharBuffer = (unsigned short*)malloc(0x2000 * sizeof(unsigned short));
 			FPDFText_GetText(PDF_TextPage, CharIndex, CharCount, CharBuffer);
 			PageText = PageText + (char*)CharBuffer;
 		}
@@ -335,6 +351,106 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Texts(TArray<FString>& Out_Texts, UPARAM
 		Out_Texts.Add(PageText);
 		FPDFText_ClosePage(PDF_TextPage);
 	}
+
+	return true;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Generate_Links(TArray<FString>& Out_Links, UPARAM(ref)UPDFiumDoc*& In_PDF, int32 PageIndex)
+{
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
+
+	if (IsValid(In_PDF) == false)
+	{
+		return false;
+	}
+
+	if (!In_PDF->Document)
+	{
+		return false;
+	}
+	
+	FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
+	FPDF_TEXTPAGE PDF_TextPage = FPDFText_LoadPage(PDF_Page);
+	FPDF_ClosePage(PDF_Page);
+
+	FPDF_PAGELINK PDF_Links = FPDFLink_LoadWebLinks(PDF_TextPage);
+	int32 Links_Count = FPDFLink_CountWebLinks(PDF_Links);
+
+	if (Links_Count == 0)
+	{
+		FPDFLink_CloseWebLinks(PDF_Links);
+		FPDFText_ClosePage(PDF_TextPage);
+		
+		return false;
+	}
+
+	for (int32 Index_Link = 0; Index_Link < Links_Count; Index_Link++)
+	{
+		unsigned short* CharBuffer = (unsigned short*)malloc(0x2000 * sizeof(unsigned short));
+		FPDFLink_GetURL(PDF_Links, Index_Link, CharBuffer, INT_MAX);
+		
+		FString LinkText;
+		for (int32 CharIndex = 0; CharIndex < INT_MAX; CharIndex++)
+		{
+			if (CharBuffer[CharIndex] == false)
+			{
+				break;
+			}
+
+			LinkText += (char)CharBuffer[CharIndex];
+		}
+
+		Out_Links.Add(LinkText);
+	}
+
+	FPDFLink_CloseWebLinks(PDF_Links);
+	FPDFText_ClosePage(PDF_TextPage);
+
+	return true;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Generate_Text_At_Area(FString& Out_Text, UPARAM(ref)UPDFiumDoc*& In_PDF, FVector2D Start, FVector2D End, int32 PageIndex)
+{
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
+
+	if (IsValid(In_PDF) == false)
+	{
+		return false;
+	}
+
+	if (!In_PDF->Document)
+	{
+		return false;
+	}
+
+	FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
+	FPDF_TEXTPAGE PDF_TextPage = FPDFText_LoadPage(PDF_Page);
+	FPDF_ClosePage(PDF_Page);
+
+	unsigned short* CharBuffer = (unsigned short*)malloc(0x2000 * sizeof(unsigned short));
+	int32 CharCount = FPDFText_CountChars(PDF_TextPage);
+	FPDFText_GetBoundedText(PDF_TextPage, Start.X, Start.Y, End.X, End.Y, CharBuffer, CharCount);
+	
+	FString PageText;
+	for (int32 CharIndex = 0; CharIndex < CharCount; CharIndex++)
+	{
+		if (CharBuffer[CharIndex] == false)
+		{
+			break;
+		}
+
+		PageText += (char)CharBuffer[CharIndex];
+	}
+
+	Out_Text = PageText;
+
+	FPDFText_ClosePage(PDF_TextPage);
 
 	return true;
 }

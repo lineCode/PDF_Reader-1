@@ -51,7 +51,9 @@ public class PDF_Reader : ModuleRules
                 "Slate",
 				"SlateCore",
                 "Projects",
-				"HTTP"
+				"HTTP",
+                "RHI",
+				"RenderCore"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

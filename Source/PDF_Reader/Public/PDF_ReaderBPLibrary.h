@@ -104,6 +104,12 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Generate Texts", Keywords = "pdf, pdfium, read, generate, text, string"), Category = "PDF_Reader|Read")
 	static bool PDF_Generate_Texts(TArray<FString>& Out_Texts, UPARAM(ref)UPDFiumDoc*& In_PDF);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Generate Links", Keywords = "pdf, pdfium, read, generate, text, string, link, web, url"), Category = "PDF_Reader|Read")
+	static bool PDF_Generate_Links(TArray<FString>& Out_Links, UPARAM(ref)UPDFiumDoc*& In_PDF, int32 PageIndex);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Generate Text At Area", Keywords = "pdf, pdfium, read, generate, text, string, area"), Category = "PDF_Reader|Read")
+	static bool PDF_Generate_Text_At_Area(FString& Out_Text, UPARAM(ref)UPDFiumDoc*& In_PDF, FVector2D Start, FVector2D End, int32 PageIndex);
 	
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Pages Count", ToolTip = "", Keywords = "pdf, pdfium, get, page, pages, count"), Category = "PDF_Reader|Read")
 	static bool PDF_Get_Pages_Count(int32& PagesCount, UPARAM(ref)UPDFiumDoc*& In_PDF);

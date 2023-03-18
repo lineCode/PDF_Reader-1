@@ -17,7 +17,7 @@ void EmptyLinkFunctionForGeneratedCodePDF_Reader_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0x9CF8B7CF,
+				0x636BFE4C,
 				0xBF24F3BE,
 				METADATA_PARAMS(nullptr, 0)
 			};
@@ -25,5 +25,5 @@ void EmptyLinkFunctionForGeneratedCodePDF_Reader_init() {}
 		}
 		return Z_Registration_Info_UPackage__Script_PDF_Reader.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_PDF_Reader(Z_Construct_UPackage__Script_PDF_Reader, TEXT("/Script/PDF_Reader"), Z_Registration_Info_UPackage__Script_PDF_Reader, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x9CF8B7CF, 0xBF24F3BE));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_PDF_Reader(Z_Construct_UPackage__Script_PDF_Reader, TEXT("/Script/PDF_Reader"), Z_Registration_Info_UPackage__Script_PDF_Reader, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x636BFE4C, 0xBF24F3BE));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
