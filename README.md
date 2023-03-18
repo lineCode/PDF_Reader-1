@@ -21,7 +21,7 @@ https://www.unrealengine.com/marketplace/en-US/product/low-entry-http-request
 * There is a helper node to give android absolute path.
 * Generate Texts: It will get all texts of all pages.
 * Generate Text At Area: You can think this as a text selection. It will get texts in a rectangle area. You have to define that rectangle's size and location according with PDF's size and location.<br />
-  Don't use your cursor location directly. (Cursor location minus PDF location at screen will give result.)
+  Don't use your cursor location directly. ((Cursor Location - PDF Location at screen) * Sampling will give you necessary locations.)
 * Generate Links: It will give all "weblinks" in specified page. It won't give internal bridges. It will give weblinks. This is limitation of PDFium.
 * Get Pages Count: You know what it does.
 * PDF Read File Close: It will close opened document.
