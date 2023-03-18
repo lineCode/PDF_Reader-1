@@ -1,18 +1,18 @@
 # USED LIBRARIES
-Android Binary
+Android Binary<br />
 https://github.com/barteksc/PdfiumAndroid
 
-Windows Binary
+Windows Binary<br />
 https://github.com/bblanchon/pdfium-binaries
 
 # DEPENDENCIES
 In order to view online PDF files, you have to use a HTTP Client plugin.<br />
 
-1- If you don't need HTTPS you can use ours.
+1- If you don't need HTTPS you can use ours.<br />
 https://github.com/FF-Projects-UE/HTTP_Client
 
-2- If you need HTTPS, write your own client plugin or get from Github/Unreal Marketplace.
-My personaly choice is Low Entry HTTP Request
+2- If you need HTTPS, write your own client plugin or get from Github/Unreal Marketplace.<br />
+My personaly choice is Low Entry HTTP Request<br />
 https://www.unrealengine.com/marketplace/en-US/product/low-entry-http-request
 
 # FEATURES
