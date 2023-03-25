@@ -1811,4 +1811,6 @@ D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Intermediate/B
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/__split_buffer \
   C:/Users/erayo/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/iomanip \
   D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_formfill.h \
-  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_text.h
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_text.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_edit.h \
+  D:/Epic/Projects/FROZEN/SDKs/FF_Plugins_Mobile/Plugins/PDF_Reader/Source/PDF_Reader/ThirdParty/pdfium/Android/include/fpdf_save.h

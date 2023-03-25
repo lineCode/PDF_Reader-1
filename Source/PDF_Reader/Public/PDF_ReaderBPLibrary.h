@@ -45,6 +45,42 @@ public:
 
 };
 
+USTRUCT(BlueprintType)
+struct FStructText
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(BlueprintReadOnly)
+	FString FontPath;
+
+	UPROPERTY(BlueprintReadOnly)
+	float FontSize;
+
+	UPROPERTY(BlueprintReadOnly)
+	FVector2D TextLocation;
+
+};
+
+USTRUCT(BlueprintType)
+struct FStructPage
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(BlueprintReadOnly)
+	FVector2D PageSize;
+
+	UPROPERTY(BlueprintReadOnly)
+	TMap<FString, FStructText> MAP_Texts;
+
+	UPROPERTY(BlueprintReadOnly)
+	TMap<UTexture2D*, FVector2D> MAP_Images;
+
+};
+
 UCLASS(BlueprintType)
 class PDF_READER_API UArrayObject : public UObject
 {
@@ -86,8 +122,8 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Read from Path", ToolTip = "You need to use absolute platform path. You can use \"PDF Reader - Mobile Path Helper\" to generate it for mobile.", Keywords = "pdf, pdfium, read, load, path"), Category = "PDF_Reader|Read")
 	static bool PDF_Read_Path(UArrayObject*& Out_Byte_Object, FString In_Path);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Read from HTTP", ToolTip = "", Keywords = "pdf, pdfium, read, load, path"), Category = "PDF_Reader|Read")
-	static bool PDF_Read_HTTP(UArrayObject*& Out_Byte_Object, TArray<uint8> In_Bytes);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Read from Bytes", ToolTip = "", Keywords = "pdf, pdfium, read, load, path"), Category = "PDF_Reader|Read")
+	static bool PDF_Read_Bytes(UArrayObject*& Out_Byte_Object, TArray<uint8> In_Bytes);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Open File", ToolTip = "", Keywords = "pdf, pdfium, read, open"), Category = "PDF_Reader|Read")
 	static bool PDF_Read_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArrayObject*& In_Byte_Object, FString In_PDF_Password);
@@ -96,22 +132,23 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	static bool PDF_Read_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF);
 
 	/**
-	* @param Sampling Default value is "1". It generates textures as its default resolution. But "2" gives better result.
+	* @param Sampling Default (also minimum) value is "1" but "2" gives best result for A4 sized PDF on 17 inch notebook screen. Bigger values is good for 3D widget like huge UIs.
 	* @param bUseMatrix Results will same but it uses different function.
+	* @param sRgb Gives more contrast to colors.
 	*/
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Generate Texture2D", Keywords = "pdf, pdfium, read, generate, texture, image"), Category = "PDF_Reader|Read")
-	static bool PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out_Pages, UPARAM(ref)UPDFiumDoc*& In_PDF, double Sampling = 1.0, bool bUseMatrix = false);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Pages", Keywords = "pdf, pdfium, read, get, pages"), Category = "PDF_Reader|Read")
+	static bool PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages, UPARAM(ref)UPDFiumDoc*& In_PDF, double In_Sampling = 1.0, bool bUseMatrix = false, bool sRgb = false);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Generate Texts", Keywords = "pdf, pdfium, read, generate, text, string"), Category = "PDF_Reader|Read")
-	static bool PDF_Generate_Texts(TArray<FString>& Out_Texts, UPARAM(ref)UPDFiumDoc*& In_PDF);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Texts", Keywords = "pdf, pdfium, read, get, texts, string"), Category = "PDF_Reader|Read")
+	static bool PDF_Get_Texts(TArray<FString>& Out_Texts, UPARAM(ref)UPDFiumDoc*& In_PDF);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Generate Links", Keywords = "pdf, pdfium, read, generate, text, string, link, web, url"), Category = "PDF_Reader|Read")
-	static bool PDF_Generate_Links(TArray<FString>& Out_Links, UPARAM(ref)UPDFiumDoc*& In_PDF, int32 PageIndex);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Links", Keywords = "pdf, pdfium, read, get, text, string, link, web, url"), Category = "PDF_Reader|Read")
+	static bool PDF_Get_Links(TArray<FString>& Out_Links, UPARAM(ref)UPDFiumDoc*& In_PDF, int32 PageIndex);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Generate Text At Area", Keywords = "pdf, pdfium, read, generate, text, string, area"), Category = "PDF_Reader|Read")
-	static bool PDF_Generate_Text_At_Area(FString& Out_Text, UPARAM(ref)UPDFiumDoc*& In_PDF, FVector2D Start, FVector2D End, int32 PageIndex);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Select Text", Keywords = "pdf, pdfium, read, get, text, string, select, area"), Category = "PDF_Reader|Read")
+	static bool PDF_Select_Text(FString& Out_Text, UPARAM(ref)UPDFiumDoc*& In_PDF, FVector2D Start, FVector2D End, int32 PageIndex);
 	
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Pages Count", ToolTip = "", Keywords = "pdf, pdfium, get, page, pages, count"), Category = "PDF_Reader|Read")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Pages Count", ToolTip = "", Keywords = "pdf, pdfium, get, pages, count"), Category = "PDF_Reader|Read")
 	static bool PDF_Get_Pages_Count(int32& PagesCount, UPARAM(ref)UPDFiumDoc*& In_PDF);
 
 };

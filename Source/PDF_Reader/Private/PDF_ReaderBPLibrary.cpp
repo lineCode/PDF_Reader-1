@@ -18,6 +18,7 @@ THIRD_PARTY_INCLUDES_START
 #include "fpdf_formfill.h"
 #include "fpdf_text.h"
 #include "fpdf_edit.h"
+#include "fpdf_save.h"
 THIRD_PARTY_INCLUDES_END
 
 static inline bool Global_bIsLibInitialized = false;
@@ -126,7 +127,7 @@ bool UPDF_ReaderBPLibrary::PDF_Read_Path(UArrayObject*& Out_Byte_Object, FString
 	return true;
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Read_HTTP(UArrayObject*& Out_Byte_Object, TArray<uint8> In_Bytes)
+bool UPDF_ReaderBPLibrary::PDF_Read_Bytes(UArrayObject*& Out_Byte_Object, TArray<uint8> In_Bytes)
 {
 	if (In_Bytes.Num() == 0)
 	{
@@ -214,7 +215,7 @@ bool UPDF_ReaderBPLibrary::PDF_Read_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF)
 	return true;
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out_Pages, UPARAM(ref)UPDFiumDoc*& In_PDF, double Sampling, bool bUseMatrix)
+bool UPDF_ReaderBPLibrary::PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages, UPARAM(ref)UPDFiumDoc*& In_PDF, double In_Sampling, bool bUseMatrix, bool sRgb)
 {	
 	if (Global_bIsLibInitialized == false)
 	{
@@ -231,21 +232,34 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out
 		return false;
 	}
 
+	double Sampling = 1;
+	if (In_Sampling < 1)
+	{
+		Sampling = 1;
+	}
+
+	else
+	{
+		Sampling = In_Sampling;
+	}
+
 	TMap<UTexture2D*, FVector2D> Pages;
 	for (int32 PageIndex = 0; PageIndex < FPDF_GetPageCount(In_PDF->Document); PageIndex++)
 	{		
 		FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
-		double PDF_Page_Width = FPDF_GetPageWidth(PDF_Page);
-		double PDF_Page_Height = FPDF_GetPageHeight(PDF_Page);
+		double_t PDF_Page_Width = FPDF_GetPageWidth(PDF_Page);
+		double_t PDF_Page_Height = FPDF_GetPageHeight(PDF_Page);
+
 		FVector2D EachResolution = FVector2D(PDF_Page_Width, PDF_Page_Height);
 		
-		FPDF_BITMAP PDF_Bitmap = FPDFBitmap_CreateEx((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), FPDFBitmap_BGRA, NULL, 0);
+		void* FirstScan = malloc(static_cast<SIZE_T>(PDF_Page_Width * PDF_Page_Height * Sampling * Sampling * 4));
+		FPDF_BITMAP PDF_Bitmap = FPDFBitmap_CreateEx((int)(PDF_Page_Width * Sampling), (int)(PDF_Page_Height * Sampling), FPDFBitmap_BGRA, FirstScan, (int)(PDF_Page_Width * Sampling * 4));
 		FPDFBitmap_FillRect(PDF_Bitmap, 0, 0, (PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), 0xffffffff);
 		
 		FPDF_FORMHANDLE Form_Handle;
 		FMemory::Memset(&Form_Handle, 0, sizeof(Form_Handle));
-		FPDF_FFLDraw(Form_Handle, PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, 0);
-	
+		FPDF_FFLDraw(Form_Handle, PDF_Bitmap, PDF_Page, 0, 0, (int)(PDF_Page_Width * Sampling), (int)(PDF_Page_Height * Sampling), 0, 0);
+
 #ifdef _WIN64
 		if (bUseMatrix == true)
 		{
@@ -280,7 +294,7 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out
 		{
 			ENQUEUE_RENDER_COMMAND(UpdateTextureRegionsData)([&PDF_Bitmap, PDF_Page, PDF_Page_Width, PDF_Page_Height, Sampling](FRHICommandListImmediate& CommandList)
 				{
-					FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, FPDF_ANNOT);
+					FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)(PDF_Page_Width * Sampling), (int)(PDF_Page_Height * Sampling), 0, FPDF_ANNOT);
 				}
 			);
 
@@ -289,19 +303,28 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out
 #else
 		ENQUEUE_RENDER_COMMAND(UpdateTextureRegionsData)([&PDF_Bitmap, PDF_Page, PDF_Page_Width, PDF_Page_Height, Sampling](FRHICommandListImmediate& CommandList)
 			{
-				FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)((PDF_Page_Width * Sampling) - 1), (int)((PDF_Page_Height * Sampling) - 1), 0, FPDF_ANNOT);
+				FPDF_RenderPageBitmap(PDF_Bitmap, PDF_Page, 0, 0, (int)(PDF_Page_Width * Sampling), (int)(PDF_Page_Height * Sampling), 0, FPDF_ANNOT);
 			}
 		);
 
 		FlushRenderingCommands();
 #endif
+		UTexture2D* PDF_Texture = UTexture2D::CreateTransient((int32)(PDF_Page_Width * Sampling), (int32)(PDF_Page_Height * Sampling), PF_B8G8R8A8);
+		
+		if (sRgb)
+		{
+			PDF_Texture->SRGB = 1;
+		}
 
-		UTexture2D* PDF_Texture = UTexture2D::CreateTransient((PDF_Page_Width * Sampling), (PDF_Page_Height * Sampling), PF_B8G8R8A8);
-		PDF_Texture->SRGB = 0;
+		else
+		{
+			PDF_Texture->SRGB = 0;
+		}
+		
 		FTexture2DMipMap& PDF_Texture_Mip = PDF_Texture->GetPlatformData()->Mips[0];
 		void* PDF_Texture_Data = PDF_Texture_Mip.BulkData.Lock(LOCK_READ_WRITE);
 
-		FMemory::Memcpy(PDF_Texture_Data, FPDFBitmap_GetBuffer(PDF_Bitmap), (static_cast<SIZE_T>(FPDFBitmap_GetStride(PDF_Bitmap)) * PDF_Page_Height));
+		FMemory::Memcpy(PDF_Texture_Data, FPDFBitmap_GetBuffer(PDF_Bitmap), (static_cast<SIZE_T>(FPDFBitmap_GetStride(PDF_Bitmap)) * PDF_Page_Height * Sampling));
 		PDF_Texture_Mip.BulkData.Unlock();
 		PDF_Texture->UpdateResource();
 		
@@ -313,10 +336,18 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Bitmap(TMap<UTexture2D*, FVector2D>& Out
 
 	Out_Pages = Pages;
 
-	return true;
+	if (Out_Pages.Num() > 0)
+	{
+		return true;
+	}
+
+	else
+	{
+		return false;
+	}
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Generate_Texts(TArray<FString>& Out_Texts, UPARAM(ref)UPDFiumDoc*& In_PDF)
+bool UPDF_ReaderBPLibrary::PDF_Get_Texts(TArray<FString>& Out_Texts, UPARAM(ref)UPDFiumDoc*& In_PDF)
 {
 	if (Global_bIsLibInitialized == false)
 	{
@@ -355,7 +386,7 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Texts(TArray<FString>& Out_Texts, UPARAM
 	return true;
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Generate_Links(TArray<FString>& Out_Links, UPARAM(ref)UPDFiumDoc*& In_PDF, int32 PageIndex)
+bool UPDF_ReaderBPLibrary::PDF_Get_Links(TArray<FString>& Out_Links, UPARAM(ref)UPDFiumDoc*& In_PDF, int32 PageIndex)
 {
 	if (Global_bIsLibInitialized == false)
 	{
@@ -412,7 +443,7 @@ bool UPDF_ReaderBPLibrary::PDF_Generate_Links(TArray<FString>& Out_Links, UPARAM
 	return true;
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Generate_Text_At_Area(FString& Out_Text, UPARAM(ref)UPDFiumDoc*& In_PDF, FVector2D Start, FVector2D End, int32 PageIndex)
+bool UPDF_ReaderBPLibrary::PDF_Select_Text(FString& Out_Text, UPARAM(ref)UPDFiumDoc*& In_PDF, FVector2D Start, FVector2D End, int32 PageIndex)
 {
 	if (Global_bIsLibInitialized == false)
 	{
