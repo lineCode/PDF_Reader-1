@@ -7,7 +7,8 @@
 #include "Misc/FileHelper.h"
 #include "Kismet/GameplayStatics.h"
 #include "RHICommandList.h"					
-#include "RenderingThread.h"				
+#include "RenderingThread.h"
+#include "Misc/Base64.h"
 
 THIRD_PARTY_INCLUDES_START
 // C++ Includes.
@@ -142,7 +143,7 @@ bool UPDF_ReaderBPLibrary::PDF_Read_Bytes(UArrayObject*& Out_Byte_Object, TArray
 	return true;
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Read_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArrayObject*& In_Byte_Object, FString In_PDF_Password)
+bool UPDF_ReaderBPLibrary::PDF_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArrayObject*& In_Byte_Object, FString In_PDF_Password)
 {
 	if (IsValid(In_Byte_Object) == false)
 	{
@@ -191,7 +192,7 @@ bool UPDF_ReaderBPLibrary::PDF_Read_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)U
 	return true;
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Read_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF)
+bool UPDF_ReaderBPLibrary::PDF_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF)
 {
 	if (Global_bIsLibInitialized == false)
 	{
@@ -215,7 +216,7 @@ bool UPDF_ReaderBPLibrary::PDF_Read_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF)
 	return true;
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages, UPARAM(ref)UPDFiumDoc*& In_PDF, double In_Sampling, bool bUseMatrix, bool sRgb)
+bool UPDF_ReaderBPLibrary::PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages, TArray<FPdfBytes>& Out_Pages_Bytes, UPARAM(ref)UPDFiumDoc*& In_PDF, double In_Sampling, bool bUseMatrix, bool sRgb, bool bUseBase64Url)
 {	
 	if (Global_bIsLibInitialized == false)
 	{
@@ -243,7 +244,6 @@ bool UPDF_ReaderBPLibrary::PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages
 		Sampling = In_Sampling;
 	}
 
-	TMap<UTexture2D*, FVector2D> Pages;
 	for (int32 PageIndex = 0; PageIndex < FPDF_GetPageCount(In_PDF->Document); PageIndex++)
 	{		
 		FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
@@ -324,17 +324,36 @@ bool UPDF_ReaderBPLibrary::PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages
 		FTexture2DMipMap& PDF_Texture_Mip = PDF_Texture->GetPlatformData()->Mips[0];
 		void* PDF_Texture_Data = PDF_Texture_Mip.BulkData.Lock(LOCK_READ_WRITE);
 
-		FMemory::Memcpy(PDF_Texture_Data, FPDFBitmap_GetBuffer(PDF_Bitmap), (static_cast<SIZE_T>(FPDFBitmap_GetStride(PDF_Bitmap)) * PDF_Page_Height * Sampling));
+		void* Buffer = FPDFBitmap_GetBuffer(PDF_Bitmap);
+		SIZE_T Size = static_cast<SIZE_T>(FPDFBitmap_GetStride(PDF_Bitmap)) * PDF_Page_Height * Sampling;
+		FMemory::Memcpy(PDF_Texture_Data, Buffer, Size);
+
+		// Bytes Export Start
+		FString Base64 = FBase64::Encode((uint8*)Buffer, Size);
+		if (bUseBase64Url)
+		{
+			Base64.ReplaceInline(TEXT("+"), TEXT("-"));
+			Base64.ReplaceInline(TEXT("/"), TEXT("_"));
+			Base64.ReplaceInline(TEXT("="), TEXT(""));
+		}
+
+		FPdfBytes PdfBytes;
+		PdfBytes.Bytes_String = Base64;
+		PdfBytes.Original_Resolution = EachResolution;
+		PdfBytes.Sampling = Sampling;
+		PdfBytes.bUseBase64Url = bUseBase64Url;
+		// Bytes Export End
+
 		PDF_Texture_Mip.BulkData.Unlock();
 		PDF_Texture->UpdateResource();
 		
-		Pages.Add(PDF_Texture, EachResolution);
-		
+		Out_Pages.Add(PDF_Texture, EachResolution);
+
 		FPDFBitmap_Destroy(PDF_Bitmap);
 		FPDF_ClosePage(PDF_Page);
-	}
 
-	Out_Pages = Pages;
+		Out_Pages_Bytes.Add(PdfBytes);
+	}
 
 	if (Out_Pages.Num() > 0)
 	{
@@ -345,6 +364,54 @@ bool UPDF_ReaderBPLibrary::PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages
 	{
 		return false;
 	}
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Bytes_To_T2D(TMap<UTexture2D*, FVector2D>& Out_Pages, TArray<FPdfBytes> In_Pages_Bytes, bool sRgb)
+{
+	if (In_Pages_Bytes.Num() == 0)
+	{
+		return false;
+	}
+
+	for (int32 Index_Image = 0; Index_Image < In_Pages_Bytes.Num(); Index_Image++)
+	{
+		FString BytesString = In_Pages_Bytes[Index_Image].Bytes_String;
+		if (In_Pages_Bytes[Index_Image].bUseBase64Url)
+		{
+			BytesString.ReplaceInline(TEXT("-"), TEXT("+"));
+			BytesString.ReplaceInline(TEXT("_"), TEXT("/"));
+		}
+
+		TArray<uint8> Bytes;
+		FBase64::Decode(BytesString, Bytes);
+
+		UTexture2D* PDF_Texture = UTexture2D::CreateTransient(In_Pages_Bytes[Index_Image].Original_Resolution.X * In_Pages_Bytes[Index_Image].Sampling, In_Pages_Bytes[Index_Image].Original_Resolution.Y * In_Pages_Bytes[Index_Image].Sampling, PF_B8G8R8A8);
+
+		if (sRgb)
+		{
+			PDF_Texture->SRGB = 1;
+		}
+
+		else
+		{
+			PDF_Texture->SRGB = 0;
+		}
+
+		FTexture2DMipMap& PDF_Texture_Mip = PDF_Texture->GetPlatformData()->Mips[0];
+		void* PDF_Texture_Data = PDF_Texture_Mip.BulkData.Lock(LOCK_READ_WRITE);
+
+		FMemory::Memcpy(PDF_Texture_Data, Bytes.GetData(), Bytes.Num());
+		PDF_Texture_Mip.BulkData.Unlock();
+		PDF_Texture->UpdateResource();
+
+		FVector2D EachResolution;
+		EachResolution.X = In_Pages_Bytes[Index_Image].Original_Resolution.X;
+		EachResolution.Y = In_Pages_Bytes[Index_Image].Original_Resolution.Y;
+
+		Out_Pages.Add(PDF_Texture, EachResolution);
+	}
+
+	return true;
 }
 
 bool UPDF_ReaderBPLibrary::PDF_Get_Texts(TArray<FString>& Out_Texts, UPARAM(ref)UPDFiumDoc*& In_PDF)

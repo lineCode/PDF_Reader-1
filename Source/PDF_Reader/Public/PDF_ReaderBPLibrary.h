@@ -25,59 +25,23 @@ THIRD_PARTY_INCLUDES_END
 */
 
 USTRUCT(BlueprintType)
-struct FCharStruct
+struct FPdfBytes
 {
 	GENERATED_BODY()
 
 public:
 
 	UPROPERTY(BlueprintReadOnly)
-	FString EachChar;
+	FString Bytes_String;
 
 	UPROPERTY(BlueprintReadOnly)
-	FLinearColor CharColor;
+	FVector2D Original_Resolution;
 
 	UPROPERTY(BlueprintReadOnly)
-	FVector2D CharPosition;
+	float Sampling;
 
 	UPROPERTY(BlueprintReadOnly)
-	double CharSize;
-
-};
-
-USTRUCT(BlueprintType)
-struct FStructText
-{
-	GENERATED_BODY()
-
-public:
-
-	UPROPERTY(BlueprintReadOnly)
-	FString FontPath;
-
-	UPROPERTY(BlueprintReadOnly)
-	float FontSize;
-
-	UPROPERTY(BlueprintReadOnly)
-	FVector2D TextLocation;
-
-};
-
-USTRUCT(BlueprintType)
-struct FStructPage
-{
-	GENERATED_BODY()
-
-public:
-
-	UPROPERTY(BlueprintReadOnly)
-	FVector2D PageSize;
-
-	UPROPERTY(BlueprintReadOnly)
-	TMap<FString, FStructText> MAP_Texts;
-
-	UPROPERTY(BlueprintReadOnly)
-	TMap<UTexture2D*, FVector2D> MAP_Images;
+	bool bUseBase64Url;
 
 };
 
@@ -126,18 +90,22 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	static bool PDF_Read_Bytes(UArrayObject*& Out_Byte_Object, TArray<uint8> In_Bytes);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Open File", ToolTip = "", Keywords = "pdf, pdfium, read, open"), Category = "PDF_Reader|Read")
-	static bool PDF_Read_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArrayObject*& In_Byte_Object, FString In_PDF_Password);
+	static bool PDF_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArrayObject*& In_Byte_Object, FString In_PDF_Password);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Close File", ToolTip = "", Keywords = "pdf, pdfium, read, close"), Category = "PDF_Reader|Read")
-	static bool PDF_Read_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF);
+	static bool PDF_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF);
 
 	/**
-	* @param Sampling Default (also minimum) value is "1" but "2" gives best result for A4 sized PDF on 17 inch notebook screen. Bigger values is good for 3D widget like huge UIs.
-	* @param bUseMatrix Results will same but it uses different function.
+	* @param In_Sampling Default (also minimum) value is "1" but "2" gives best result for A4 sized PDF on 17 inch notebook screen. Bigger values is good for 3D widget like huge UIs.
+	* @param bUseMatrix Results will same but it uses different algorithm.
 	* @param sRgb Gives more contrast to colors.
+	* @param Out_Pages_Bytes Don't use these Base64 results on web. PDFium based Bitmap doesn't work with it.
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Pages", Keywords = "pdf, pdfium, read, get, pages"), Category = "PDF_Reader|Read")
-	static bool PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages, UPARAM(ref)UPDFiumDoc*& In_PDF, double In_Sampling = 1.0, bool bUseMatrix = false, bool sRgb = false);
+	static bool PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages, TArray<FPdfBytes>& Out_Pages_Bytes, UPARAM(ref)UPDFiumDoc*& In_PDF, double In_Sampling = 1.0, bool bUseMatrix = false, bool sRgb = false, bool bUseBase64Url = true);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Convert Bytes to Texture2D", Keywords = "pdf, pdfium, read, get, pages, convert, bytes"), Category = "PDF_Reader|Read")
+	static bool PDF_Bytes_To_T2D(TMap<UTexture2D*, FVector2D>& Out_Pages, TArray<FPdfBytes> In_Pages_Bytes, bool sRgb = false);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Texts", Keywords = "pdf, pdfium, read, get, texts, string"), Category = "PDF_Reader|Read")
 	static bool PDF_Get_Texts(TArray<FString>& Out_Texts, UPARAM(ref)UPDFiumDoc*& In_PDF);
