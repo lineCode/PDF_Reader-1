@@ -15,5 +15,4 @@ public:
 #ifdef _WIN64
 	void* PDFium_Handle;
 #endif
-
 };

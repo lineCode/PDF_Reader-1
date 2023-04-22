@@ -44,8 +44,8 @@
 #define WITH_PUSH_MODEL 0
 #define WITH_CEF3 1
 #define WITH_LIVE_CODING 1
-#define UE_LIVE_CODING_ENGINE_DIR "D:\\Epic\\Engines\\UE_5.1\\Engine"
-#define UE_LIVE_CODING_PROJECT "D:\\Epic\\Projects\\FROZEN\\SDKs\\FF_Plugins_Mobile\\FF_Plugins_Mobile.uproject"
+#define UE_LIVE_CODING_ENGINE_DIR "E:\\Epic\\Engines\\UE_5.1\\Engine"
+#define UE_LIVE_CODING_PROJECT "E:\\Epic\\Projects\\FROZEN\\SDKs\\FF_Plugins_Mobile\\FF_Plugins_Mobile.uproject"
 #define WITH_CPP_MODULES 0
 #define WITH_CPP_COROUTINES 0
 #define WITH_PROCESS_PRIORITY_CONTROL 0
@@ -212,4 +212,9 @@
 #define READ_TARGET_ENABLED_PLUGINS_FROM_RECEIPT 0
 #define LOAD_PLUGINS_FOR_TARGET_PLATFORMS 0
 #define PROJECTS_API 
+#define HTTP_PACKAGE 1
+#define CURL_ENABLE_DEBUG_CALLBACK 1
+#define CURL_ENABLE_NO_TIMEOUTS_OPTION 1
+#define WITH_WINHTTP 1
+#define HTTP_API 
 #define PDF_READER_API 

@@ -1,6 +1,6 @@
 D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealGame\Development\PDF_Reader\Module.PDF_Reader.cpp
 /I .
-/I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\ThirdParty\libharu\Windows\include
+/I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\ThirdParty\pdfium\Windows\include
 /I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\Private
 /I ..\Intermediate\Build\Win64\UnrealGame\Inc\CoreUObject\UHT
 /I Runtime
@@ -106,24 +106,9 @@ D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\B
 /I Runtime\TypedElementFramework\Public
 /I ..\Intermediate\Build\Win64\UnrealGame\Inc\TypedElementRuntime\UHT
 /I Runtime\TypedElementRuntime\Public
-/I ..\Intermediate\Build\Win64\UnrealGame\Inc\UMG\UHT
-/I Runtime\UMG\Public
-/I Runtime\Online
-/I Runtime\Online\HTTP\Public
-/I ..\Intermediate\Build\Win64\UnrealGame\Inc\MovieScene\UHT
-/I Runtime\MovieScene\Public
-/I ..\Intermediate\Build\Win64\UnrealGame\Inc\TimeManagement\UHT
-/I Runtime\TimeManagement\Public
-/I ..\Intermediate\Build\Win64\UnrealGame\Inc\MovieSceneTracks\UHT
-/I Runtime\MovieSceneTracks\Public
-/I ..\Intermediate\Build\Win64\UnrealGame\Inc\Constraints\UHT
-/I Runtime\Experimental\Animation
-/I Runtime\Experimental\Animation\Constraints\Public
-/I ..\Intermediate\Build\Win64\UnrealGame\Inc\PropertyPath\UHT
-/I Runtime\PropertyPath\Public
+/I Runtime\Projects\Public
 /I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealGame\Inc\PDF_Reader\UHT
 /I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source
-/I ThirdParty\libPNG\libPNG-1.5.2
 /I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\Public
 /external:W0
 /external:I ThirdParty\mimalloc\include

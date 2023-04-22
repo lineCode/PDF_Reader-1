@@ -102,7 +102,7 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	* @param Out_Pages_Bytes Don't use these Base64 results on web. PDFium based Bitmap doesn't work with it.
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Pages", Keywords = "pdf, pdfium, read, get, pages"), Category = "PDF_Reader|Read")
-	static bool PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages, TArray<FPdfBytes>& Out_Pages_Bytes, UPARAM(ref)UPDFiumDoc*& In_PDF, double In_Sampling = 1.0, bool bUseMatrix = false, bool sRgb = false, bool bUseBase64Url = true);
+	static bool PDF_Get_Pages(TMap<UTexture2D*, FVector2D>& Out_Pages, TArray<FPdfBytes>& Out_Pages_Bytes, UPARAM(ref)UPDFiumDoc*& In_PDF, double In_Sampling = 1.0, bool bUseMatrix = false, bool sRgb = false, bool bUseBase64Url = true, FColor BG_Color = FColor::White);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Convert Bytes to Texture2D", Keywords = "pdf, pdfium, read, get, pages, convert, bytes"), Category = "PDF_Reader|Read")
 	static bool PDF_Bytes_To_T2D(TMap<UTexture2D*, FVector2D>& Out_Pages, TArray<FPdfBytes> In_Pages_Bytes, bool sRgb = false);
@@ -118,5 +118,31 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Get Pages Count", ToolTip = "", Keywords = "pdf, pdfium, get, pages, count"), Category = "PDF_Reader|Read")
 	static bool PDF_Get_Pages_Count(int32& PagesCount, UPARAM(ref)UPDFiumDoc*& In_PDF);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Create Document", ToolTip = "", Keywords = "pdf, pdfium, create, doc, document, pdf"), Category = "PDF_Reader|Write")
+	static bool PDF_Create_Doc(UPDFiumDoc*& Out_PDF);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Add Pages", ToolTip = "", Keywords = "pdf, pdfium, create, doc, document, pdf, add, pages"), Category = "PDF_Reader|Write")
+	static bool PDF_Add_Pages(UPARAM(ref)UPDFiumDoc*& In_PDF, TArray<FVector2D> Pages);
+
+	/**
+	* @param FontName Sample font names are "Helvetica-BoldItalic" and "Arial". Don't use space between font name and its specifiers.
+	* @param Position X value starts from left, Y value starts from bottom.
+	*/
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Add Texts as UTF16", Keywords = "pdf, pdfium, create, doc, document, pdf, add, texts"), Category = "PDF_Reader|Write")
+	static bool PDF_Add_Texts_UTF16(UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear = FVector2D(1.0f, 1.0f), FVector2D Rotation = FVector2D(0.0f, 0.0f), FString FontName = "Helvetica-BoldItalic", int32 FontSize = 12, int32 PageIndex = 0);
+
+	/**
+	* @param FontName Sample font names are "Helvetica-BoldItalic" and "Arial". Don't use space between font name and its specifiers.
+	* @param Position X value starts from left, Y value starts from bottom.
+	*/
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Add Texts as Charcodes", Keywords = "pdf, pdfium, create, doc, document, pdf, add, texts"), Category = "PDF_Reader|Write")
+	static bool PDF_Add_Texts_Charcodes(UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear = FVector2D(1.0f, 1.0f), FVector2D Rotation = FVector2D(0.0f, 0.0f), FString FontName = "Helvetica-BoldItalic", int32 FontSize = 12, int32 PageIndex = 0);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Add Image", Keywords = "pdf, pdfium, create, doc, document, pdf, add, image"), Category = "PDF_Reader|Write")
+	static bool PDF_Add_Image(UPARAM(ref)UPDFiumDoc*& In_PDF, UTexture2D* In_Texts, FVector2D Position, FVector2D Shear = FVector2D(1.0f, 1.0f), FVector2D Rotation = FVector2D(0.0f, 0.0f), FVector2D Scale = FVector2D(512.0f, 512.0f), int32 PageIndex = 0);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Save PDF", ToolTip = "", Keywords = "pdf, pdfium, create, doc, document, pdf, add, texts"), Category = "PDF_Reader|Write")
+	static bool PDF_Save_PDF(TMap<UPDFiumDoc*, FString> Exports);
 
 };

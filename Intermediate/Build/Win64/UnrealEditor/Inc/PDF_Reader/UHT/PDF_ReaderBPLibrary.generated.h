@@ -11,7 +11,10 @@
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 class UArrayObject;
 class UPDFiumDoc;
+class UPDFiumDoc; 
+class UTexture2D;
 class UTexture2D; 
+struct FColor;
 struct FPdfBytes;
 #ifdef PDF_READER_PDF_ReaderBPLibrary_generated_h
 #error "PDF_ReaderBPLibrary.generated.h already included, missing '#pragma once' in PDF_ReaderBPLibrary.h"
@@ -182,6 +185,12 @@ template<> PDF_READER_API UClass* StaticClass<class UPDFiumDoc>();
 #define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_SPARSE_DATA
 #define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execPDF_Save_PDF); \
+	DECLARE_FUNCTION(execPDF_Add_Image); \
+	DECLARE_FUNCTION(execPDF_Add_Texts_Charcodes); \
+	DECLARE_FUNCTION(execPDF_Add_Texts_UTF16); \
+	DECLARE_FUNCTION(execPDF_Add_Pages); \
+	DECLARE_FUNCTION(execPDF_Create_Doc); \
 	DECLARE_FUNCTION(execPDF_Get_Pages_Count); \
 	DECLARE_FUNCTION(execPDF_Select_Text); \
 	DECLARE_FUNCTION(execPDF_Get_Links); \
@@ -200,6 +209,12 @@ template<> PDF_READER_API UClass* StaticClass<class UPDFiumDoc>();
 
 #define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execPDF_Save_PDF); \
+	DECLARE_FUNCTION(execPDF_Add_Image); \
+	DECLARE_FUNCTION(execPDF_Add_Texts_Charcodes); \
+	DECLARE_FUNCTION(execPDF_Add_Texts_UTF16); \
+	DECLARE_FUNCTION(execPDF_Add_Pages); \
+	DECLARE_FUNCTION(execPDF_Create_Doc); \
 	DECLARE_FUNCTION(execPDF_Get_Pages_Count); \
 	DECLARE_FUNCTION(execPDF_Select_Text); \
 	DECLARE_FUNCTION(execPDF_Get_Links); \
