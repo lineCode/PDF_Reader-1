@@ -626,6 +626,7 @@ bool UPDF_ReaderBPLibrary::PDF_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArray
 
 #ifdef _WIN64
 	PDF_Object->Document = FPDF_LoadMemDocument64(PDF_Data, PDF_Data_Size, TCHAR_TO_UTF8(*In_PDF_Password));
+	FPDF_LoadXFA(PDF_Object->Document);
 #else
 	PDF_Object->Document = FPDF_LoadMemDocument(PDF_Data, PDF_Data_Size, TCHAR_TO_UTF8(*In_PDF_Password));
 #endif
@@ -1080,43 +1081,7 @@ bool UPDF_ReaderBPLibrary::PDF_Add_Pages(UPARAM(ref)UPDFiumDoc*& In_PDF, TArray<
 #endif
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Add_Texts_UTF16(UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear, FVector2D Rotation, FString FontName, int32 FontSize, int32 PageIndex)
-{
-#ifdef _WIN64
-	if (Global_bIsLibInitialized == false)
-	{
-		return false;
-	}
-
-	if (IsValid(In_PDF) == false)
-	{
-		return false;
-	}
-
-	if (!In_PDF->Document)
-	{
-		return false;
-	}
-	
-	FPDF_FONT Font = FPDFText_LoadStandardFont(In_PDF->Document, TCHAR_TO_UTF8(*FontName));
-	FPDF_PAGEOBJECT TextObject = FPDFPageObj_CreateTextObj(In_PDF->Document, Font, FontSize);
-	
-	FPDFText_SetText(TextObject, TCHAR_TO_UTF16(*In_Texts));
-	FPDFPageObj_Transform(TextObject, Shear.X, Rotation.X, Rotation.Y, Shear.Y, Position.X, Position.Y);
-	
-	FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
-	FPDFPage_InsertObject(PDF_Page, TextObject);
-	FPDFPage_GenerateContent(PDF_Page);
-
-	FPDF_ClosePage(PDF_Page);
-
-	return true;
-#else
-	return false;
-#endif
-}
-
-bool UPDF_ReaderBPLibrary::PDF_Add_Texts_Charcodes(UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear, FVector2D Rotation, FString FontName, int32 FontSize, int32 PageIndex)
+bool UPDF_ReaderBPLibrary::PDF_Add_Texts(UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear, FVector2D Rotation, FVector2D Border, FString FontName, int32 FontSize, int32 PageIndex, bool bUseCharcodes)
 {
 #ifdef _WIN64
 	if (Global_bIsLibInitialized == false)
@@ -1134,41 +1099,144 @@ bool UPDF_ReaderBPLibrary::PDF_Add_Texts_Charcodes(UPARAM(ref)UPDFiumDoc*& In_PD
 		return false;
 	}
 
-	FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
+	if (In_Texts.IsEmpty())
+	{
+		return false;
+	}
+
 	FPDF_FONT Font = FPDFText_LoadStandardFont(In_PDF->Document, TCHAR_TO_UTF8(*FontName));
 
-	TArray<FString> EachLine;
-	In_Texts.ParseIntoArray(EachLine, TEXT("\n"), false);
+	FPDF_PAGE First_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
+	TArray<FPDF_PAGE> Array_Pages;
+	Array_Pages.Add(First_Page);
 
-	for (int32 Index_Line = 0; Index_Line < EachLine.Num(); Index_Line++)
+	int32 Acceptable_Horizontal = 2 * ((FPDF_GetPageWidth(First_Page) - Position.X - Border.X) / FontSize);
+	int32 Acceptable_Vertical = (Position.Y - Border.Y) / FontSize;
+
+	// Generate paragraphs.
+	TArray<FString> Array_Paragraphs;
+	if (In_Texts.Contains(LINE_TERMINATOR_ANSI) == true)
+	{
+		Array_Paragraphs = UKismetStringLibrary::ParseIntoArray(In_Texts, LINE_TERMINATOR_ANSI, false);
+	}
+
+	else
+	{
+		Array_Paragraphs.Add(In_Texts);
+	}
+
+	// Generate lines for text wrapping.
+	TArray<FString> Array_Lines;
+	for (int32 Index_Paragraphs = 0; Index_Paragraphs < Array_Paragraphs.Num(); Index_Paragraphs++)
+	{
+		FString Each_Paragraph = Array_Paragraphs[Index_Paragraphs];
+		
+		if (Each_Paragraph.IsEmpty())
+		{
+			Array_Lines.Add(" ");
+
+			continue;
+		}
+
+		if (Each_Paragraph.Len() < Acceptable_Horizontal)
+		{
+			Array_Lines.Add(Each_Paragraph);
+
+			continue;
+		}
+
+		bool bAllowChop = true;
+		while (bAllowChop)
+		{
+			FString Each_Line = UKismetStringLibrary::Left(Each_Paragraph, Acceptable_Horizontal);
+			Each_Paragraph = UKismetStringLibrary::RightChop(Each_Paragraph, Acceptable_Horizontal);
+
+			if (UKismetStringLibrary::Left(Each_Line, 2) == "  ")
+			{
+				Array_Lines.Add(Each_Line.TrimEnd());
+			}
+
+			else
+			{
+				Array_Lines.Add(Each_Line.TrimStartAndEnd());
+			}
+			
+			if (Each_Paragraph.Len() < Acceptable_Horizontal)
+			{
+				if (UKismetStringLibrary::Left(Each_Paragraph, 2) == "  ")
+				{
+					Array_Lines.Add(Each_Paragraph.TrimEnd());
+				}
+				
+				else
+				{
+					Array_Lines.Add(Each_Paragraph.TrimStartAndEnd());
+				}
+
+				bAllowChop = false;
+			}
+		}
+	}
+
+	// Check if new pages are required or not.
+	if (Array_Lines.Num() > Acceptable_Vertical)
+	{
+		TArray<FVector2D> NewPageSize;
+		NewPageSize.Add(FVector2D(FPDF_GetPageWidth(First_Page), FPDF_GetPageHeight(First_Page)));
+
+		int32 Extra_Page_Count = (Array_Lines.Num() / Acceptable_Vertical);
+		for (int32 Index_Extra_Page = 0; Index_Extra_Page < Extra_Page_Count; Index_Extra_Page++)
+		{
+			UPDF_ReaderBPLibrary::PDF_Add_Pages(In_PDF, NewPageSize);
+			FPDF_PAGE New_Page = FPDF_LoadPage(In_PDF->Document, (PageIndex + Index_Extra_Page + 1));
+			Array_Pages.Add(New_Page);
+		}
+	}
+	
+	// Generate text objects.
+	int32 ActivePage = 0;
+	for (int32 Index_Lines = 0; Index_Lines < Array_Lines.Num(); Index_Lines++)
 	{
 		FPDF_PAGEOBJECT TextObject = FPDFPageObj_CreateTextObj(In_PDF->Document, Font, FontSize);
 
-		TArray<FString> Array_Chars;
-		std::string TextString = TCHAR_TO_UTF8(*EachLine[Index_Line]);
-		for (std::string::iterator it = TextString.begin(); it != TextString.end(); ++it)
+		FString Each_Line = Array_Lines[Index_Lines];
+		
+		if (bUseCharcodes)
 		{
-			std::string expectsString(1, *it);
-			Array_Chars.Add(expectsString.c_str());
-		}
+			TArray<FString> Array_Chars = UKismetStringLibrary::GetCharacterArrayFromString(Each_Line);
+			int32 CharsCount = Array_Chars.Num();
 
-		uint32_t* CharCodes = (uint32_t*)malloc(Array_Chars.Num() * sizeof(uint32_t));
-		for (int32 Index_Char = 0; Index_Char < Array_Chars.Num(); Index_Char++)
-		{
-			if (Global_Char_To_ASCII.Contains(Array_Chars[Index_Char]))
+			uint32_t* CharCodes = (uint32_t*)malloc(CharsCount * sizeof(uint32_t));
+			for (int32 Index_Chars = 0; Index_Chars < CharsCount; Index_Chars++)
 			{
-				CharCodes[Index_Char] = *Global_Char_To_ASCII.Find(Array_Chars[Index_Char]);
+				FString Char = Array_Chars[Index_Chars];
+				CharCodes[Index_Chars] = UKismetStringLibrary::GetCharacterAsNumber(Char, 0);
 			}
+
+			FPDFText_SetCharcodes(TextObject, CharCodes, CharsCount);
+		}
+		
+		else
+		{
+			FPDFText_SetText(TextObject, TCHAR_TO_UTF16(*Each_Line));
 		}
 
-		FPDFText_SetCharcodes(TextObject, CharCodes, Array_Chars.Num());
-		FPDFPageObj_Transform(TextObject, Shear.X, Rotation.X, Rotation.Y, Shear.Y, Position.X, (Position.Y - (FontSize * Index_Line)));
+		FPDFPageObj_Transform(TextObject, Shear.X, Rotation.X, Rotation.Y, Shear.Y, Position.X, ((Position.Y * (ActivePage + 1)) - (FontSize * Index_Lines)));
+		FPDFPage_InsertObject(Array_Pages[ActivePage], TextObject);
+		FPDFPage_GenerateContent(Array_Pages[ActivePage]);
 
-		FPDFPage_InsertObject(PDF_Page, TextObject);
-		FPDFPage_GenerateContent(PDF_Page);
+		// We are care about counts not index.
+		if (((Index_Lines + 1) / (ActivePage + 1)) == Acceptable_Vertical)
+		{
+			ActivePage += 1;
+		}
 	}
 
-	FPDF_ClosePage(PDF_Page);
+	// Close all pages after writing.
+	for (int32 Index_Page = 0; Index_Page < Array_Pages.Num(); Index_Page++)
+	{
+		FPDF_ClosePage(Array_Pages[Index_Page]);
+	}
 
 	return true;
 #else
@@ -1176,7 +1244,7 @@ bool UPDF_ReaderBPLibrary::PDF_Add_Texts_Charcodes(UPARAM(ref)UPDFiumDoc*& In_PD
 #endif
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Add_Image(UPARAM(ref)UPDFiumDoc*& In_PDF, UTexture2D* In_Texts, FVector2D Position, FVector2D Shear, FVector2D Rotation, FVector2D Scale, int32 PageIndex)
+bool UPDF_ReaderBPLibrary::PDF_Add_Image(UPARAM(ref)UPDFiumDoc*& In_PDF, UTexture2D* In_Texture, FVector2D Position, FVector2D Shear, FVector2D Rotation, int32 PageIndex)
 {
 #ifdef _WIN64
 
@@ -1195,14 +1263,21 @@ bool UPDF_ReaderBPLibrary::PDF_Add_Image(UPARAM(ref)UPDFiumDoc*& In_PDF, UTextur
 		return false;
 	}
 
+	FTexture2DMipMap& Texture_Mip = In_Texture->GetPlatformData()->Mips[0];
+	void* Texture_Data = Texture_Mip.BulkData.Lock(LOCK_READ_WRITE);
+
 	FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
-	FPDF_PAGEOBJECT ImageObject = FPDFPageObj_NewImageObj(In_PDF->Document);
-
-	//FPDFImageObj_SetBitmap()
-	FPDFPageObj_Transform(ImageObject, Shear.X, Rotation.X, Rotation.Y, Shear.Y, Position.X, Position.Y);
-
-	FPDFPage_InsertObject(PDF_Page, ImageObject);
+	FPDF_PAGEOBJECT Image_Object = FPDFPageObj_NewImageObj(In_PDF->Document);
+	FPDF_BITMAP Bitmap = FPDFBitmap_CreateEx(In_Texture->GetSizeX(), In_Texture->GetSizeY(), FPDFBitmap_BGRA, Texture_Data, (int)In_Texture->GetSizeX() * 4);
+	FPDFImageObj_SetBitmap(NULL, 1, Image_Object, Bitmap);
+	FPDFPageObj_Transform(Image_Object, Shear.X, Rotation.X, Rotation.Y, Shear.Y, Position.X, Position.Y);
+	FPDFPage_InsertObject(PDF_Page, Image_Object);
 	FPDFPage_GenerateContent(PDF_Page);
+
+	FPDFBitmap_Destroy(Bitmap);
+	Texture_Mip.BulkData.Unlock();
+
+	FPDF_ClosePage(PDF_Page);
 
 	return true;
 
@@ -1258,7 +1333,9 @@ bool UPDF_ReaderBPLibrary::PDF_Save_PDF(TMap<UPDFiumDoc*, FString> Exports)
 
 		Global_PDF_Export_Path = *Exports.Find(Array_Docs[Index_Docs]);
 
-		FPDF_FILEWRITE Writer ;
+		FPDF_FILEWRITE Writer;
+		memset(&Writer, 0, sizeof(FPDF_FILEWRITE));
+
 		Writer.version = 1;
 		Writer.WriteBlock = WriteCallback;
 		FPDF_SaveAsCopy(Array_Docs[Index_Docs]->Document, &Writer, 3);

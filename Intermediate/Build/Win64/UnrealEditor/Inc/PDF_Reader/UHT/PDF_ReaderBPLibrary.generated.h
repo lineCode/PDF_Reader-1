@@ -187,8 +187,7 @@ template<> PDF_READER_API UClass* StaticClass<class UPDFiumDoc>();
  \
 	DECLARE_FUNCTION(execPDF_Save_PDF); \
 	DECLARE_FUNCTION(execPDF_Add_Image); \
-	DECLARE_FUNCTION(execPDF_Add_Texts_Charcodes); \
-	DECLARE_FUNCTION(execPDF_Add_Texts_UTF16); \
+	DECLARE_FUNCTION(execPDF_Add_Texts); \
 	DECLARE_FUNCTION(execPDF_Add_Pages); \
 	DECLARE_FUNCTION(execPDF_Create_Doc); \
 	DECLARE_FUNCTION(execPDF_Get_Pages_Count); \
@@ -211,8 +210,7 @@ template<> PDF_READER_API UClass* StaticClass<class UPDFiumDoc>();
  \
 	DECLARE_FUNCTION(execPDF_Save_PDF); \
 	DECLARE_FUNCTION(execPDF_Add_Image); \
-	DECLARE_FUNCTION(execPDF_Add_Texts_Charcodes); \
-	DECLARE_FUNCTION(execPDF_Add_Texts_UTF16); \
+	DECLARE_FUNCTION(execPDF_Add_Texts); \
 	DECLARE_FUNCTION(execPDF_Add_Pages); \
 	DECLARE_FUNCTION(execPDF_Create_Doc); \
 	DECLARE_FUNCTION(execPDF_Get_Pages_Count); \

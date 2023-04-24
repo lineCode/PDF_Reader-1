@@ -53,7 +53,7 @@ public class PDF_Reader : ModuleRules
                 "Projects",
 				"HTTP",
                 "RHI",
-				"RenderCore"
+				"RenderCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

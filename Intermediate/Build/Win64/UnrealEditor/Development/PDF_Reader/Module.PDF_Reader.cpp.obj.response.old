@@ -1,7 +1,7 @@
-D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Module.PDF_Reader.cpp
+E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Module.PDF_Reader.cpp
 /I .
-/I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\ThirdParty\pdfium\Windows\include
-/I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\Private
+/I E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\ThirdParty\pdfium\Windows\include
+/I E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\Private
 /I ..\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\UHT
 /I Runtime
 /I Runtime\CoreUObject\Public
@@ -271,9 +271,11 @@ D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\B
 /I Runtime\MovieSceneCapture\Public
 /I ..\Intermediate\Build\Win64\UnrealEditor\Inc\AnimationDataController\UHT
 /I Developer\AnimationDataController\Public
-/I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Inc\PDF_Reader\UHT
-/I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source
-/I D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\Public
+/I ..\Intermediate\Build\Win64\UnrealEditor\Inc\ImageWriteQueue\UHT
+/I Runtime\ImageWriteQueue\Public
+/I E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Inc\PDF_Reader\UHT
+/I E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source
+/I E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Source\PDF_Reader\Public
 /external:W0
 /external:I ThirdParty\mimalloc\include
 /external:I ThirdParty\LibTiff\Source\Win64
@@ -283,12 +285,12 @@ D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\B
 /external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22000.0\shared"
 /external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22000.0\um"
 /external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22000.0\winrt"
-/FI"D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Intermediate\Build\Win64\FF_Plugins_MobileEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
-/FI"D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Definitions.PDF_Reader.h"
-/Yu"D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Intermediate\Build\Win64\FF_Plugins_MobileEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
-/Fp"D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Intermediate\Build\Win64\FF_Plugins_MobileEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.pch"
-/Fo"D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Module.PDF_Reader.cpp.obj"
-/sourceDependencies D:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Module.PDF_Reader.cpp.dep.json
+/FI"E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Intermediate\Build\Win64\FF_Plugins_MobileEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
+/FI"E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Definitions.PDF_Reader.h"
+/Yu"E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Intermediate\Build\Win64\FF_Plugins_MobileEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
+/Fp"E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Intermediate\Build\Win64\FF_Plugins_MobileEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.pch"
+/Fo"E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Module.PDF_Reader.cpp.obj"
+/sourceDependencies E:\Epic\Projects\FROZEN\SDKs\FF_Plugins_Mobile\Plugins\PDF_Reader\Intermediate\Build\Win64\UnrealEditor\Development\PDF_Reader\Module.PDF_Reader.cpp.dep.json
 /Zc:inline
 /nologo
 /Oi
