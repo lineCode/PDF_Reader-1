@@ -17,7 +17,9 @@ https://www.unrealengine.com/marketplace/en-US/product/low-entry-http-request
 
 # TARGET PLATFORM
 * Plugin is for Unreal Engine 5.1 and up.
-* Windows and Android platforms supported. This is runtime plugin. It don't work in editor. 
+* This is a "runtime" plugin. It won't work on editor.
+* Android platform can render PDF file and get texts but it can't create new PDF file.
+* Windows platform can render PDF file, get texts and create new PDF file.
 
 # FEATURES
 * <b>PDF Android Path HelperThere</b>: It gives real absolute path of file on Android.
