@@ -29,10 +29,13 @@ https://www.unrealengine.com/marketplace/en-US/product/low-entry-http-request
 * PDF_LibInit / PDF_LibClose / PDF_LibState: It will initialize, close and give state of PDFium library.
 * Create PDF: It creates a new and empty PDF file.
 * Add Pages: It adds pages to target PDF file with defined size. (Array count is page count and each vector element of array is its size)
-* Add Texts as CharCodes: It converts each letter of string to an ASCII DECIMAL. For ASCII perspective, it supports extended chars but embedded fonts of PDFium doesn't have chars other than English letters.<br />
-We will create a custom font load function in the future. This will solve extended chars problem.
-* Add Texts as UTF16: This uses PDFium's exprimenta SetText function. Usage is same with CharCodes but at the backend it directly converts FString to UTF16LE format. But its character support is worse than charcode and it has a bug about space between words.<br />
-So, use CharCodes.
+* Add Texts: It adds text objects to target page. PDFium doesn't support line break at default but we integrated a parse system. So it has auto wrap feature. Neverthless, we suggest you that be careful about your layout (for example when will you create a line break or not)
+	* Position X = Horizontal position.
+	* Position Y = Vertical position but it starts from bottom. If your PDF page's height is 800 pixel, top will be 800 and bottom will be 0.
+	* Shear X and Y = It strecth your text object. Scaling won't be vectoral. So we don't suggest it.
+	* Rotation X and Y = We don't know how it works right now.
+	* Border X and Y = It defines vertical and horizontal borders.
+	* Use Charcodes: Frontend usage from blueprints are same but at backend it switches between ASCII Decimal based "FPDFText_SetCharcodes()" and "FPDFText_SetText()". Charcodes has better character support.
 * Add Images: We have not finished it, yet.
 * Save PDF: It save pdf file to target location. IMPORTANT ! CALL THIS ONLY FROM A SINGLE PLACE ! STORE ALL YOUR CREATED PDF FILES AND WRITE THEM ALL AT ONCE ! IT USES C CALLBACK AND ITS PURPOSE IS SINGLE FILE EXPORT AT THE SAME TIME !<br />
 For multiple save cases, you can export all your PDF objects to different (or same) location in a for loop after you finish your job. You don't have to save your PDF file when you add something to it. It automaticaly refresh it. <br />
