@@ -23,7 +23,7 @@ https://www.unrealengine.com/marketplace/en-US/product/low-entry-http-request
 * Get Texts: It will get all texts of all pages.
 * Select Text: You can think this as a somekind of text selection. It will get text/strings in a rectangle area. You have to define that rectangle's size and location according with PDF's size and location.<br />
   Don't use your cursor location directly. ((Cursor Location - PDF Location at screen) * Sampling will give you necessary locations.)
-* Get Links: It will give all "weblinks" in specified page. It won't give internal bridges. It will give weblinks. This is limitation of PDFium.
+* <b>Get Links</b>: It will give all "weblinks" in specified page. It won't give internal bridges. It will give weblinks. This is limitation of PDFium.
 * Get Pages Count: You know what it does.
 * PDF Read File Close: It will close opened document.
 * PDF_LibInit / PDF_LibClose / PDF_LibState: It will initialize, close and give state of PDFium library.
