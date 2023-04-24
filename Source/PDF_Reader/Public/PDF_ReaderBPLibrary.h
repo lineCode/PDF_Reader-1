@@ -134,8 +134,7 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	/**
 	* @param FontName Sample font names are "Helvetica-BoldItalic" and "Arial". Don't use space between font name and its specifiers.
 	* @param Position X value starts from left, Y value starts from bottom.
-	* @param bUseCharcodes It switch between "FPDFText_SetCharcodes()" and "FPDFText_SetText()". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters (for example line break. FPDFText_SetText() doesn't support it.)
-	* We included SetText because library has it and we could include it. That's why. Actually don't worry about line breaks. We forcefully integrated it to both method.
+	* @param bUseCharcodes It switch between "FPDFText_SetCharcodes()" and "FPDFText_SetText()". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters.
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Add Texts", Keywords = "pdf, pdfium, create, doc, document, pdf, add, texts"), Category = "PDF_Reader|Write")
 	static void PDF_Add_Texts(FDelegateAddObject DelegateAddObject, UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear = FVector2D(1.0f, 1.0f), FVector2D Rotation = FVector2D(0.0f, 0.0f), FVector2D Border = FVector2D(10.0f, 10.0f), FString FontName = "Helvetica-BoldItalic", int32 FontSize = 12, int32 PageIndex = 0, bool bUseCharcodes = true, bool bGetCharcodesFromDb = false);

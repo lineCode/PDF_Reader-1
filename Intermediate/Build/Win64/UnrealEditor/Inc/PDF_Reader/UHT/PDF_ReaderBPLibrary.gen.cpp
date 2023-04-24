@@ -711,7 +711,7 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::Function_MetaDataParams[] = {
 		{ "Category", "PDF_Reader|Write" },
-		{ "Comment", "/**\n\x09* @param FontName Sample font names are \"Helvetica-BoldItalic\" and \"Arial\". Don't use space between font name and its specifiers.\n\x09* @param Position X value starts from left, Y value starts from bottom.\n\x09* @param bUseCharcodes It switch between \"FPDFText_SetCharcodes()\" and \"FPDFText_SetText()\". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters (for example line break. FPDFText_SetText() doesn't support it.)\n\x09* We included SetText because library has it and we could include it. That's why. Actually don't worry about line breaks. We forcefully integrated it to both method.\n\x09*/" },
+		{ "Comment", "/**\n\x09* @param FontName Sample font names are \"Helvetica-BoldItalic\" and \"Arial\". Don't use space between font name and its specifiers.\n\x09* @param Position X value starts from left, Y value starts from bottom.\n\x09* @param bUseCharcodes It switch between \"FPDFText_SetCharcodes()\" and \"FPDFText_SetText()\". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters.\n\x09*/" },
 		{ "CPP_Default_bGetCharcodesFromDb", "false" },
 		{ "CPP_Default_Border", "(X=10.000,Y=10.000)" },
 		{ "CPP_Default_bUseCharcodes", "true" },
@@ -723,7 +723,7 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 		{ "DisplayName", "PDF Reader - Add Texts" },
 		{ "Keywords", "pdf, pdfium, create, doc, document, pdf, add, texts" },
 		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
-		{ "ToolTip", "@param FontName Sample font names are \"Helvetica-BoldItalic\" and \"Arial\". Don't use space between font name and its specifiers.\n@param Position X value starts from left, Y value starts from bottom.\n@param bUseCharcodes It switch between \"FPDFText_SetCharcodes()\" and \"FPDFText_SetText()\". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters (for example line break. FPDFText_SetText() doesn't support it.)\nWe included SetText because library has it and we could include it. That's why. Actually don't worry about line breaks. We forcefully integrated it to both method." },
+		{ "ToolTip", "@param FontName Sample font names are \"Helvetica-BoldItalic\" and \"Arial\". Don't use space between font name and its specifiers.\n@param Position X value starts from left, Y value starts from bottom.\n@param bUseCharcodes It switch between \"FPDFText_SetCharcodes()\" and \"FPDFText_SetText()\". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters." },
 	};
 #endif
 	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_Add_Texts", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04C22401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::Function_MetaDataParams)) };
@@ -1648,7 +1648,7 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 	const FClassFunctionLinkInfo Z_Construct_UClass_UPDF_ReaderBPLibrary_Statics::FuncInfo[] = {
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Image, "PDF_Add_Image" }, // 2129260331
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages, "PDF_Add_Pages" }, // 174670547
-		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts, "PDF_Add_Texts" }, // 2839660643
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts, "PDF_Add_Texts" }, // 3081437649
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Android_Path_Helper, "PDF_Android_Path_Helper" }, // 4257260276
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Bytes_To_T2D, "PDF_Bytes_To_T2D" }, // 2521646802
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_All_Docs, "PDF_Close_All_Docs" }, // 4174871994
@@ -1716,9 +1716,9 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo[] = {
 		{ Z_Construct_UClass_UArrayObject, UArrayObject::StaticClass, TEXT("UArrayObject"), &Z_Registration_Info_UClass_UArrayObject, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UArrayObject), 1126855976U) },
 		{ Z_Construct_UClass_UPDFiumDoc, UPDFiumDoc::StaticClass, TEXT("UPDFiumDoc"), &Z_Registration_Info_UClass_UPDFiumDoc, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDFiumDoc), 2249290787U) },
-		{ Z_Construct_UClass_UPDF_ReaderBPLibrary, UPDF_ReaderBPLibrary::StaticClass, TEXT("UPDF_ReaderBPLibrary"), &Z_Registration_Info_UClass_UPDF_ReaderBPLibrary, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDF_ReaderBPLibrary), 1481391366U) },
+		{ Z_Construct_UClass_UPDF_ReaderBPLibrary, UPDF_ReaderBPLibrary::StaticClass, TEXT("UPDF_ReaderBPLibrary"), &Z_Registration_Info_UClass_UPDF_ReaderBPLibrary, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDF_ReaderBPLibrary), 3394475076U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_855403099(TEXT("/Script/PDF_Reader"),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_3906670821(TEXT("/Script/PDF_Reader"),
 		Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo),
 		Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ScriptStructInfo),
 		nullptr, 0);
