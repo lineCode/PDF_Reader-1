@@ -182,8 +182,23 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 template<> PDF_READER_API UClass* StaticClass<class UPDFiumDoc>();
 
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_SPARSE_DATA
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_RPC_WRAPPERS \
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_70_DELEGATE \
+struct _Script_PDF_Reader_eventDelegateAddObject_Parms \
+{ \
+	bool bIsSuccessfull; \
+	FString OutCode; \
+}; \
+static inline void FDelegateAddObject_DelegateWrapper(const FScriptDelegate& DelegateAddObject, bool bIsSuccessfull, const FString& OutCode) \
+{ \
+	_Script_PDF_Reader_eventDelegateAddObject_Parms Parms; \
+	Parms.bIsSuccessfull=bIsSuccessfull ? true : false; \
+	Parms.OutCode=OutCode; \
+	DelegateAddObject.ProcessDelegate<UObject>(&Parms); \
+}
+
+
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_SPARSE_DATA
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execPDF_Save_PDF); \
 	DECLARE_FUNCTION(execPDF_Add_Image); \
@@ -196,6 +211,7 @@ template<> PDF_READER_API UClass* StaticClass<class UPDFiumDoc>();
 	DECLARE_FUNCTION(execPDF_Get_Texts); \
 	DECLARE_FUNCTION(execPDF_Bytes_To_T2D); \
 	DECLARE_FUNCTION(execPDF_Get_Pages); \
+	DECLARE_FUNCTION(execPDF_Close_All_Docs); \
 	DECLARE_FUNCTION(execPDF_File_Close); \
 	DECLARE_FUNCTION(execPDF_File_Open); \
 	DECLARE_FUNCTION(execPDF_Read_Bytes); \
@@ -206,7 +222,7 @@ template<> PDF_READER_API UClass* StaticClass<class UPDFiumDoc>();
 	DECLARE_FUNCTION(execPDF_LibInit);
 
 
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execPDF_Save_PDF); \
 	DECLARE_FUNCTION(execPDF_Add_Image); \
@@ -219,6 +235,7 @@ template<> PDF_READER_API UClass* StaticClass<class UPDFiumDoc>();
 	DECLARE_FUNCTION(execPDF_Get_Texts); \
 	DECLARE_FUNCTION(execPDF_Bytes_To_T2D); \
 	DECLARE_FUNCTION(execPDF_Get_Pages); \
+	DECLARE_FUNCTION(execPDF_Close_All_Docs); \
 	DECLARE_FUNCTION(execPDF_File_Close); \
 	DECLARE_FUNCTION(execPDF_File_Open); \
 	DECLARE_FUNCTION(execPDF_Read_Bytes); \
@@ -229,8 +246,8 @@ template<> PDF_READER_API UClass* StaticClass<class UPDFiumDoc>();
 	DECLARE_FUNCTION(execPDF_LibInit);
 
 
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_ACCESSORS
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_INCLASS_NO_PURE_DECLS \
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_ACCESSORS
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUPDF_ReaderBPLibrary(); \
 	friend struct Z_Construct_UClass_UPDF_ReaderBPLibrary_Statics; \
@@ -239,7 +256,7 @@ public: \
 	DECLARE_SERIALIZER(UPDF_ReaderBPLibrary)
 
 
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_INCLASS \
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_INCLASS \
 private: \
 	static void StaticRegisterNativesUPDF_ReaderBPLibrary(); \
 	friend struct Z_Construct_UClass_UPDF_ReaderBPLibrary_Statics; \
@@ -248,7 +265,7 @@ public: \
 	DECLARE_SERIALIZER(UPDF_ReaderBPLibrary)
 
 
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_STANDARD_CONSTRUCTORS \
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UPDF_ReaderBPLibrary) \
@@ -262,7 +279,7 @@ public: \
 	NO_API virtual ~UPDF_ReaderBPLibrary();
 
 
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_ENHANCED_CONSTRUCTORS \
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UPDF_ReaderBPLibrary(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()) : Super(ObjectInitializer) { }; \
 private: \
@@ -276,27 +293,27 @@ public: \
 	NO_API virtual ~UPDF_ReaderBPLibrary();
 
 
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_69_PROLOG
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_GENERATED_BODY_LEGACY \
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_PROLOG
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_SPARSE_DATA \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_RPC_WRAPPERS \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_ACCESSORS \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_INCLASS \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_STANDARD_CONSTRUCTORS \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_SPARSE_DATA \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_RPC_WRAPPERS \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_ACCESSORS \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_INCLASS \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_GENERATED_BODY \
+#define FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_SPARSE_DATA \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_ACCESSORS \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_INCLASS_NO_PURE_DECLS \
-	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_72_ENHANCED_CONSTRUCTORS \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_SPARSE_DATA \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_ACCESSORS \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_INCLASS_NO_PURE_DECLS \
+	FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_75_ENHANCED_CONSTRUCTORS \
 static_assert(false, "Unknown access specifier for GENERATED_BODY() macro in class PDF_ReaderBPLibrary."); \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

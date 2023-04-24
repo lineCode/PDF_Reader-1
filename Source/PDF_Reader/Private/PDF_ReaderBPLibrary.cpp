@@ -507,10 +507,17 @@ FString UPDF_ReaderBPLibrary::PDF_Android_Path_Helper(FString InFileName)
 	}
 }
 
-void UPDF_ReaderBPLibrary::PDF_LibInit()
+bool UPDF_ReaderBPLibrary::PDF_LibInit(FString& Out_Code)
 {
+	if (Global_bIsLibInitialized == true)
+	{
+		Out_Code = "Library already initialized";
+		return false;
+	}
+	
 	FPDF_LIBRARY_CONFIG config;
 	FMemory::Memset(&config, 0, sizeof(config));
+
 	config.version = 2;
 	config.m_pUserFontPaths = NULL;
 	config.m_pIsolate = NULL;
@@ -520,12 +527,20 @@ void UPDF_ReaderBPLibrary::PDF_LibInit()
 	Global_bIsLibInitialized = true;
 
 	DefineCharCodes();
+
+	Out_Code = "Library successfully initialized.";
+	return true;
 }
 
-void UPDF_ReaderBPLibrary::PDF_LibClose()
+bool UPDF_ReaderBPLibrary::PDF_LibClose(FString& Out_Code)
 {
-	TArray<FPDF_DOCUMENT> Array_Docs = Global_Docs_Pool.Array();
+	if (Global_bIsLibInitialized == false)
+	{
+		Out_Code = "Library already closed.";
+		return false;
+	}
 	
+	TArray<FPDF_DOCUMENT> Array_Docs = Global_Docs_Pool.Array();
 	for (int32 Index_Docs = 0; Index_Docs < Array_Docs.Num(); Index_Docs++)
 	{
 		if (Array_Docs[Index_Docs])
@@ -539,6 +554,9 @@ void UPDF_ReaderBPLibrary::PDF_LibClose()
 
 	Global_bIsLibInitialized = false;
 	FPDF_DestroyLibrary();
+
+	Out_Code = "Library successfully closed.";
+	return true;
 }
 
 bool UPDF_ReaderBPLibrary::PDF_LibState()
@@ -665,6 +683,28 @@ bool UPDF_ReaderBPLibrary::PDF_File_Close(UPARAM(ref)UPDFiumDoc*& In_PDF)
 	FPDF_CloseDocument(In_PDF->Document);
 	In_PDF = nullptr;
 	
+	return true;
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Close_All_Docs()
+{
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
+
+	TArray<FPDF_DOCUMENT> Array_Docs = Global_Docs_Pool.Array();
+	for (int32 Index_Docs = 0; Index_Docs < Array_Docs.Num(); Index_Docs++)
+	{
+		if (Array_Docs[Index_Docs])
+		{
+			FPDF_CloseDocument(Array_Docs[Index_Docs]);
+		}
+	}
+
+	Array_Docs.Empty();
+	Global_Docs_Pool.Empty();
+
 	return true;
 }
 
@@ -1081,166 +1121,184 @@ bool UPDF_ReaderBPLibrary::PDF_Add_Pages(UPARAM(ref)UPDFiumDoc*& In_PDF, TArray<
 #endif
 }
 
-bool UPDF_ReaderBPLibrary::PDF_Add_Texts(UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear, FVector2D Rotation, FVector2D Border, FString FontName, int32 FontSize, int32 PageIndex, bool bUseCharcodes)
+void UPDF_ReaderBPLibrary::PDF_Add_Texts(FDelegateAddObject DelegateAddObject, UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear, FVector2D Rotation, FVector2D Border, FString FontName, int32 FontSize, int32 PageIndex, bool bUseCharcodes, bool bGetCharcodesFromDb)
 {
 #ifdef _WIN64
 	if (Global_bIsLibInitialized == false)
 	{
-		return false;
+		DelegateAddObject.Execute(false, "PDFium Library haven't been initialized.");
 	}
 
 	if (IsValid(In_PDF) == false)
 	{
-		return false;
+		DelegateAddObject.Execute(false, "PDF object is not valid.");
 	}
 
 	if (!In_PDF->Document)
 	{
-		return false;
+		DelegateAddObject.Execute(false, "PDF document is not valid.");
 	}
 
 	if (In_Texts.IsEmpty())
 	{
-		return false;
+		DelegateAddObject.Execute(false, "Text is empty.");
 	}
 
-	FPDF_FONT Font = FPDFText_LoadStandardFont(In_PDF->Document, TCHAR_TO_UTF8(*FontName));
-
-	FPDF_PAGE First_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
-	TArray<FPDF_PAGE> Array_Pages;
-	Array_Pages.Add(First_Page);
-
-	int32 Acceptable_Horizontal = 2 * ((FPDF_GetPageWidth(First_Page) - Position.X - Border.X) / FontSize);
-	int32 Acceptable_Vertical = (Position.Y - Border.Y) / FontSize;
-
-	// Generate paragraphs.
-	TArray<FString> Array_Paragraphs;
-	if (In_Texts.Contains(LINE_TERMINATOR_ANSI) == true)
-	{
-		Array_Paragraphs = UKismetStringLibrary::ParseIntoArray(In_Texts, LINE_TERMINATOR_ANSI, false);
-	}
-
-	else
-	{
-		Array_Paragraphs.Add(In_Texts);
-	}
-
-	// Generate lines for text wrapping.
-	TArray<FString> Array_Lines;
-	for (int32 Index_Paragraphs = 0; Index_Paragraphs < Array_Paragraphs.Num(); Index_Paragraphs++)
-	{
-		FString Each_Paragraph = Array_Paragraphs[Index_Paragraphs];
-		
-		if (Each_Paragraph.IsEmpty())
+	AsyncTask(ENamedThreads::AnyNormalThreadNormalTask, [DelegateAddObject, &In_PDF, In_Texts, Position, Shear, Rotation, Border, FontName, FontSize, PageIndex, bUseCharcodes, bGetCharcodesFromDb]()
 		{
-			Array_Lines.Add(" ");
+			FPDF_FONT Font = FPDFText_LoadStandardFont(In_PDF->Document, TCHAR_TO_UTF8(*FontName));
 
-			continue;
-		}
+			FPDF_PAGE First_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
+			TArray<FPDF_PAGE> Array_Pages;
+			Array_Pages.Add(First_Page);
 
-		if (Each_Paragraph.Len() < Acceptable_Horizontal)
-		{
-			Array_Lines.Add(Each_Paragraph);
+			int32 Acceptable_Horizontal = 2 * ((FPDF_GetPageWidth(First_Page) - Position.X - Border.X) / FontSize);
+			int32 Acceptable_Vertical = (Position.Y - Border.Y) / FontSize;
 
-			continue;
-		}
-
-		bool bAllowChop = true;
-		while (bAllowChop)
-		{
-			FString Each_Line = UKismetStringLibrary::Left(Each_Paragraph, Acceptable_Horizontal);
-			Each_Paragraph = UKismetStringLibrary::RightChop(Each_Paragraph, Acceptable_Horizontal);
-
-			if (UKismetStringLibrary::Left(Each_Line, 2) == "  ")
+			// Generate paragraphs.
+			TArray<FString> Array_Paragraphs;
+			if (In_Texts.Contains(LINE_TERMINATOR_ANSI) == true)
 			{
-				Array_Lines.Add(Each_Line.TrimEnd());
+				Array_Paragraphs = UKismetStringLibrary::ParseIntoArray(In_Texts, LINE_TERMINATOR_ANSI, false);
 			}
 
 			else
 			{
-				Array_Lines.Add(Each_Line.TrimStartAndEnd());
+				Array_Paragraphs.Add(In_Texts);
 			}
-			
-			if (Each_Paragraph.Len() < Acceptable_Horizontal)
+
+			// Generate lines for text wrapping.
+			TArray<FString> Array_Lines;
+			for (int32 Index_Paragraphs = 0; Index_Paragraphs < Array_Paragraphs.Num(); Index_Paragraphs++)
 			{
-				if (UKismetStringLibrary::Left(Each_Paragraph, 2) == "  ")
+				FString Each_Paragraph = Array_Paragraphs[Index_Paragraphs];
+
+				if (Each_Paragraph.IsEmpty())
 				{
-					Array_Lines.Add(Each_Paragraph.TrimEnd());
+					Array_Lines.Add(" ");
+
+					continue;
 				}
-				
+
+				if (Each_Paragraph.Len() < Acceptable_Horizontal)
+				{
+					Array_Lines.Add(Each_Paragraph);
+
+					continue;
+				}
+
+				bool bAllowChop = true;
+				while (bAllowChop)
+				{
+					FString Each_Line = UKismetStringLibrary::Left(Each_Paragraph, Acceptable_Horizontal);
+					Each_Paragraph = UKismetStringLibrary::RightChop(Each_Paragraph, Acceptable_Horizontal);
+
+					if (UKismetStringLibrary::Left(Each_Line, 2) == "  ")
+					{
+						Array_Lines.Add(Each_Line.TrimEnd());
+					}
+
+					else
+					{
+						Array_Lines.Add(Each_Line.TrimStartAndEnd());
+					}
+
+					if (Each_Paragraph.Len() < Acceptable_Horizontal)
+					{
+						if (UKismetStringLibrary::Left(Each_Paragraph, 2) == "  ")
+						{
+							Array_Lines.Add(Each_Paragraph.TrimEnd());
+						}
+
+						else
+						{
+							Array_Lines.Add(Each_Paragraph.TrimStartAndEnd());
+						}
+
+						bAllowChop = false;
+					}
+				}
+			}
+
+			// Check if new pages are required or not.
+			if (Array_Lines.Num() > Acceptable_Vertical)
+			{
+				TArray<FVector2D> NewPageSize;
+				NewPageSize.Add(FVector2D(FPDF_GetPageWidth(First_Page), FPDF_GetPageHeight(First_Page)));
+
+				int32 Extra_Page_Count = (Array_Lines.Num() / Acceptable_Vertical);
+				for (int32 Index_Extra_Page = 0; Index_Extra_Page < Extra_Page_Count; Index_Extra_Page++)
+				{
+					UPDF_ReaderBPLibrary::PDF_Add_Pages(In_PDF, NewPageSize);
+					FPDF_PAGE New_Page = FPDF_LoadPage(In_PDF->Document, (PageIndex + Index_Extra_Page + 1));
+					Array_Pages.Add(New_Page);
+				}
+			}
+
+			// Generate text objects.
+			int32 ActivePage = 0;
+			for (int32 Index_Lines = 0; Index_Lines < Array_Lines.Num(); Index_Lines++)
+			{
+				FPDF_PAGEOBJECT TextObject = FPDFPageObj_CreateTextObj(In_PDF->Document, Font, FontSize);
+
+				FString Each_Line = Array_Lines[Index_Lines];
+
+				if (bUseCharcodes)
+				{
+					TArray<FString> Array_Chars = UKismetStringLibrary::GetCharacterArrayFromString(Each_Line);
+					int32 CharsCount = Array_Chars.Num();
+
+					uint32_t* CharCodes = (uint32_t*)malloc(CharsCount * sizeof(uint32_t));
+					for (int32 Index_Chars = 0; Index_Chars < CharsCount; Index_Chars++)
+					{
+						FString Char = Array_Chars[Index_Chars];
+
+						if (bGetCharcodesFromDb == true)
+						{
+							CharCodes[Index_Chars] = *Global_Char_To_ASCII.Find(Char);
+						}
+
+						else
+						{
+							CharCodes[Index_Chars] = UKismetStringLibrary::GetCharacterAsNumber(Char, 0);
+						}
+					}
+
+					FPDFText_SetCharcodes(TextObject, CharCodes, CharsCount);
+				}
+
 				else
 				{
-					Array_Lines.Add(Each_Paragraph.TrimStartAndEnd());
+					FPDFText_SetText(TextObject, TCHAR_TO_UTF16(*Each_Line));
 				}
 
-				bAllowChop = false;
+				FPDFPageObj_Transform(TextObject, Shear.X, Rotation.X, Rotation.Y, Shear.Y, Position.X, ((Position.Y * (ActivePage + 1)) - (FontSize * Index_Lines)));
+				FPDFPage_InsertObject(Array_Pages[ActivePage], TextObject);
+				FPDFPage_GenerateContent(Array_Pages[ActivePage]);
+
+				// We are care about counts not index.
+				if (((Index_Lines + 1) / (ActivePage + 1)) == Acceptable_Vertical)
+				{
+					ActivePage += 1;
+				}
 			}
-		}
-	}
 
-	// Check if new pages are required or not.
-	if (Array_Lines.Num() > Acceptable_Vertical)
-	{
-		TArray<FVector2D> NewPageSize;
-		NewPageSize.Add(FVector2D(FPDF_GetPageWidth(First_Page), FPDF_GetPageHeight(First_Page)));
-
-		int32 Extra_Page_Count = (Array_Lines.Num() / Acceptable_Vertical);
-		for (int32 Index_Extra_Page = 0; Index_Extra_Page < Extra_Page_Count; Index_Extra_Page++)
-		{
-			UPDF_ReaderBPLibrary::PDF_Add_Pages(In_PDF, NewPageSize);
-			FPDF_PAGE New_Page = FPDF_LoadPage(In_PDF->Document, (PageIndex + Index_Extra_Page + 1));
-			Array_Pages.Add(New_Page);
-		}
-	}
-	
-	// Generate text objects.
-	int32 ActivePage = 0;
-	for (int32 Index_Lines = 0; Index_Lines < Array_Lines.Num(); Index_Lines++)
-	{
-		FPDF_PAGEOBJECT TextObject = FPDFPageObj_CreateTextObj(In_PDF->Document, Font, FontSize);
-
-		FString Each_Line = Array_Lines[Index_Lines];
-		
-		if (bUseCharcodes)
-		{
-			TArray<FString> Array_Chars = UKismetStringLibrary::GetCharacterArrayFromString(Each_Line);
-			int32 CharsCount = Array_Chars.Num();
-
-			uint32_t* CharCodes = (uint32_t*)malloc(CharsCount * sizeof(uint32_t));
-			for (int32 Index_Chars = 0; Index_Chars < CharsCount; Index_Chars++)
+			// Close all pages after writing.
+			for (int32 Index_Page = 0; Index_Page < Array_Pages.Num(); Index_Page++)
 			{
-				FString Char = Array_Chars[Index_Chars];
-				CharCodes[Index_Chars] = UKismetStringLibrary::GetCharacterAsNumber(Char, 0);
+				FPDF_ClosePage(Array_Pages[Index_Page]);
 			}
 
-			FPDFText_SetCharcodes(TextObject, CharCodes, CharsCount);
+			AsyncTask(ENamedThreads::GameThread, [DelegateAddObject]()
+				{
+					DelegateAddObject.ExecuteIfBound(true, "Text object successfully added.");
+				}
+			);
 		}
-		
-		else
-		{
-			FPDFText_SetText(TextObject, TCHAR_TO_UTF16(*Each_Line));
-		}
+	);
 
-		FPDFPageObj_Transform(TextObject, Shear.X, Rotation.X, Rotation.Y, Shear.Y, Position.X, ((Position.Y * (ActivePage + 1)) - (FontSize * Index_Lines)));
-		FPDFPage_InsertObject(Array_Pages[ActivePage], TextObject);
-		FPDFPage_GenerateContent(Array_Pages[ActivePage]);
-
-		// We are care about counts not index.
-		if (((Index_Lines + 1) / (ActivePage + 1)) == Acceptable_Vertical)
-		{
-			ActivePage += 1;
-		}
-	}
-
-	// Close all pages after writing.
-	for (int32 Index_Page = 0; Index_Page < Array_Pages.Num(); Index_Page++)
-	{
-		FPDF_ClosePage(Array_Pages[Index_Page]);
-	}
-
-	return true;
 #else
-	return false;
+	DelegateAddObject.Execute(false, "PDF writer functions only avaible for Windows at the moment.");
 #endif
 }
 
