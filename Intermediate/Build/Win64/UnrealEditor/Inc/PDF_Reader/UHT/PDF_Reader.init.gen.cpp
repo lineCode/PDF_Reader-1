@@ -21,13 +21,13 @@ void EmptyLinkFunctionForGeneratedCodePDF_Reader_init() {}
 				SingletonFuncArray,
 				UE_ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0xAF77CB29,
-				0xF7B13EAB,
+				0xAB3692CC,
+				0x3442C79C,
 				METADATA_PARAMS(nullptr, 0)
 			};
 			UECodeGen_Private::ConstructUPackage(Z_Registration_Info_UPackage__Script_PDF_Reader.OuterSingleton, PackageParams);
 		}
 		return Z_Registration_Info_UPackage__Script_PDF_Reader.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_PDF_Reader(Z_Construct_UPackage__Script_PDF_Reader, TEXT("/Script/PDF_Reader"), Z_Registration_Info_UPackage__Script_PDF_Reader, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xAF77CB29, 0xF7B13EAB));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_PDF_Reader(Z_Construct_UPackage__Script_PDF_Reader, TEXT("/Script/PDF_Reader"), Z_Registration_Info_UPackage__Script_PDF_Reader, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xAB3692CC, 0x3442C79C));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

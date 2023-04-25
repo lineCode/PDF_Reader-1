@@ -20,6 +20,9 @@ void EmptyLinkFunctionForGeneratedCodePDF_ReaderBPLibrary() {}
 	PDF_READER_API UClass* Z_Construct_UClass_UPDF_ReaderBPLibrary_NoRegister();
 	PDF_READER_API UClass* Z_Construct_UClass_UPDFiumDoc();
 	PDF_READER_API UClass* Z_Construct_UClass_UPDFiumDoc_NoRegister();
+	PDF_READER_API UClass* Z_Construct_UClass_UPDFiumFont();
+	PDF_READER_API UClass* Z_Construct_UClass_UPDFiumFont_NoRegister();
+	PDF_READER_API UEnum* Z_Construct_UEnum_PDF_Reader_EStandartFonts();
 	PDF_READER_API UFunction* Z_Construct_UDelegateFunction_PDF_Reader_DelegateAddObject__DelegateSignature();
 	PDF_READER_API UScriptStruct* Z_Construct_UScriptStruct_FPdfBytes();
 	UPackage* Z_Construct_UPackage__Script_PDF_Reader();
@@ -254,6 +257,157 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 	}
 	DEFINE_VTABLE_PTR_HELPER_CTOR(UPDFiumDoc);
 	UPDFiumDoc::~UPDFiumDoc() {}
+	void UPDFiumFont::StaticRegisterNativesUPDFiumFont()
+	{
+	}
+	IMPLEMENT_CLASS_NO_AUTO_REGISTRATION(UPDFiumFont);
+	UClass* Z_Construct_UClass_UPDFiumFont_NoRegister()
+	{
+		return UPDFiumFont::StaticClass();
+	}
+	struct Z_Construct_UClass_UPDFiumFont_Statics
+	{
+		static UObject* (*const DependentSingletons[])();
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
+#endif
+		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
+		static const UECodeGen_Private::FClassParams ClassParams;
+	};
+	UObject* (*const Z_Construct_UClass_UPDFiumFont_Statics::DependentSingletons[])() = {
+		(UObject* (*)())Z_Construct_UClass_UObject,
+		(UObject* (*)())Z_Construct_UPackage__Script_PDF_Reader,
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UPDFiumFont_Statics::Class_MetaDataParams[] = {
+		{ "BlueprintType", "true" },
+		{ "IncludePath", "PDF_ReaderBPLibrary.h" },
+		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
+	};
+#endif
+	const FCppClassTypeInfoStatic Z_Construct_UClass_UPDFiumFont_Statics::StaticCppClassTypeInfo = {
+		TCppClassTypeTraits<UPDFiumFont>::IsAbstract,
+	};
+	const UECodeGen_Private::FClassParams Z_Construct_UClass_UPDFiumFont_Statics::ClassParams = {
+		&UPDFiumFont::StaticClass,
+		nullptr,
+		&StaticCppClassTypeInfo,
+		DependentSingletons,
+		nullptr,
+		nullptr,
+		nullptr,
+		UE_ARRAY_COUNT(DependentSingletons),
+		0,
+		0,
+		0,
+		0x001000A0u,
+		METADATA_PARAMS(Z_Construct_UClass_UPDFiumFont_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_UPDFiumFont_Statics::Class_MetaDataParams))
+	};
+	UClass* Z_Construct_UClass_UPDFiumFont()
+	{
+		if (!Z_Registration_Info_UClass_UPDFiumFont.OuterSingleton)
+		{
+			UECodeGen_Private::ConstructUClass(Z_Registration_Info_UClass_UPDFiumFont.OuterSingleton, Z_Construct_UClass_UPDFiumFont_Statics::ClassParams);
+		}
+		return Z_Registration_Info_UClass_UPDFiumFont.OuterSingleton;
+	}
+	template<> PDF_READER_API UClass* StaticClass<UPDFiumFont>()
+	{
+		return UPDFiumFont::StaticClass();
+	}
+	DEFINE_VTABLE_PTR_HELPER_CTOR(UPDFiumFont);
+	UPDFiumFont::~UPDFiumFont() {}
+	static FEnumRegistrationInfo Z_Registration_Info_UEnum_EStandartFonts;
+	static UEnum* EStandartFonts_StaticEnum()
+	{
+		if (!Z_Registration_Info_UEnum_EStandartFonts.OuterSingleton)
+		{
+			Z_Registration_Info_UEnum_EStandartFonts.OuterSingleton = GetStaticEnum(Z_Construct_UEnum_PDF_Reader_EStandartFonts, Z_Construct_UPackage__Script_PDF_Reader(), TEXT("EStandartFonts"));
+		}
+		return Z_Registration_Info_UEnum_EStandartFonts.OuterSingleton;
+	}
+	template<> PDF_READER_API UEnum* StaticEnum<EStandartFonts>()
+	{
+		return EStandartFonts_StaticEnum();
+	}
+	struct Z_Construct_UEnum_PDF_Reader_EStandartFonts_Statics
+	{
+		static const UECodeGen_Private::FEnumeratorParam Enumerators[];
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FEnumParams EnumParams;
+	};
+	const UECodeGen_Private::FEnumeratorParam Z_Construct_UEnum_PDF_Reader_EStandartFonts_Statics::Enumerators[] = {
+		{ "EStandartFonts::Helvetica", (int64)EStandartFonts::Helvetica },
+		{ "EStandartFonts::Helvetica_Italic", (int64)EStandartFonts::Helvetica_Italic },
+		{ "EStandartFonts::Helvetica_Bold", (int64)EStandartFonts::Helvetica_Bold },
+		{ "EStandartFonts::Helvetica_BoldItalic", (int64)EStandartFonts::Helvetica_BoldItalic },
+		{ "EStandartFonts::Times_Roman", (int64)EStandartFonts::Times_Roman },
+		{ "EStandartFonts::Times_Bold", (int64)EStandartFonts::Times_Bold },
+		{ "EStandartFonts::Times_BoldItalic", (int64)EStandartFonts::Times_BoldItalic },
+		{ "EStandartFonts::Times_Italic", (int64)EStandartFonts::Times_Italic },
+		{ "EStandartFonts::Courier", (int64)EStandartFonts::Courier },
+		{ "EStandartFonts::Courier_Bold", (int64)EStandartFonts::Courier_Bold },
+		{ "EStandartFonts::Courier_Oblique", (int64)EStandartFonts::Courier_Oblique },
+		{ "EStandartFonts::Courier_BoldOblique", (int64)EStandartFonts::Courier_BoldOblique },
+		{ "EStandartFonts::Symbol", (int64)EStandartFonts::Symbol },
+		{ "EStandartFonts::ZapfDingbats", (int64)EStandartFonts::ZapfDingbats },
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UEnum_PDF_Reader_EStandartFonts_Statics::Enum_MetaDataParams[] = {
+		{ "BlueprintType", "true" },
+		{ "Courier.DisplayName", "Courier" },
+		{ "Courier.Name", "EStandartFonts::Courier" },
+		{ "Courier_Bold.DisplayName", "Courier Bold" },
+		{ "Courier_Bold.Name", "EStandartFonts::Courier_Bold" },
+		{ "Courier_BoldOblique.DisplayName", "Courier Bold Oblique" },
+		{ "Courier_BoldOblique.Name", "EStandartFonts::Courier_BoldOblique" },
+		{ "Courier_Oblique.DisplayName", "Courier Oblique" },
+		{ "Courier_Oblique.Name", "EStandartFonts::Courier_Oblique" },
+		{ "Helvetica.DisplayName", "Helvetica/Arial" },
+		{ "Helvetica.Name", "EStandartFonts::Helvetica" },
+		{ "Helvetica_Bold.DisplayName", "Helvetica/Arial Bold" },
+		{ "Helvetica_Bold.Name", "EStandartFonts::Helvetica_Bold" },
+		{ "Helvetica_BoldItalic.DisplayName", "Helvetica/Arial Bold Italic" },
+		{ "Helvetica_BoldItalic.Name", "EStandartFonts::Helvetica_BoldItalic" },
+		{ "Helvetica_Italic.DisplayName", "Helvetica/Arial Italic" },
+		{ "Helvetica_Italic.Name", "EStandartFonts::Helvetica_Italic" },
+		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
+		{ "Symbol.DisplayName", "Symbol" },
+		{ "Symbol.Name", "EStandartFonts::Symbol" },
+		{ "Times_Bold.DisplayName", "Times Bold" },
+		{ "Times_Bold.Name", "EStandartFonts::Times_Bold" },
+		{ "Times_BoldItalic.DisplayName", "Times Bold Italic" },
+		{ "Times_BoldItalic.Name", "EStandartFonts::Times_BoldItalic" },
+		{ "Times_Italic.DisplayName", "Times Italic" },
+		{ "Times_Italic.Name", "EStandartFonts::Times_Italic" },
+		{ "Times_Roman.DisplayName", "Times Roman" },
+		{ "Times_Roman.Name", "EStandartFonts::Times_Roman" },
+		{ "ZapfDingbats.DisplayName", "ZapfDingbats" },
+		{ "ZapfDingbats.Name", "EStandartFonts::ZapfDingbats" },
+	};
+#endif
+	const UECodeGen_Private::FEnumParams Z_Construct_UEnum_PDF_Reader_EStandartFonts_Statics::EnumParams = {
+		(UObject*(*)())Z_Construct_UPackage__Script_PDF_Reader,
+		nullptr,
+		"EStandartFonts",
+		"EStandartFonts",
+		Z_Construct_UEnum_PDF_Reader_EStandartFonts_Statics::Enumerators,
+		UE_ARRAY_COUNT(Z_Construct_UEnum_PDF_Reader_EStandartFonts_Statics::Enumerators),
+		RF_Public|RF_Transient|RF_MarkAsNative,
+		EEnumFlags::None,
+		(uint8)UEnum::ECppForm::EnumClass,
+		METADATA_PARAMS(Z_Construct_UEnum_PDF_Reader_EStandartFonts_Statics::Enum_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UEnum_PDF_Reader_EStandartFonts_Statics::Enum_MetaDataParams))
+	};
+	UEnum* Z_Construct_UEnum_PDF_Reader_EStandartFonts()
+	{
+		if (!Z_Registration_Info_UEnum_EStandartFonts.InnerSingleton)
+		{
+			UECodeGen_Private::ConstructUEnum(Z_Registration_Info_UEnum_EStandartFonts.InnerSingleton, Z_Construct_UEnum_PDF_Reader_EStandartFonts_Statics::EnumParams);
+		}
+		return Z_Registration_Info_UEnum_EStandartFonts.InnerSingleton;
+	}
 	struct Z_Construct_UDelegateFunction_PDF_Reader_DelegateAddObject__DelegateSignature_Statics
 	{
 		struct _Script_PDF_Reader_eventDelegateAddObject_Parms
@@ -320,19 +474,49 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 	{
 		P_GET_PROPERTY(FDelegateProperty,Z_Param_DelegateAddObject);
 		P_GET_OBJECT_REF(UPDFiumDoc,Z_Param_Out_In_PDF);
+		P_GET_OBJECT_REF(UPDFiumFont,Z_Param_Out_In_Font);
 		P_GET_PROPERTY(FStrProperty,Z_Param_In_Texts);
 		P_GET_STRUCT(FVector2D,Z_Param_Position);
 		P_GET_STRUCT(FVector2D,Z_Param_Shear);
 		P_GET_STRUCT(FVector2D,Z_Param_Rotation);
 		P_GET_STRUCT(FVector2D,Z_Param_Border);
-		P_GET_PROPERTY(FStrProperty,Z_Param_FontName);
 		P_GET_PROPERTY(FIntProperty,Z_Param_FontSize);
 		P_GET_PROPERTY(FIntProperty,Z_Param_PageIndex);
 		P_GET_UBOOL(Z_Param_bUseCharcodes);
 		P_GET_UBOOL(Z_Param_bGetCharcodesFromDb);
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		UPDF_ReaderBPLibrary::PDF_Add_Texts(FDelegateAddObject(Z_Param_DelegateAddObject),Z_Param_Out_In_PDF,Z_Param_In_Texts,Z_Param_Position,Z_Param_Shear,Z_Param_Rotation,Z_Param_Border,Z_Param_FontName,Z_Param_FontSize,Z_Param_PageIndex,Z_Param_bUseCharcodes,Z_Param_bGetCharcodesFromDb);
+		UPDF_ReaderBPLibrary::PDF_Add_Texts(FDelegateAddObject(Z_Param_DelegateAddObject),Z_Param_Out_In_PDF,Z_Param_Out_In_Font,Z_Param_In_Texts,Z_Param_Position,Z_Param_Shear,Z_Param_Rotation,Z_Param_Border,Z_Param_FontSize,Z_Param_PageIndex,Z_Param_bUseCharcodes,Z_Param_bGetCharcodesFromDb);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_Close_Font)
+	{
+		P_GET_OBJECT_REF(UPDFiumFont,Z_Param_Out_In_Font);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		*(bool*)Z_Param__Result=UPDF_ReaderBPLibrary::PDF_Close_Font(Z_Param_Out_In_Font);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_Load_Standart_Font)
+	{
+		P_GET_OBJECT_REF(UPDFiumFont,Z_Param_Out_Out_Font);
+		P_GET_OBJECT_REF(UPDFiumDoc,Z_Param_Out_In_PDF);
+		P_GET_ENUM(EStandartFonts,Z_Param_Font_Name);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		*(bool*)Z_Param__Result=UPDF_ReaderBPLibrary::PDF_Load_Standart_Font(Z_Param_Out_Out_Font,Z_Param_Out_In_PDF,EStandartFonts(Z_Param_Font_Name));
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_Load_Font)
+	{
+		P_GET_OBJECT_REF(UPDFiumFont,Z_Param_Out_Out_Font);
+		P_GET_OBJECT_REF(UPDFiumDoc,Z_Param_Out_In_PDF);
+		P_GET_PROPERTY(FStrProperty,Z_Param_Font_Path);
+		P_GET_UBOOL(Z_Param_bIsTrueType);
+		P_GET_UBOOL(Z_Param_bIsCid);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		*(bool*)Z_Param__Result=UPDF_ReaderBPLibrary::PDF_Load_Font(Z_Param_Out_Out_Font,Z_Param_Out_In_PDF,Z_Param_Font_Path,Z_Param_bIsTrueType,Z_Param_bIsCid);
 		P_NATIVE_END;
 	}
 	DEFINE_FUNCTION(UPDF_ReaderBPLibrary::execPDF_Add_Pages)
@@ -501,6 +685,7 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 			{ "PDF_Android_Path_Helper", &UPDF_ReaderBPLibrary::execPDF_Android_Path_Helper },
 			{ "PDF_Bytes_To_T2D", &UPDF_ReaderBPLibrary::execPDF_Bytes_To_T2D },
 			{ "PDF_Close_All_Docs", &UPDF_ReaderBPLibrary::execPDF_Close_All_Docs },
+			{ "PDF_Close_Font", &UPDF_ReaderBPLibrary::execPDF_Close_Font },
 			{ "PDF_Create_Doc", &UPDF_ReaderBPLibrary::execPDF_Create_Doc },
 			{ "PDF_File_Close", &UPDF_ReaderBPLibrary::execPDF_File_Close },
 			{ "PDF_File_Open", &UPDF_ReaderBPLibrary::execPDF_File_Open },
@@ -511,6 +696,8 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 			{ "PDF_LibClose", &UPDF_ReaderBPLibrary::execPDF_LibClose },
 			{ "PDF_LibInit", &UPDF_ReaderBPLibrary::execPDF_LibInit },
 			{ "PDF_LibState", &UPDF_ReaderBPLibrary::execPDF_LibState },
+			{ "PDF_Load_Font", &UPDF_ReaderBPLibrary::execPDF_Load_Font },
+			{ "PDF_Load_Standart_Font", &UPDF_ReaderBPLibrary::execPDF_Load_Standart_Font },
 			{ "PDF_Read_Bytes", &UPDF_ReaderBPLibrary::execPDF_Read_Bytes },
 			{ "PDF_Read_Path", &UPDF_ReaderBPLibrary::execPDF_Read_Path },
 			{ "PDF_Save_PDF", &UPDF_ReaderBPLibrary::execPDF_Save_PDF },
@@ -621,10 +808,11 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages_Statics::Function_MetaDataParams[] = {
 		{ "Category", "PDF_Reader|Write" },
+		{ "Comment", "/*\n\x09* @param Pages It will add pages as same amount of the length of the array to the document. Each page size will be equal to respective indexed Vector 2D\n\x09*/" },
 		{ "DisplayName", "PDF Reader - Add Pages" },
 		{ "Keywords", "pdf, pdfium, create, doc, document, pdf, add, pages" },
 		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
-		{ "ToolTip", "" },
+		{ "ToolTip", "* @param Pages It will add pages as same amount of the length of the array to the document. Each page size will be equal to respective indexed Vector 2D" },
 	};
 #endif
 	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_Add_Pages", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages_Statics::PDF_ReaderBPLibrary_eventPDF_Add_Pages_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages_Statics::Function_MetaDataParams)) };
@@ -643,12 +831,12 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 		{
 			FScriptDelegate DelegateAddObject;
 			UPDFiumDoc* In_PDF;
+			UPDFiumFont* In_Font;
 			FString In_Texts;
 			FVector2D Position;
 			FVector2D Shear;
 			FVector2D Rotation;
 			FVector2D Border;
-			FString FontName;
 			int32 FontSize;
 			int32 PageIndex;
 			bool bUseCharcodes;
@@ -656,12 +844,12 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 		};
 		static const UECodeGen_Private::FDelegatePropertyParams NewProp_DelegateAddObject;
 		static const UECodeGen_Private::FObjectPropertyParams NewProp_In_PDF;
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_In_Font;
 		static const UECodeGen_Private::FStrPropertyParams NewProp_In_Texts;
 		static const UECodeGen_Private::FStructPropertyParams NewProp_Position;
 		static const UECodeGen_Private::FStructPropertyParams NewProp_Shear;
 		static const UECodeGen_Private::FStructPropertyParams NewProp_Rotation;
 		static const UECodeGen_Private::FStructPropertyParams NewProp_Border;
-		static const UECodeGen_Private::FStrPropertyParams NewProp_FontName;
 		static const UECodeGen_Private::FIntPropertyParams NewProp_FontSize;
 		static const UECodeGen_Private::FIntPropertyParams NewProp_PageIndex;
 		static void NewProp_bUseCharcodes_SetBit(void* Obj);
@@ -676,12 +864,12 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 	};
 	const UECodeGen_Private::FDelegatePropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_DelegateAddObject = { "DelegateAddObject", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Delegate, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, DelegateAddObject), Z_Construct_UDelegateFunction_PDF_Reader_DelegateAddObject__DelegateSignature, METADATA_PARAMS(nullptr, 0) }; // 1981911638
 	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_In_PDF = { "In_PDF", nullptr, (EPropertyFlags)0x0010000008000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, In_PDF), Z_Construct_UClass_UPDFiumDoc_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_In_Font = { "In_Font", nullptr, (EPropertyFlags)0x0010000008000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, In_Font), Z_Construct_UClass_UPDFiumFont_NoRegister, METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_In_Texts = { "In_Texts", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, In_Texts), METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_Position = { "Position", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, Position), Z_Construct_UScriptStruct_FVector2D, METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_Shear = { "Shear", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, Shear), Z_Construct_UScriptStruct_FVector2D, METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_Rotation = { "Rotation", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, Rotation), Z_Construct_UScriptStruct_FVector2D, METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_Border = { "Border", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, Border), Z_Construct_UScriptStruct_FVector2D, METADATA_PARAMS(nullptr, 0) };
-	const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_FontName = { "FontName", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, FontName), METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FIntPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_FontSize = { "FontSize", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, FontSize), METADATA_PARAMS(nullptr, 0) };
 	const UECodeGen_Private::FIntPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_PageIndex = { "PageIndex", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms, PageIndex), METADATA_PARAMS(nullptr, 0) };
 	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_bUseCharcodes_SetBit(void* Obj)
@@ -697,12 +885,12 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::PropPointers[] = {
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_DelegateAddObject,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_In_PDF,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_In_Font,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_In_Texts,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_Position,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_Shear,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_Rotation,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_Border,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_FontName,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_FontSize,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_PageIndex,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::NewProp_bUseCharcodes,
@@ -711,11 +899,10 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::Function_MetaDataParams[] = {
 		{ "Category", "PDF_Reader|Write" },
-		{ "Comment", "/**\n\x09* @param FontName Sample font names are \"Helvetica-BoldItalic\" and \"Arial\". Don't use space between font name and its specifiers.\n\x09* @param Position X value starts from left, Y value starts from bottom.\n\x09* @param bUseCharcodes It switch between \"FPDFText_SetCharcodes()\" and \"FPDFText_SetText()\". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters.\n\x09*/" },
+		{ "Comment", "/**\n\x09* @param Position X value starts from left, Y value starts from bottom.\n\x09* @param bUseCharcodes It switch between \"FPDFText_SetCharcodes()\" and \"FPDFText_SetText()\". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters.\n\x09*/" },
 		{ "CPP_Default_bGetCharcodesFromDb", "false" },
 		{ "CPP_Default_Border", "(X=10.000,Y=10.000)" },
 		{ "CPP_Default_bUseCharcodes", "true" },
-		{ "CPP_Default_FontName", "Helvetica-BoldItalic" },
 		{ "CPP_Default_FontSize", "12" },
 		{ "CPP_Default_PageIndex", "0" },
 		{ "CPP_Default_Rotation", "(X=0.000,Y=0.000)" },
@@ -723,7 +910,7 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 		{ "DisplayName", "PDF Reader - Add Texts" },
 		{ "Keywords", "pdf, pdfium, create, doc, document, pdf, add, texts" },
 		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
-		{ "ToolTip", "@param FontName Sample font names are \"Helvetica-BoldItalic\" and \"Arial\". Don't use space between font name and its specifiers.\n@param Position X value starts from left, Y value starts from bottom.\n@param bUseCharcodes It switch between \"FPDFText_SetCharcodes()\" and \"FPDFText_SetText()\". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters." },
+		{ "ToolTip", "@param Position X value starts from left, Y value starts from bottom.\n@param bUseCharcodes It switch between \"FPDFText_SetCharcodes()\" and \"FPDFText_SetText()\". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters." },
 	};
 #endif
 	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_Add_Texts", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::PDF_ReaderBPLibrary_eventPDF_Add_Texts_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04C22401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts_Statics::Function_MetaDataParams)) };
@@ -881,6 +1068,51 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 		if (!ReturnFunction)
 		{
 			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_All_Docs_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics
+	{
+		struct PDF_ReaderBPLibrary_eventPDF_Close_Font_Parms
+		{
+			UPDFiumFont* In_Font;
+			bool ReturnValue;
+		};
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_In_Font;
+		static void NewProp_ReturnValue_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
+		static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::NewProp_In_Font = { "In_Font", nullptr, (EPropertyFlags)0x0010000008000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Close_Font_Parms, In_Font), Z_Construct_UClass_UPDFiumFont_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::NewProp_ReturnValue_SetBit(void* Obj)
+	{
+		((PDF_ReaderBPLibrary_eventPDF_Close_Font_Parms*)Obj)->ReturnValue = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventPDF_Close_Font_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::PropPointers[] = {
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::NewProp_In_Font,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::NewProp_ReturnValue,
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::Function_MetaDataParams[] = {
+		{ "Category", "PDF_Reader|Write" },
+		{ "DisplayName", "PDF Reader - Close Font" },
+		{ "Keywords", "pdf, pdfium, close, font" },
+		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
+		{ "ToolTip", "" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_Close_Font", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::PDF_ReaderBPLibrary_eventPDF_Close_Font_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -1414,6 +1646,135 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 		}
 		return ReturnFunction;
 	}
+	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics
+	{
+		struct PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms
+		{
+			UPDFiumFont* Out_Font;
+			UPDFiumDoc* In_PDF;
+			FString Font_Path;
+			bool bIsTrueType;
+			bool bIsCid;
+			bool ReturnValue;
+		};
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_Out_Font;
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_In_PDF;
+		static const UECodeGen_Private::FStrPropertyParams NewProp_Font_Path;
+		static void NewProp_bIsTrueType_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_bIsTrueType;
+		static void NewProp_bIsCid_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_bIsCid;
+		static void NewProp_ReturnValue_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
+		static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_Out_Font = { "Out_Font", nullptr, (EPropertyFlags)0x0010000000000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms, Out_Font), Z_Construct_UClass_UPDFiumFont_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_In_PDF = { "In_PDF", nullptr, (EPropertyFlags)0x0010000008000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms, In_PDF), Z_Construct_UClass_UPDFiumDoc_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_Font_Path = { "Font_Path", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms, Font_Path), METADATA_PARAMS(nullptr, 0) };
+	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_bIsTrueType_SetBit(void* Obj)
+	{
+		((PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms*)Obj)->bIsTrueType = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_bIsTrueType = { "bIsTrueType", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_bIsTrueType_SetBit, METADATA_PARAMS(nullptr, 0) };
+	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_bIsCid_SetBit(void* Obj)
+	{
+		((PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms*)Obj)->bIsCid = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_bIsCid = { "bIsCid", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_bIsCid_SetBit, METADATA_PARAMS(nullptr, 0) };
+	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_ReturnValue_SetBit(void* Obj)
+	{
+		((PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms*)Obj)->ReturnValue = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::PropPointers[] = {
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_Out_Font,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_In_PDF,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_Font_Path,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_bIsTrueType,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_bIsCid,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::NewProp_ReturnValue,
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::Function_MetaDataParams[] = {
+		{ "Category", "PDF_Reader|Write" },
+		{ "Comment", "/*\n\x09* @param bIsTrueType true will load font as TrueType, false will load as TYPE1.\n\x09* @param bIsCid Look at this link about CID fonts \"https://blog.idrsolutions.com/what-are-cid-fonts/\"\n\x09*/" },
+		{ "DisplayName", "PDF Reader - Load Font (EXPRIMENTAL! DONT USE IT!)" },
+		{ "Keywords", "pdf, pdfium, load, font" },
+		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
+		{ "ToolTip", "* @param bIsTrueType true will load font as TrueType, false will load as TYPE1.\n* @param bIsCid Look at this link about CID fonts \"https://blog.idrsolutions.com/what-are-cid-fonts/\"" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_Load_Font", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::PDF_ReaderBPLibrary_eventPDF_Load_Font_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics
+	{
+		struct PDF_ReaderBPLibrary_eventPDF_Load_Standart_Font_Parms
+		{
+			UPDFiumFont* Out_Font;
+			UPDFiumDoc* In_PDF;
+			EStandartFonts Font_Name;
+			bool ReturnValue;
+		};
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_Out_Font;
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_In_PDF;
+		static const UECodeGen_Private::FBytePropertyParams NewProp_Font_Name_Underlying;
+		static const UECodeGen_Private::FEnumPropertyParams NewProp_Font_Name;
+		static void NewProp_ReturnValue_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
+		static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_Out_Font = { "Out_Font", nullptr, (EPropertyFlags)0x0010000000000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Load_Standart_Font_Parms, Out_Font), Z_Construct_UClass_UPDFiumFont_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_In_PDF = { "In_PDF", nullptr, (EPropertyFlags)0x0010000008000180, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Load_Standart_Font_Parms, In_PDF), Z_Construct_UClass_UPDFiumDoc_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FBytePropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_Font_Name_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, 0, nullptr, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FEnumPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_Font_Name = { "Font_Name", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, STRUCT_OFFSET(PDF_ReaderBPLibrary_eventPDF_Load_Standart_Font_Parms, Font_Name), Z_Construct_UEnum_PDF_Reader_EStandartFonts, METADATA_PARAMS(nullptr, 0) }; // 3595226983
+	void Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_ReturnValue_SetBit(void* Obj)
+	{
+		((PDF_ReaderBPLibrary_eventPDF_Load_Standart_Font_Parms*)Obj)->ReturnValue = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, nullptr, nullptr, sizeof(bool), sizeof(PDF_ReaderBPLibrary_eventPDF_Load_Standart_Font_Parms), &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
+	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::PropPointers[] = {
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_Out_Font,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_In_PDF,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_Font_Name_Underlying,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_Font_Name,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::NewProp_ReturnValue,
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::Function_MetaDataParams[] = {
+		{ "Category", "PDF_Reader|Write" },
+		{ "CPP_Default_Font_Name", "Helvetica" },
+		{ "DisplayName", "PDF Reader - Load Standart Font" },
+		{ "Keywords", "pdf, pdfium, load, font, standart" },
+		{ "ModuleRelativePath", "Public/PDF_ReaderBPLibrary.h" },
+		{ "ToolTip", "These are 14 standart font which described on PDF Specs 1.7 page 416.\nPDFium (or PDF Specs 1.7) uses same library for both Arial and Helvetica. So, if there are problems with their visualizations or language supports, it is library's owner's responsibility.\n\nZapfDingbats and Symbol really convert your texts into some kind of drawings. It's not an error or language problem, it is what it is.\nActually kawaii btw." },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UPDF_ReaderBPLibrary, nullptr, "PDF_Load_Standart_Font", nullptr, nullptr, sizeof(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::PDF_ReaderBPLibrary_eventPDF_Load_Standart_Font_Parms), Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	struct Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Bytes_Statics
 	{
 		struct PDF_ReaderBPLibrary_eventPDF_Read_Bytes_Parms
@@ -1647,11 +2008,12 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UPDF_ReaderBPLibrary_Statics::FuncInfo[] = {
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Image, "PDF_Add_Image" }, // 2129260331
-		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages, "PDF_Add_Pages" }, // 174670547
-		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts, "PDF_Add_Texts" }, // 3081437649
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Pages, "PDF_Add_Pages" }, // 2985996920
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Add_Texts, "PDF_Add_Texts" }, // 2199824553
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Android_Path_Helper, "PDF_Android_Path_Helper" }, // 4257260276
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Bytes_To_T2D, "PDF_Bytes_To_T2D" }, // 2521646802
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_All_Docs, "PDF_Close_All_Docs" }, // 4174871994
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Close_Font, "PDF_Close_Font" }, // 905038804
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Create_Doc, "PDF_Create_Doc" }, // 454719550
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_File_Close, "PDF_File_Close" }, // 1662338953
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_File_Open, "PDF_File_Open" }, // 1246137478
@@ -1662,6 +2024,8 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibClose, "PDF_LibClose" }, // 257273354
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibInit, "PDF_LibInit" }, // 3618929762
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_LibState, "PDF_LibState" }, // 993612849
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Font, "PDF_Load_Font" }, // 2436508662
+		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Load_Standart_Font, "PDF_Load_Standart_Font" }, // 1961441632
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Bytes, "PDF_Read_Bytes" }, // 3279856659
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Read_Path, "PDF_Read_Path" }, // 1815998336
 		{ &Z_Construct_UFunction_UPDF_ReaderBPLibrary_PDF_Save_PDF, "PDF_Save_PDF" }, // 4149975477
@@ -1707,8 +2071,12 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 	UPDF_ReaderBPLibrary::~UPDF_ReaderBPLibrary() {}
 	struct Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics
 	{
+		static const FEnumRegisterCompiledInInfo EnumInfo[];
 		static const FStructRegisterCompiledInInfo ScriptStructInfo[];
 		static const FClassRegisterCompiledInInfo ClassInfo[];
+	};
+	const FEnumRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::EnumInfo[] = {
+		{ EStandartFonts_StaticEnum, TEXT("EStandartFonts"), &Z_Registration_Info_UEnum_EStandartFonts, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3595226983U) },
 	};
 	const FStructRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ScriptStructInfo[] = {
 		{ FPdfBytes::StaticStruct, Z_Construct_UScriptStruct_FPdfBytes_Statics::NewStructOps, TEXT("PdfBytes"), &Z_Registration_Info_UScriptStruct_PdfBytes, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FPdfBytes), 187784250U) },
@@ -1716,10 +2084,11 @@ template<> PDF_READER_API UScriptStruct* StaticStruct<FPdfBytes>()
 	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo[] = {
 		{ Z_Construct_UClass_UArrayObject, UArrayObject::StaticClass, TEXT("UArrayObject"), &Z_Registration_Info_UClass_UArrayObject, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UArrayObject), 1126855976U) },
 		{ Z_Construct_UClass_UPDFiumDoc, UPDFiumDoc::StaticClass, TEXT("UPDFiumDoc"), &Z_Registration_Info_UClass_UPDFiumDoc, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDFiumDoc), 2249290787U) },
-		{ Z_Construct_UClass_UPDF_ReaderBPLibrary, UPDF_ReaderBPLibrary::StaticClass, TEXT("UPDF_ReaderBPLibrary"), &Z_Registration_Info_UClass_UPDF_ReaderBPLibrary, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDF_ReaderBPLibrary), 3394475076U) },
+		{ Z_Construct_UClass_UPDFiumFont, UPDFiumFont::StaticClass, TEXT("UPDFiumFont"), &Z_Registration_Info_UClass_UPDFiumFont, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDFiumFont), 1057734852U) },
+		{ Z_Construct_UClass_UPDF_ReaderBPLibrary, UPDF_ReaderBPLibrary::StaticClass, TEXT("UPDF_ReaderBPLibrary"), &Z_Registration_Info_UClass_UPDF_ReaderBPLibrary, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UPDF_ReaderBPLibrary), 680397234U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_3906670821(TEXT("/Script/PDF_Reader"),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_24182442(TEXT("/Script/PDF_Reader"),
 		Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ClassInfo),
 		Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::ScriptStructInfo),
-		nullptr, 0);
+		Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Projects_FROZEN_SDKs_FF_Plugins_Mobile_Plugins_PDF_Reader_Source_PDF_Reader_Public_PDF_ReaderBPLibrary_h_Statics::EnumInfo));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

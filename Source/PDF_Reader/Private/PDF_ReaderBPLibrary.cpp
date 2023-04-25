@@ -3,14 +3,15 @@
 #include "PDF_ReaderBPLibrary.h"
 #include "PDF_Reader.h"
 
-// UE Includes.
+// UE Mechanics Includes.
+#include "Misc/Base64.h"
 #include "Misc/FileHelper.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetStringLibrary.h"
+
+// UE Rendering Includes.
 #include "RHICommandList.h"					
 #include "RenderingThread.h"
-#include "Misc/Base64.h"
-
-#include "Kismet/KismetStringLibrary.h"
 
 THIRD_PARTY_INCLUDES_START
 // C++ Includes.
@@ -1121,9 +1122,182 @@ bool UPDF_ReaderBPLibrary::PDF_Add_Pages(UPARAM(ref)UPDFiumDoc*& In_PDF, TArray<
 #endif
 }
 
-void UPDF_ReaderBPLibrary::PDF_Add_Texts(FDelegateAddObject DelegateAddObject, UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear, FVector2D Rotation, FVector2D Border, FString FontName, int32 FontSize, int32 PageIndex, bool bUseCharcodes, bool bGetCharcodesFromDb)
+bool UPDF_ReaderBPLibrary::PDF_Load_Font(UPDFiumFont*& Out_Font, UPARAM(ref)UPDFiumDoc*& In_PDF, FString Font_Path, bool bIsTrueType, bool bIsCid)
 {
-#ifdef _WIN64
+#ifdef PLATFORM_WINDOWS
+
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
+
+	if (IsValid(In_PDF) == false)
+	{
+		return false;
+	}
+
+	if (!In_PDF->Document)
+	{
+		return false;
+	}
+
+	if (Font_Path.IsEmpty())
+	{
+		return false;
+	}
+
+	if (FPaths::FileExists(Font_Path) == false)
+	{
+		return false;
+	}
+
+	int FontType = 0;
+	if (bIsTrueType == true)
+	{
+		FontType = FPDF_FONT_TRUETYPE;
+	}
+
+	else
+	{
+		FontType = FPDF_FONT_TYPE1;
+	}
+
+	FString Path = Font_Path;
+	FPaths::NormalizeFilename(Path);
+
+	TArray<uint8> Array_Bytes;
+	FFileHelper::LoadFileToArray(Array_Bytes, *Path);
+
+	FPDF_FONT Font = FPDFText_LoadFont(In_PDF->Document, Array_Bytes.GetData(), Array_Bytes.GetAllocatedSize(), FontType, bIsCid);
+	if (!Font)
+	{
+		return false;
+	}
+
+	UPDFiumFont* FontObject = NewObject<UPDFiumFont>();
+	FontObject->Font = Font;
+	Out_Font = FontObject;
+
+	return true;
+
+#else
+	return false;
+#endif
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Load_Standart_Font(UPDFiumFont*& Out_Font, UPARAM(ref)UPDFiumDoc*& In_PDF, EStandartFonts Font_Name)
+{
+#ifdef PLATFORM_WINDOWS
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
+
+	if (IsValid(In_PDF) == false)
+	{
+		return false;
+	}
+
+	if (!In_PDF->Document)
+	{
+		return false;
+	}
+
+	FString Font_String;
+	switch (Font_Name)
+	{
+	case EStandartFonts::Helvetica:
+		Font_String = "Helvetica";
+		break;
+	case EStandartFonts::Helvetica_Italic:
+		Font_String = "Helvetica-Italic";
+		break;
+	case EStandartFonts::Helvetica_Bold:
+		Font_String = "Helvetica-Bold";
+		break;
+	case EStandartFonts::Helvetica_BoldItalic:
+		Font_String = "Helvetica-BoldItalic";
+		break;
+	case EStandartFonts::Times_Roman:
+		Font_String = "Times-Roman";
+		break;
+	case EStandartFonts::Times_Bold:
+		Font_String = "Times-Bold";
+		break;
+	case EStandartFonts::Times_BoldItalic:
+		Font_String = "Times-BoldItalic";
+		break;
+	case EStandartFonts::Times_Italic:
+		Font_String = "Times-Italic";
+		break;
+	case EStandartFonts::Courier:
+		Font_String = "Courier";
+		break;
+	case EStandartFonts::Courier_Bold:
+		Font_String = "Courier-Bold";
+		break;
+	case EStandartFonts::Courier_Oblique:
+		Font_String = "Courier-Oblique";
+		break;
+	case EStandartFonts::Courier_BoldOblique:
+		Font_String = "Courier-BoldOblique";
+		break;
+	case EStandartFonts::Symbol:
+		Font_String = "Symbol";
+		break;
+	case EStandartFonts::ZapfDingbats:
+		Font_String = "ZapfDingbats";
+		break;
+	default:
+		Font_String = "Helvetica";
+		break;
+	}
+
+	FPDF_FONT Font = FPDFText_LoadStandardFont(In_PDF->Document, TCHAR_TO_UTF8(*Font_String));
+
+	if (!Font)
+	{
+		return false;
+	}
+	
+	UPDFiumFont* FontObject = NewObject<UPDFiumFont>();
+	FontObject->Font = Font;
+
+	Out_Font = FontObject;
+
+	return true;
+
+#else
+	return false;
+#endif
+}
+
+bool UPDF_ReaderBPLibrary::PDF_Close_Font(UPARAM(ref)UPDFiumFont*& In_Font)
+{
+#ifdef PLATFORM_WINDOWS
+	
+	if (Global_bIsLibInitialized == false)
+	{
+		return false;
+	}
+
+	if (IsValid(In_Font) == false)
+	{
+		return false;
+	}
+
+	FPDFFont_Close(In_Font->Font);
+
+	return true;
+
+#else
+	return false;
+#endif
+}
+
+void UPDF_ReaderBPLibrary::PDF_Add_Texts(FDelegateAddObject DelegateAddObject, UPARAM(ref)UPDFiumDoc*& In_PDF, UPARAM(ref)UPDFiumFont*& In_Font, FString In_Texts, FVector2D Position, FVector2D Shear, FVector2D Rotation, FVector2D Border, int32 FontSize, int32 PageIndex, bool bUseCharcodes, bool bGetCharcodesFromDb)
+{
+#ifdef PLATFORM_WINDOWS
 	if (Global_bIsLibInitialized == false)
 	{
 		DelegateAddObject.Execute(false, "PDFium Library haven't been initialized.");
@@ -1139,15 +1313,18 @@ void UPDF_ReaderBPLibrary::PDF_Add_Texts(FDelegateAddObject DelegateAddObject, U
 		DelegateAddObject.Execute(false, "PDF document is not valid.");
 	}
 
-	if (In_Texts.IsEmpty())
+	if (In_Texts.IsEmpty() == true)
 	{
 		DelegateAddObject.Execute(false, "Text is empty.");
 	}
 
-	AsyncTask(ENamedThreads::AnyNormalThreadNormalTask, [DelegateAddObject, &In_PDF, In_Texts, Position, Shear, Rotation, Border, FontName, FontSize, PageIndex, bUseCharcodes, bGetCharcodesFromDb]()
-		{
-			FPDF_FONT Font = FPDFText_LoadStandardFont(In_PDF->Document, TCHAR_TO_UTF8(*FontName));
+	if (IsValid(In_Font) == false)
+	{
+		DelegateAddObject.Execute(false, "Font object is invalid.");
+	}
 
+	AsyncTask(ENamedThreads::AnyNormalThreadNormalTask, [DelegateAddObject, &In_PDF, In_Font, In_Texts, Position, Shear, Rotation, Border, FontSize, PageIndex, bUseCharcodes, bGetCharcodesFromDb]()
+		{
 			FPDF_PAGE First_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
 			TArray<FPDF_PAGE> Array_Pages;
 			Array_Pages.Add(First_Page);
@@ -1239,7 +1416,7 @@ void UPDF_ReaderBPLibrary::PDF_Add_Texts(FDelegateAddObject DelegateAddObject, U
 			int32 ActivePage = 0;
 			for (int32 Index_Lines = 0; Index_Lines < Array_Lines.Num(); Index_Lines++)
 			{
-				FPDF_PAGEOBJECT TextObject = FPDFPageObj_CreateTextObj(In_PDF->Document, Font, FontSize);
+				FPDF_PAGEOBJECT TextObject = FPDFPageObj_CreateTextObj(In_PDF->Document, In_Font->Font, FontSize);
 
 				FString Each_Line = Array_Lines[Index_Lines];
 
@@ -1304,7 +1481,7 @@ void UPDF_ReaderBPLibrary::PDF_Add_Texts(FDelegateAddObject DelegateAddObject, U
 
 bool UPDF_ReaderBPLibrary::PDF_Add_Image(UPARAM(ref)UPDFiumDoc*& In_PDF, UTexture2D* In_Texture, FVector2D Position, FVector2D Shear, FVector2D Rotation, int32 PageIndex)
 {
-#ifdef _WIN64
+#ifdef PLATFORM_WINDOWS
 
 	if (Global_bIsLibInitialized == false)
 	{
@@ -1346,7 +1523,7 @@ bool UPDF_ReaderBPLibrary::PDF_Add_Image(UPARAM(ref)UPDFiumDoc*& In_PDF, UTextur
 
 int WriteCallback(FPDF_FILEWRITE* pThis, const void* pData, unsigned long size)
 {
-#ifdef _WIN64
+#ifdef PLATFORM_WINDOWS
 	std::string data;
 	data.append(static_cast<const char*>(pData), size);
 	
@@ -1363,7 +1540,7 @@ int WriteCallback(FPDF_FILEWRITE* pThis, const void* pData, unsigned long size)
 
 bool UPDF_ReaderBPLibrary::PDF_Save_PDF(TMap<UPDFiumDoc*, FString> Exports)
 {
-#ifdef _WIN64
+#ifdef PLATFORM_WINDOWS
 	if (Exports.Num() == 0)
 	{
 		return false;

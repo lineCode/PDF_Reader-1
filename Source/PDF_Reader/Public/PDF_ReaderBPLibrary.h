@@ -66,6 +66,39 @@ public:
 	FPDF_DOCUMENT Document;
 };
 
+UCLASS(BlueprintType)
+class PDF_READER_API UPDFiumFont : public UObject
+{
+	GENERATED_BODY()
+
+public:
+
+	FPDF_FONT Font;
+};
+
+UENUM(BlueprintType)
+enum class EStandartFonts : uint8
+{
+	Helvetica				UMETA(DisplayName = "Helvetica/Arial"),
+	Helvetica_Italic		UMETA(DisplayName = "Helvetica/Arial Italic"),
+	Helvetica_Bold			UMETA(DisplayName = "Helvetica/Arial Bold"),
+	Helvetica_BoldItalic	UMETA(DisplayName = "Helvetica/Arial Bold Italic"),
+
+	Times_Roman				UMETA(DisplayName = "Times Roman"),
+	Times_Bold				UMETA(DisplayName = "Times Bold"),
+	Times_BoldItalic		UMETA(DisplayName = "Times Bold Italic"),
+	Times_Italic			UMETA(DisplayName = "Times Italic"),
+
+	Courier					UMETA(DisplayName = "Courier"),
+	Courier_Bold			UMETA(DisplayName = "Courier Bold"),
+	Courier_Oblique			UMETA(DisplayName = "Courier Oblique"),
+	Courier_BoldOblique		UMETA(DisplayName = "Courier Bold Oblique"),
+
+	Symbol					UMETA(DisplayName = "Symbol"),
+	ZapfDingbats			UMETA(DisplayName = "ZapfDingbats"),
+};
+ENUM_CLASS_FLAGS(EStandartFonts)
+
 UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FDelegateAddObject, bool, bIsSuccessfull, FString, OutCode);
 
@@ -128,16 +161,31 @@ class UPDF_ReaderBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Create Document", ToolTip = "", Keywords = "pdf, pdfium, create, doc, document, pdf"), Category = "PDF_Reader|Write")
 	static bool PDF_Create_Doc(UPDFiumDoc*& Out_PDF);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Add Pages", ToolTip = "", Keywords = "pdf, pdfium, create, doc, document, pdf, add, pages"), Category = "PDF_Reader|Write")
+	/*
+	* @param Pages It will add pages as same amount of the length of the array to the document. Each page size will be equal to respective indexed Vector 2D
+	*/
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Add Pages", Keywords = "pdf, pdfium, create, doc, document, pdf, add, pages"), Category = "PDF_Reader|Write")
 	static bool PDF_Add_Pages(UPARAM(ref)UPDFiumDoc*& In_PDF, TArray<FVector2D> Pages);
 
+	/*
+	* @param bIsTrueType true will load font as TrueType, false will load as TYPE1.
+	* @param bIsCid Look at this link about CID fonts "https://blog.idrsolutions.com/what-are-cid-fonts/"
+	*/
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Load Font (EXPRIMENTAL! DONT USE IT!)", Keywords = "pdf, pdfium, load, font"), Category = "PDF_Reader|Write")
+	static bool PDF_Load_Font(UPDFiumFont*& Out_Font, UPARAM(ref)UPDFiumDoc*& In_PDF, FString Font_Path, bool bIsTrueType, bool bIsCid);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Load Standart Font", ToolTip = "These are 14 standart font which described on PDF Specs 1.7 page 416.\nPDFium (or PDF Specs 1.7) uses same library for both Arial and Helvetica. So, if there are problems with their visualizations or language supports, it is library's owner's responsibility.\n\nZapfDingbats and Symbol really convert your texts into some kind of drawings. It's not an error or language problem, it is what it is.\nActually kawaii btw.", Keywords = "pdf, pdfium, load, font, standart"), Category = "PDF_Reader|Write")
+	static bool PDF_Load_Standart_Font(UPDFiumFont*& Out_Font, UPARAM(ref)UPDFiumDoc*& In_PDF, EStandartFonts Font_Name = EStandartFonts::Helvetica);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Close Font", ToolTip = "", Keywords = "pdf, pdfium, close, font"), Category = "PDF_Reader|Write")
+	static bool PDF_Close_Font(UPARAM(ref)UPDFiumFont*& In_Font);
+
 	/**
-	* @param FontName Sample font names are "Helvetica-BoldItalic" and "Arial". Don't use space between font name and its specifiers.
 	* @param Position X value starts from left, Y value starts from bottom.
 	* @param bUseCharcodes It switch between "FPDFText_SetCharcodes()" and "FPDFText_SetText()". When you enable CharCodes, you don't need to write your texts as ASCII decimals. System automatically converts it. Also it supports much more characters.
 	*/
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Add Texts", Keywords = "pdf, pdfium, create, doc, document, pdf, add, texts"), Category = "PDF_Reader|Write")
-	static void PDF_Add_Texts(FDelegateAddObject DelegateAddObject, UPARAM(ref)UPDFiumDoc*& In_PDF, FString In_Texts, FVector2D Position, FVector2D Shear = FVector2D(1.0f, 1.0f), FVector2D Rotation = FVector2D(0.0f, 0.0f), FVector2D Border = FVector2D(10.0f, 10.0f), FString FontName = "Helvetica-BoldItalic", int32 FontSize = 12, int32 PageIndex = 0, bool bUseCharcodes = true, bool bGetCharcodesFromDb = false);
+	static void PDF_Add_Texts(FDelegateAddObject DelegateAddObject, UPARAM(ref)UPDFiumDoc*& In_PDF, UPARAM(ref)UPDFiumFont*& In_Font, FString In_Texts, FVector2D Position, FVector2D Shear = FVector2D(1.0f, 1.0f), FVector2D Rotation = FVector2D(0.0f, 0.0f), FVector2D Border = FVector2D(10.0f, 10.0f), int32 FontSize = 12, int32 PageIndex = 0, bool bUseCharcodes = true, bool bGetCharcodesFromDb = false);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PDF Reader - Add Image (EXPRIMENTAL! DONT USE IT!)", Keywords = "pdf, pdfium, create, doc, document, pdf, add, image"), Category = "PDF_Reader|Write")
 	static bool PDF_Add_Image(UPARAM(ref)UPDFiumDoc*& In_PDF, UTexture2D* In_Texture, FVector2D Position, FVector2D Shear = FVector2D(1.0f, 1.0f), FVector2D Rotation = FVector2D(0.0f, 0.0f), int32 PageIndex = 0);
