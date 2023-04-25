@@ -617,7 +617,6 @@ bool UPDF_ReaderBPLibrary::PDF_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArray
 {
 	if (IsValid(In_Byte_Object) == false)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 30, FColor::Red, "Byte object is not valid.");
 		return false;
 	}
 
@@ -652,7 +651,6 @@ bool UPDF_ReaderBPLibrary::PDF_File_Open(UPDFiumDoc*& Out_PDF, UPARAM(ref)UArray
 
 	if (!PDF_Object->Document)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 30, FColor::Red, "Unable to load PDF file.");
 		return false;
 	}
 
@@ -923,23 +921,22 @@ bool UPDF_ReaderBPLibrary::PDF_Get_Texts(TArray<FString>& Out_Texts, UPARAM(ref)
 		return false;
 	}
 
-	unsigned short* CharBuffer = (unsigned short*)malloc(0x2000 * sizeof(unsigned short));
 	for (int32 PageIndex = 0; PageIndex < FPDF_GetPageCount(In_PDF->Document); PageIndex++)
 	{
 		FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
 		FPDF_TEXTPAGE PDF_TextPage = FPDFText_LoadPage(PDF_Page);
-		FPDF_ClosePage(PDF_Page);
+
+		int CharCount = FPDFText_CountChars(PDF_TextPage);
+		unsigned short* CharBuffer = (unsigned short*)malloc(static_cast<size_t>(CharCount) * 4);
+		FPDFText_GetText(PDF_TextPage, 0, CharCount, CharBuffer);
 
 		FString PageText;
-		int CharCount = FPDFText_CountChars(PDF_TextPage);
-		for (int32 CharIndex = 0; CharIndex < CharCount; CharIndex++)
-		{
-			FPDFText_GetText(PDF_TextPage, CharIndex, CharCount, CharBuffer);
-			PageText = PageText + (char*)CharBuffer;
-		}
-		
+		PageText.AppendChars((WIDECHAR*)CharBuffer, CharCount);
 		Out_Texts.Add(PageText);
+
 		FPDFText_ClosePage(PDF_TextPage);
+		FPDF_ClosePage(PDF_Page);
+		free(CharBuffer);
 	}
 
 	return true;
@@ -964,7 +961,6 @@ bool UPDF_ReaderBPLibrary::PDF_Get_Links(TArray<FString>& Out_Links, UPARAM(ref)
 	
 	FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
 	FPDF_TEXTPAGE PDF_TextPage = FPDFText_LoadPage(PDF_Page);
-	FPDF_ClosePage(PDF_Page);
 
 	FPDF_PAGELINK PDF_Links = FPDFLink_LoadWebLinks(PDF_TextPage);
 	int32 Links_Count = FPDFLink_CountWebLinks(PDF_Links);
@@ -979,25 +975,20 @@ bool UPDF_ReaderBPLibrary::PDF_Get_Links(TArray<FString>& Out_Links, UPARAM(ref)
 
 	for (int32 Index_Link = 0; Index_Link < Links_Count; Index_Link++)
 	{
-		unsigned short* CharBuffer = (unsigned short*)malloc(0x2000 * sizeof(unsigned short));
-		FPDFLink_GetURL(PDF_Links, Index_Link, CharBuffer, INT_MAX);
-		
-		FString LinkText;
-		for (int32 CharIndex = 0; CharIndex < INT_MAX; CharIndex++)
-		{
-			if (CharBuffer[CharIndex] == false)
-			{
-				break;
-			}
+		int CharLenght = FPDFLink_GetURL(PDF_Links, Index_Link, NULL, NULL);
+		unsigned short* CharBuffer = (unsigned short*)malloc(static_cast<size_t>(CharLenght) * 2);
+		FPDFLink_GetURL(PDF_Links, Index_Link, CharBuffer, (CharLenght * 2));
 
-			LinkText += (char)CharBuffer[CharIndex];
-		}
+		FString LinkText;
+		LinkText.AppendChars((WIDECHAR*)CharBuffer, CharLenght);
 
 		Out_Links.Add(LinkText);
+		free(CharBuffer);
 	}
 
 	FPDFLink_CloseWebLinks(PDF_Links);
 	FPDFText_ClosePage(PDF_TextPage);
+	FPDF_ClosePage(PDF_Page);
 
 	return true;
 }
@@ -1021,26 +1012,19 @@ bool UPDF_ReaderBPLibrary::PDF_Select_Text(FString& Out_Text, UPARAM(ref)UPDFium
 
 	FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
 	FPDF_TEXTPAGE PDF_TextPage = FPDFText_LoadPage(PDF_Page);
-	FPDF_ClosePage(PDF_Page);
 
-	unsigned short* CharBuffer = (unsigned short*)malloc(0x2000 * sizeof(unsigned short));
-	int32 CharCount = FPDFText_CountChars(PDF_TextPage);
-	FPDFText_GetBoundedText(PDF_TextPage, Start.X, Start.Y, End.X, End.Y, CharBuffer, CharCount);
+	int CharLenght = FPDFText_GetBoundedText(PDF_TextPage, Start.X, Start.Y, End.X, End.Y, NULL, NULL);
+	unsigned short* CharBuffer = (unsigned short*)malloc(static_cast<size_t>(CharLenght) * 2);
+	FPDFText_GetBoundedText(PDF_TextPage, Start.X, Start.Y, End.X, End.Y, CharBuffer, (CharLenght * 2));
 	
-	FString PageText;
-	for (int32 CharIndex = 0; CharIndex < CharCount; CharIndex++)
-	{
-		if (CharBuffer[CharIndex] == false)
-		{
-			break;
-		}
+	FString SelectedText;
+	SelectedText.AppendChars((WIDECHAR*)CharBuffer, CharLenght);
 
-		PageText += (char)CharBuffer[CharIndex];
-	}
-
-	Out_Text = PageText;
+	Out_Text = SelectedText;
 
 	FPDFText_ClosePage(PDF_TextPage);
+	FPDF_ClosePage(PDF_Page);
+	free(CharBuffer);
 
 	return true;
 }
@@ -1503,8 +1487,10 @@ bool UPDF_ReaderBPLibrary::PDF_Add_Image(UPARAM(ref)UPDFiumDoc*& In_PDF, UTextur
 
 	FPDF_PAGE PDF_Page = FPDF_LoadPage(In_PDF->Document, PageIndex);
 	FPDF_PAGEOBJECT Image_Object = FPDFPageObj_NewImageObj(In_PDF->Document);
+
 	FPDF_BITMAP Bitmap = FPDFBitmap_CreateEx(In_Texture->GetSizeX(), In_Texture->GetSizeY(), FPDFBitmap_BGRA, Texture_Data, (int)In_Texture->GetSizeX() * 4);
-	FPDFImageObj_SetBitmap(NULL, 1, Image_Object, Bitmap);
+	FPDFImageObj_SetBitmap(&PDF_Page, 1, Image_Object, Bitmap);
+
 	FPDFPageObj_Transform(Image_Object, Shear.X, Rotation.X, Rotation.Y, Shear.Y, Position.X, Position.Y);
 	FPDFPage_InsertObject(PDF_Page, Image_Object);
 	FPDFPage_GenerateContent(PDF_Page);
