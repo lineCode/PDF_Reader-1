@@ -41,6 +41,8 @@ https://www.unrealengine.com/marketplace/en-US/product/low-entry-http-request
 
 * <b>PDF_LibInit / PDF_LibClose / PDF_LibState</b>: It will initialize, close and give state of PDFium library.
 
+* <b>Load Standart Font</b>: There are 14 standart fonts embedded to PDF libraries according to PDF Spec 1.7 page 416. This function allows to select one them.
+
 * <b>Create PDF</b>: It creates a new and empty PDF file.
 
 * <b>Add Pages</b>: It adds pages to target PDF file with defined size. (Array count is page count and each vector element of array is its size)
@@ -65,3 +67,7 @@ https://www.unrealengine.com/marketplace/en-US/product/low-entry-http-request
 * When you close your game or finish your job with that document, close that PDF document.
 * When you close your game, you have to close library as well.
 * if you want to "view" changes which you did on your newly created PDF file in UE5, you need to render it "again" and assign it to your widget or material.
+
+# EXPRIMENTAL (DO NOT USE THEM)
+* Image Adding
+* Extenal Font Loading
